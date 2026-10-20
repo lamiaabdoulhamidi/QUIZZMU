@@ -32,7 +32,7 @@ const songs = [
   {
     title: "Blinding Lights",
     artist: "The Weeknd",
-    genre: "synthpop",
+    genre: "electro",
     hints: [
       "Genre : synthpop / électro avec un groove très marquant.",
       "Paroles : 'I live for the night light'.",
@@ -52,11 +52,71 @@ const songs = [
   {
     title: "Le temps est bon",
     artist: "Mylène Farmer",
-    genre: "pop",
+    genre: "french",
     hints: [
       "Genre : pop électro, avec un univers nocturne et sensuel.",
       "Le titre parle d'un moment où la vie semble enfin se mettre en place.",
       "Cette chanson française a été interprétée par Mylène Farmer et est très connue."
+    ]
+  },
+  {
+    title: "Smells Like Teen Spirit",
+    artist: "Nirvana",
+    genre: "rock",
+    hints: [
+      "Genre : grunge rock, très énergique et abrasif.",
+      "Paroles : 'With the lights out, it's less dangerous'.",
+      "Le morceau est devenu un hymne du rock des années 1990."
+    ]
+  },
+  {
+    title: "God's Plan",
+    artist: "Drake",
+    genre: "rap",
+    hints: [
+      "Genre : rap / hip-hop, avec un rythme très fluide.",
+      "Paroles : 'I been saying this for years'.",
+      "La chanson a connu un immense succès mondial et est très jouée en radio."
+    ]
+  },
+  {
+    title: "HUMBLE.",
+    artist: "Kendrick Lamar",
+    genre: "rap",
+    hints: [
+      "Genre : rap, avec un flow puissant et une énergie immédiate.",
+      "Paroles : 'Sit down, be humble'.",
+      "Ce titre est sorti en 2017 et a marqué les charts internationaux."
+    ]
+  },
+  {
+    title: "On the Floor",
+    artist: "Jennifer Lopez",
+    genre: "rnb",
+    hints: [
+      "Genre : dance-pop avec des influences latines et R&B.",
+      "Paroles : 'Dance the night away'.",
+      "La chanson a été un grand tube dans le monde entier au début des années 2010."
+    ]
+  },
+  {
+    title: "Love on the Brain",
+    artist: "Rihanna",
+    genre: "rnb",
+    hints: [
+      "Genre : R&B / soul, très émouvant et puissant.",
+      "Paroles : 'And you got me like, ooh'.",
+      "Le titre est connu pour sa voix expressive et le crescendo émotionnel."
+    ]
+  },
+  {
+    title: "L'Impératrice",
+    artist: "L'Impératrice",
+    genre: "french",
+    hints: [
+      "Genre : pop française / indie, très groove et lumineux.",
+      "Le titre est souvent associé à une ambiance douce et dansante.",
+      "Ce groupe français est connu pour ses morceaux festifs et rétro-futuristes."
     ]
   }
 ];
@@ -68,7 +128,8 @@ const state = {
   currentSong: null,
   currentHintIndex: 0,
   songs: [],
-  locked: false
+  locked: false,
+  selectedGenre: "tous"
 };
 
 const startScreen = document.getElementById("startScreen");
@@ -85,6 +146,7 @@ const playAgainBtn = document.getElementById("playAgainBtn");
 const answerForm = document.getElementById("answerForm");
 const endTitle = document.getElementById("endTitle");
 const endMessage = document.getElementById("endMessage");
+const genreButtons = document.querySelectorAll(".genre-btn");
 
 function normalize(value) {
   return value
@@ -107,10 +169,34 @@ function setFeedback(message, type = "") {
   feedback.className = `feedback ${type}`.trim();
 }
 
+function getSongsForSelectedGenre() {
+  if (state.selectedGenre === "tous") {
+    return songs;
+  }
+
+  return songs.filter((song) => song.genre === state.selectedGenre);
+}
+
+function selectGenre(genre) {
+  state.selectedGenre = genre;
+
+  genreButtons.forEach((button) => {
+    const isActive = button.dataset.genre === genre;
+    button.classList.toggle("active", isActive);
+  });
+}
+
 function startGame() {
+  const availableSongs = shuffle(getSongsForSelectedGenre());
+
+  if (availableSongs.length === 0) {
+    setFeedback("Ce genre n'a pas encore de chansons dans le quiz.", "error");
+    return;
+  }
+
   state.score = 0;
   state.round = 0;
-  state.songs = shuffle(songs).slice(0, TOTAL_ROUNDS);
+  state.songs = availableSongs.slice(0, Math.min(TOTAL_ROUNDS, availableSongs.length));
   state.locked = false;
 
   startScreen.classList.add("hidden");
@@ -162,8 +248,9 @@ function finishGame() {
   gameScreen.classList.add("hidden");
   endScreen.classList.remove("hidden");
 
+  const maxScore = state.songs.length * 25;
   endTitle.textContent = "Partie terminée";
-  endMessage.textContent = `Ton score final : ${state.score} / ${state.songs.length * 25} points.`;
+  endMessage.textContent = `Ton score final : ${state.score} / ${maxScore} points.`;
 }
 
 function checkAnswer() {
@@ -202,6 +289,12 @@ function checkAnswer() {
   }, 1800);
 }
 
+genreButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectGenre(button.dataset.genre);
+  });
+});
+
 answerForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -223,9 +316,9 @@ answerInput.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("load", () => {
+  selectGenre("tous");
   startScreen.classList.remove("hidden");
   gameScreen.classList.add("hidden");
   endScreen.classList.add("hidden");
   restartBtn.classList.add("hidden");
 });
-
