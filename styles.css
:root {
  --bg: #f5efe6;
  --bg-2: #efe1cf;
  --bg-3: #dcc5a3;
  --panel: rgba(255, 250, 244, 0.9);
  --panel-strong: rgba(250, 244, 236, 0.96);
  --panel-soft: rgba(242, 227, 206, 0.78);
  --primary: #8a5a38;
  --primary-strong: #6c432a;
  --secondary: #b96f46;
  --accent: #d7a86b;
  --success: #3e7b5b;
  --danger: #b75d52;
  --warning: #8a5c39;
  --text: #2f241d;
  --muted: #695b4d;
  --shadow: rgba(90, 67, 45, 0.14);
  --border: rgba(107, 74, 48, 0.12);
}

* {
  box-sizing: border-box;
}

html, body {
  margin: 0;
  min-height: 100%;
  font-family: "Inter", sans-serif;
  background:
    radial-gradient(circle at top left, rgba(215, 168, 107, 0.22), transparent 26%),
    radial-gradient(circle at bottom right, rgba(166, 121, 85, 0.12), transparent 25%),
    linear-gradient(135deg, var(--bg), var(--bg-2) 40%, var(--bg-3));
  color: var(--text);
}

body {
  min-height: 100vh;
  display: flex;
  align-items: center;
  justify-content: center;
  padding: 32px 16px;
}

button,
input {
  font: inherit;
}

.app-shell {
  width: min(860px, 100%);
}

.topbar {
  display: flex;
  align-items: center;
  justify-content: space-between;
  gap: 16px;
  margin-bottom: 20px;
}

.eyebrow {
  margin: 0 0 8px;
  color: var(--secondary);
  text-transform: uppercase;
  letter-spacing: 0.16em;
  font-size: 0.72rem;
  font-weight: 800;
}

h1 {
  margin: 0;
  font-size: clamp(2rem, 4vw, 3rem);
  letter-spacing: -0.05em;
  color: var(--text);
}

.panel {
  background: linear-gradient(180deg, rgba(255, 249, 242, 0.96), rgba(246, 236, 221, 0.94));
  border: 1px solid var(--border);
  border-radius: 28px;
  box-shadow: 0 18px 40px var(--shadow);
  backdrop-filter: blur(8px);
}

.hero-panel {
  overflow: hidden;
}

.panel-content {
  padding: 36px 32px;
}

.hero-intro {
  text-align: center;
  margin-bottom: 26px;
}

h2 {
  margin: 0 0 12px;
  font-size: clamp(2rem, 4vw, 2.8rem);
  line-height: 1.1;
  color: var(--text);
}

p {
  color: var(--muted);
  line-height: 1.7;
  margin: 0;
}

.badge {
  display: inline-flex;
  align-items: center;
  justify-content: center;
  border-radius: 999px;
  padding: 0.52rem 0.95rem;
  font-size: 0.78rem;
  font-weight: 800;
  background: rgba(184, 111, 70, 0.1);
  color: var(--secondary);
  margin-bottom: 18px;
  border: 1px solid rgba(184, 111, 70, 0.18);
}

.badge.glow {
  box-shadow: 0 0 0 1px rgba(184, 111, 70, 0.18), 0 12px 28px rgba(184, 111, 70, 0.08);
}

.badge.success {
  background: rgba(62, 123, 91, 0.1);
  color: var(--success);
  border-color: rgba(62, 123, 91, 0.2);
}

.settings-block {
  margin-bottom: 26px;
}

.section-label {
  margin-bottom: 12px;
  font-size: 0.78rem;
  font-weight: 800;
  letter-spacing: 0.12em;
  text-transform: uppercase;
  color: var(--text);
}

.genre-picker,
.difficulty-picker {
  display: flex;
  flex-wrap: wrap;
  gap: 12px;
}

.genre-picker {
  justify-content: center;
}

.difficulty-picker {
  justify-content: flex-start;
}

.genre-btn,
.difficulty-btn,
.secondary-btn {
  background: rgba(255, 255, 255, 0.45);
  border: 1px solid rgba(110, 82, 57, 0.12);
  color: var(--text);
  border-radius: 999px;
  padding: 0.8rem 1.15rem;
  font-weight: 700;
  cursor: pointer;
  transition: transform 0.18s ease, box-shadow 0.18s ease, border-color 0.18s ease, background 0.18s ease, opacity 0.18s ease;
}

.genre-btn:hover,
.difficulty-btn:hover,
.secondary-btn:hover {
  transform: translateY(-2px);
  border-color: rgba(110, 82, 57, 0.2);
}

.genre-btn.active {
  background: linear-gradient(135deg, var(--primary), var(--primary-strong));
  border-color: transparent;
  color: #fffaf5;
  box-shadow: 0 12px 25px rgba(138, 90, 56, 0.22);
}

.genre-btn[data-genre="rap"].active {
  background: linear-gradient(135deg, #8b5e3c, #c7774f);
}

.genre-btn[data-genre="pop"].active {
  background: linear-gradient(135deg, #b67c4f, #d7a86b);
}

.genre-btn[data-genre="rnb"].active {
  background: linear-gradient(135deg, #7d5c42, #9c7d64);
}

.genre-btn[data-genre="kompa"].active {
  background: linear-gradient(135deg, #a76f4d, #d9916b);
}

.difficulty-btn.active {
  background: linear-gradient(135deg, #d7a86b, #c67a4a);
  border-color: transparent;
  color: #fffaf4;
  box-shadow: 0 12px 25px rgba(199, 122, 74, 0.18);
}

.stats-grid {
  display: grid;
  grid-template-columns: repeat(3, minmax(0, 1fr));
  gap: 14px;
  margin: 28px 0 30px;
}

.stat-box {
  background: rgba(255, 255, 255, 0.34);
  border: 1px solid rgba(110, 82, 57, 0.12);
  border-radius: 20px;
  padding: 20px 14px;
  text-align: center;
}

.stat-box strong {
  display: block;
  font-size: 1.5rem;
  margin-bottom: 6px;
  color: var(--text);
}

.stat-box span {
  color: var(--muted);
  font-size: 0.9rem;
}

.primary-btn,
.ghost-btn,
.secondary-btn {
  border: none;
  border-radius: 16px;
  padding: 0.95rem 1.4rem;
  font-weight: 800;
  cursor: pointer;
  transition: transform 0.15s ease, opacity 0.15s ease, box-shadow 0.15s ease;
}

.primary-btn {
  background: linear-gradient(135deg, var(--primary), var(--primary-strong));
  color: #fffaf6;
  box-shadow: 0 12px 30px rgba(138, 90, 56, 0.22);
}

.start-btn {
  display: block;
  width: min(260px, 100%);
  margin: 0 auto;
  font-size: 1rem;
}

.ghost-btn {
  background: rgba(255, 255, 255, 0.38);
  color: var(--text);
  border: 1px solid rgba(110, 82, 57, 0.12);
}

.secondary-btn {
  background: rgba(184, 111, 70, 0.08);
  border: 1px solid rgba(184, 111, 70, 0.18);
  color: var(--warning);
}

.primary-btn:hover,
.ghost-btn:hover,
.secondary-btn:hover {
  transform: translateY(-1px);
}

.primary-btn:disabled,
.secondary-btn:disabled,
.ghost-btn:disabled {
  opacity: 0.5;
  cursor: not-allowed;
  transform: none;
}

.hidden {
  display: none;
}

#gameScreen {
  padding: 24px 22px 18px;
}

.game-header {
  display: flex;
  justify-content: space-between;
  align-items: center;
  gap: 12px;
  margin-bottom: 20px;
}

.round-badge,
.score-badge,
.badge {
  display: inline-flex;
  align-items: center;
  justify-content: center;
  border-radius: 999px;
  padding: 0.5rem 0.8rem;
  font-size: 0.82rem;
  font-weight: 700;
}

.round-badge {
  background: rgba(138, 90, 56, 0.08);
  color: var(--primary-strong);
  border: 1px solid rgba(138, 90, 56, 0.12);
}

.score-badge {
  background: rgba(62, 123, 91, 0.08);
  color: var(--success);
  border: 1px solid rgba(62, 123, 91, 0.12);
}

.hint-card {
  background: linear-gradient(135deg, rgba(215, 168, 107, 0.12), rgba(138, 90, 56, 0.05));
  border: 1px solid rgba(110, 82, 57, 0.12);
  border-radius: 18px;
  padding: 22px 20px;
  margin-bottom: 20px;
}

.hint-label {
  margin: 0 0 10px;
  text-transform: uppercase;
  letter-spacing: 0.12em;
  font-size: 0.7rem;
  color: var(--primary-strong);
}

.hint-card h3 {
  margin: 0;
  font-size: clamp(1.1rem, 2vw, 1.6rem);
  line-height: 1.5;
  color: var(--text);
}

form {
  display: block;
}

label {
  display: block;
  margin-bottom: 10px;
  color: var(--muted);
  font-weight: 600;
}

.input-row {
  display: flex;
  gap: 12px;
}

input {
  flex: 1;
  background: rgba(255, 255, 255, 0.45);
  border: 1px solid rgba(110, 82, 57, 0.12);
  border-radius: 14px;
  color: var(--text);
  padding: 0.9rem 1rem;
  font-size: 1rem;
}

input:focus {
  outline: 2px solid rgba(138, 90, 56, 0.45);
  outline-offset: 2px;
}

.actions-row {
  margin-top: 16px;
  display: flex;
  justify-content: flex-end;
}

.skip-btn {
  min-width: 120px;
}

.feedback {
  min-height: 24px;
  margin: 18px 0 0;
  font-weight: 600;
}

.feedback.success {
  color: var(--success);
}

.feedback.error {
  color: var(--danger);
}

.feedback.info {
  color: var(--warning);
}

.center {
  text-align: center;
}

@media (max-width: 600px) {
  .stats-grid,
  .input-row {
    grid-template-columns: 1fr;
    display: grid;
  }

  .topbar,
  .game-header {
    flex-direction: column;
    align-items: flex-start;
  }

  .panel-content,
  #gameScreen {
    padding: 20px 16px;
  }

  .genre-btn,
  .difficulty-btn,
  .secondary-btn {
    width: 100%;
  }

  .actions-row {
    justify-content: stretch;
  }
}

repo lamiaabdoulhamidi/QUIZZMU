@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizzMU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Quiz musical</p>
+          <h1>QuizzMU</h1>
+        </div>
+        <button id="restartBtn" class="ghost-btn hidden" type="button">Recommencer</button>
+      </header>
+
+      <main>
+        <section id="startScreen" class="panel hero-panel">
+          <div class="panel-content">
+            <div class="hero-intro">
+              <span class="badge glow">Bienvenue</span>
+              <h2>Teste ta culture musicale</h2>
+              <p>
+                Choisis ton style, sélectionne la difficulté puis lance une série de questions
+                précises sur les morceaux récents, les artistes et les titres qui tournent aujourd'hui.
+              </p>
+            </div>
+
+            <div class="settings-block">
+              <div class="section-label">1. Choisis ton genre</div>
+              <div class="genre-picker" aria-label="Choisir un genre de musique">
+                <button class="genre-btn active" type="button" data-genre="tous">Tous</button>
+                <button class="genre-btn" type="button" data-genre="rap">🎤 Rap</button>
+                <button class="genre-btn" type="button" data-genre="pop">✨ Pop</button>
+                <button class="genre-btn" type="button" data-genre="rnb">🎵 R&B</button>
+                <button class="genre-btn" type="button" data-genre="kompa">💃 Kompa</button>
+              </div>
+            </div>
+
+            <div class="settings-block">
+              <div class="section-label">2. Choisis la difficulté</div>
+              <div class="difficulty-picker" aria-label="Choisir la difficulté du quiz">
+                <button class="difficulty-btn active" type="button" data-difficulty="facile">Facile</button>
+                <button class="difficulty-btn" type="button" data-difficulty="moyen">Moyen</button>
+                <button class="difficulty-btn" type="button" data-difficulty="difficile">Difficile</button>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <strong id="totalQuestionsValue">8</strong>
+                <span>questions</span>
+              </div>
+              <div class="stat-box">
+                <strong id="hintCountValue">2</strong>
+                <span>indices</span>
+              </div>
+              <div class="stat-box">
+                <strong id="difficultyValue">Facile</strong>
+                <span>niveau</span>
+              </div>
+            </div>
+
+            <button id="startBtn" class="primary-btn start-btn" type="button">Commencer le quiz</button>
+          </div>
+        </section>
+
+        <section id="gameScreen" class="panel hidden">
+          <div class="game-header">
+            <span id="roundBadge" class="round-badge">Question 1 / 8</span>
+            <span id="scoreBadge" class="score-badge">Score : 0</span>
+          </div>
+
+          <div class="hint-card">
+            <p class="hint-label">Question</p>
+            <h3 id="clueText">Chargement...</h3>
+          </div>
+
+          <form id="answerForm">
+            <label for="answerInput">Ta réponse</label>
+            <div class="input-row">
+              <input
+                id="answerInput"
+                type="text"
+                placeholder="Ex : Kendrick Lamar, Sabrina Carpenter, ou le titre"
+                autocomplete="off"
+              />
+              <button type="submit" class="primary-btn">Valider</button>
+            </div>
+          </form>
+
+          <div class="actions-row">
+            <button id="skipBtn" type="button" class="secondary-btn skip-btn" aria-label="Passer cette question">Passer</button>
+          </div>
+
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+        </section>
+
+        <section id="endScreen" class="panel hidden">
+          <div class="panel-content center">
+            <span class="badge success">Fin de partie</span>
+            <h2 id="endTitle">Partie terminée</h2>
+            <p id="endMessage">Ton score final :</p>
+            <button id="playAgainBtn" class="primary-btn" type="button">Rejouer</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
