@@ -20,23 +20,25 @@
       </header>
 
       <main>
-        <section id="startScreen" class="panel">
+        <section id="startScreen" class="panel hero-panel">
           <div class="panel-content">
-            <span class="badge">Mode solo</span>
-            <h2>Choisis un genre et commence le quiz</h2>
-            <p>
-              Tu peux jouer dans un univers rap, rock, pop, électro, R&B ou français.
-              Le joueur choisit le style qu'il veut.
-            </p>
+            <div class="hero-intro">
+              <span class="badge glow">Bienvenue</span>
+              <h2>Teste ta culture musicale</h2>
+              <p>
+                Choisis ton univers préféré et prouve que tu connais les classiques, les tubes
+                et les artistes qui font bouger la playlist.
+              </p>
+            </div>
 
             <div class="genre-picker" aria-label="Choisir un genre de musique">
               <button class="genre-btn active" type="button" data-genre="tous">Tous</button>
-              <button class="genre-btn" type="button" data-genre="rock">Rock</button>
-              <button class="genre-btn" type="button" data-genre="rap">Rap</button>
-              <button class="genre-btn" type="button" data-genre="pop">Pop</button>
-              <button class="genre-btn" type="button" data-genre="electro">Electro</button>
-              <button class="genre-btn" type="button" data-genre="rnb">R&B</button>
-              <button class="genre-btn" type="button" data-genre="french">Français</button>
+              <button class="genre-btn" type="button" data-genre="rock">🎸 Rock</button>
+              <button class="genre-btn" type="button" data-genre="rap">🎤 Rap</button>
+              <button class="genre-btn" type="button" data-genre="pop">✨ Pop</button>
+              <button class="genre-btn" type="button" data-genre="electro">🎧 Electro</button>
+              <button class="genre-btn" type="button" data-genre="rnb">🎵 R&B</button>
+              <button class="genre-btn" type="button" data-genre="french">🇫🇷 Français</button>
             </div>
 
             <div class="stats-grid">
@@ -54,7 +56,7 @@
               </div>
             </div>
 
-            <button id="startBtn" class="primary-btn" type="button">Commencer</button>
+            <button id="startBtn" class="primary-btn start-btn" type="button">Commencer le quiz</button>
           </div>
         </section>
 
