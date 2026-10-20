@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizzMU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Quiz musical</p>
+          <h1>QuizzMU</h1>
+        </div>
+        <button id="restartBtn" class="ghost-btn hidden" type="button">Recommencer</button>
+      </header>
+
+      <main>
+        <section id="startScreen" class="panel">
+          <div class="panel-content">
+            <span class="badge">Mode solo</span>
+            <h2>Devine la musique à partir des indices</h2>
+            <p>
+              Tu recevras des indices, des paroles, des détails sur le groupe ou l'album.
+              Trouve le bon titre pour gagner des points.
+            </p>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <strong>5</strong>
+                <span>questions</span>
+              </div>
+              <div class="stat-box">
+                <strong>3</strong>
+                <span>indices max</span>
+              </div>
+              <div class="stat-box">
+                <strong>100</strong>
+                <span>score parfait</span>
+              </div>
+            </div>
+
+            <button id="startBtn" class="primary-btn" type="button">Commencer</button>
+          </div>
+        </section>
+
+        <section id="gameScreen" class="panel hidden">
+          <div class="game-header">
+            <span id="roundBadge" class="round-badge">Question 1 / 5</span>
+            <span id="scoreBadge" class="score-badge">Score : 0</span>
+          </div>
+
+          <div class="hint-card">
+            <p class="hint-label">Indice</p>
+            <h3 id="clueText">Chargement...</h3>
+          </div>
+
+          <form id="answerForm">
+            <label for="answerInput">Ta réponse</label>
+            <div class="input-row">
+              <input
+                id="answerInput"
+                type="text"
+                placeholder="Ex : Bohemian Rhapsody"
+                autocomplete="off"
+              />
+              <button type="submit" class="primary-btn">Valider</button>
+            </div>
+          </form>
+
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+        </section>
+
+        <section id="endScreen" class="panel hidden">
+          <div class="panel-content center">
+            <span class="badge success">Fin de partie</span>
+            <h2 id="endTitle">Partie terminée</h2>
+            <p id="endMessage">Ton score final :</p>
+            <button id="playAgainBtn" class="primary-btn" type="button">Rejouer</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
