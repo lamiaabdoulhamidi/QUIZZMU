@@ -11,6 +11,7 @@
   --accent: #d7a86b;
   --success: #3e7b5b;
   --danger: #b75d52;
+  --warning: #8a5c39;
   --text: #2f241d;
   --muted: #695b4d;
   --shadow: rgba(90, 67, 45, 0.14);
@@ -21,7 +22,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   min-height: 100%;
   font-family: "Inter", sans-serif;
@@ -55,6 +57,18 @@ input {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 20px;
+}
+
+.header-actions,
+.end-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.end-actions {
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .eyebrow {
@@ -160,7 +174,8 @@ p {
 }
 
 .genre-btn,
-.difficulty-btn {
+.difficulty-btn,
+.secondary-btn {
   background: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(110, 82, 57, 0.12);
   color: var(--text);
@@ -168,11 +183,12 @@ p {
   padding: 0.8rem 1.15rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
 }
 
 .genre-btn:hover,
-.difficulty-btn:hover {
+.difficulty-btn:hover,
+.secondary-btn:hover {
   transform: translateY(-2px);
   border-color: rgba(110, 82, 57, 0.2);
 }
@@ -235,7 +251,8 @@ p {
 }
 
 .primary-btn,
-.ghost-btn {
+.ghost-btn,
+.secondary-btn {
   border: none;
   border-radius: 16px;
   padding: 0.95rem 1.4rem;
@@ -263,9 +280,24 @@ p {
   border: 1px solid rgba(110, 82, 57, 0.12);
 }
 
+.secondary-btn {
+  background: rgba(184, 111, 70, 0.08);
+  border: 1px solid rgba(184, 111, 70, 0.18);
+  color: var(--warning);
+}
+
 .primary-btn:hover,
-.ghost-btn:hover {
+.ghost-btn:hover,
+.secondary-btn:hover {
   transform: translateY(-1px);
+}
+
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.ghost-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .hidden {
@@ -362,6 +394,16 @@ input:focus {
   outline-offset: 2px;
 }
 
+.actions-row {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.skip-btn {
+  min-width: 120px;
+}
+
 .feedback {
   min-height: 24px;
   margin: 18px 0 0;
@@ -376,6 +418,10 @@ input:focus {
   color: var(--danger);
 }
 
+.feedback.info {
+  color: var(--warning);
+}
+
 .center {
   text-align: center;
 }
@@ -388,7 +434,9 @@ input:focus {
   }
 
   .topbar,
-  .game-header {
+  .game-header,
+  .header-actions,
+  .end-actions {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -399,7 +447,14 @@ input:focus {
   }
 
   .genre-btn,
-  .difficulty-btn {
+  .difficulty-btn,
+  .secondary-btn,
+  .primary-btn,
+  .ghost-btn {
     width: 100%;
+  }
+
+  .actions-row {
+    justify-content: stretch;
   }
 }
