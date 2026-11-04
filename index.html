@@ -6,18 +6,22 @@
     <title>QuizzMU</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="artist-quiz.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
       <header class="topbar">
         <div>
           <p class="eyebrow">Quiz musical</p>
           <h1>QuizzMU</h1>
         </div>
+
+        <nav class="category-nav" aria-label="Rubriques du quiz">
+          <button type="button" class="category-tab active" data-mode="questions" aria-pressed="true">Questions</button>
+          <button type="button" class="category-tab" data-mode="artist" aria-pressed="false">Spécial Artiste</button>
+        </nav>
 
         <div class="header-actions">
           <button id="menuBtn" class="ghost-btn hidden" type="button">Retour au menu</button>
@@ -26,7 +30,7 @@
       </header>
 
       <main>
-        <section id="startScreen" class="panel hero-panel">
+        <section id="startScreen" class="panel hero-panel quiz-view">
           <div class="panel-content">
             <div class="hero-intro">
               <span class="badge glow">Bienvenue</span>
@@ -58,55 +62,36 @@
             </div>
 
             <div class="stats-grid">
-              <div class="stat-box">
-                <strong id="totalQuestionsValue">5</strong>
-                <span>questions</span>
-              </div>
-              <div class="stat-box">
-                <strong id="hintCountValue">2</strong>
-                <span>indices</span>
-              </div>
-              <div class="stat-box">
-                <strong id="difficultyValue">Facile</strong>
-                <span>niveau</span>
-              </div>
+              <div class="stat-box"><strong id="totalQuestionsValue">5</strong><span>questions</span></div>
+              <div class="stat-box"><strong id="hintCountValue">2</strong><span>indices</span></div>
+              <div class="stat-box"><strong id="difficultyValue">Facile</strong><span>niveau</span></div>
             </div>
 
             <button id="startBtn" class="primary-btn start-btn" type="button">Commencer le quiz</button>
           </div>
         </section>
 
-        <section id="gameScreen" class="panel hidden">
+        <section id="gameScreen" class="panel hidden quiz-view">
           <div class="game-header">
             <span id="roundBadge" class="round-badge">Question 1 / 5</span>
             <span id="scoreBadge" class="score-badge">Score : 0</span>
           </div>
-
           <div class="hint-card">
             <p class="hint-label">Question</p>
             <h3 id="clueText">Chargement...</h3>
           </div>
-
           <form id="answerForm">
             <label for="answerInput">Ta réponse</label>
             <div class="input-row">
-              <input
-                id="answerInput"
-                type="text"
-                placeholder="Ex : Kendrick Lamar, Sabrina Carpenter, ou le titre"
-                autocomplete="off"
-              />
+              <input id="answerInput" type="text" placeholder="Ex : Kendrick Lamar, Sabrina Carpenter, ou le titre" autocomplete="off" />
               <button type="submit" class="primary-btn">Valider</button>
             </div>
-            <div class="actions-row">
-              <button type="button" id="skipBtn" class="secondary-btn skip-btn" disabled>Passer</button>
-            </div>
+            <div class="actions-row"><button type="button" id="skipBtn" class="secondary-btn skip-btn" disabled>Passer</button></div>
           </form>
-
           <p id="feedback" class="feedback" aria-live="polite"></p>
         </section>
 
-        <section id="endScreen" class="panel hidden">
+        <section id="endScreen" class="panel hidden quiz-view">
           <div class="panel-content center">
             <span class="badge success">Fin de partie</span>
             <h2 id="endTitle">Partie terminée</h2>
@@ -117,9 +102,47 @@
             </div>
           </div>
         </section>
+
+        <section id="artistStartScreen" class="panel artist-view hidden" aria-labelledby="artistTitle">
+          <div class="panel-content artist-intro">
+            <span class="badge glow">Spécial Artiste</span>
+            <h2 id="artistTitle">Beyoncé</h2>
+            <p>7 blind tests et 3 questions de culture musicale. Écoute les extraits puis choisis parmi quatre réponses.</p>
+            <div class="artist-facts"><span>10 questions</span><span>Blind test + culture</span><span>Score sur 10</span></div>
+            <button id="startArtistBtn" class="primary-btn start-btn" type="button">Commencer le quiz Beyoncé</button>
+          </div>
+        </section>
+
+        <section id="artistGameScreen" class="panel artist-view hidden" aria-labelledby="artistQuestionPrompt">
+          <div class="artist-game-content">
+            <div class="game-header">
+              <span id="artistRoundBadge" class="round-badge">Question 1 / 10</span>
+              <span id="artistScoreBadge" class="score-badge">Score : 0 / 10</span>
+            </div>
+            <p id="artistQuestionType" class="eyebrow">Blind test</p>
+            <div class="hint-card artist-question-card"><p class="hint-label">Question</p><h3 id="artistQuestionPrompt">Quel est le titre du morceau ?</h3></div>
+            <div id="artistAudioArea" class="artist-audio-area">
+              <button id="artistPlayButton" class="primary-btn artist-play-button" type="button" disabled>Chargement de l’extrait…</button>
+              <audio id="artistPreviewAudio" preload="none"></audio>
+              <p id="artistAudioStatus" class="feedback" role="status" aria-live="polite">Connexion à Deezer…</p>
+            </div>
+            <div id="artistChoices" class="artist-choices" aria-label="Propositions de réponse"></div>
+            <div id="artistReveal" class="artist-reveal" hidden aria-live="polite"></div>
+            <div class="artist-next-row"><button id="artistNextButton" class="primary-btn" type="button" hidden>Question suivante →</button></div>
+          </div>
+        </section>
+
+        <section id="artistEndScreen" class="panel artist-view hidden" aria-labelledby="artistEndTitle">
+          <div class="panel-content center">
+            <span class="badge success">Spécial Beyoncé</span>
+            <h2 id="artistEndTitle">Quiz terminé !</h2>
+            <p id="artistFinalScore" class="artist-final-score"></p>
+            <div class="end-actions"><button id="restartArtistButton" class="primary-btn" type="button">Rejouer</button></div>
+          </div>
+        </section>
       </main>
     </div>
-
     <script src="script.js"></script>
+    <script src="artist-quiz.js"></script>
   </body>
 </html>
