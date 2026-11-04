@@ -6,6 +6,8 @@
     <title>QuizzMU</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -35,32 +37,13 @@
               </p>
             </div>
 
-            <div class="soundcloud-test">
-              <div class="section-label">Test lecteur SoundCloud · 15 secondes</div>
-              <div class="soundcloud-player">
-                <iframe
-                  id="soundcloudTestPlayer"
-                  title="Lecteur audio SoundCloud de test"
-                  width="100%"
-                  height="166"
-                  scrolling="no"
-                  frameborder="no"
-                  allow="autoplay; encrypted-media"
-                  src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A13964439&color=%238a5a38&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-                ></iframe>
-              </div>
-              <p class="soundcloud-note" aria-live="polite">
-                Le lecteur compact met la lecture en pause après 15 secondes. Le titre peut rester visible dans le lecteur.
-              </p>
-            </div>
-
             <div class="settings-block">
               <div class="section-label">1. Choisis ton genre</div>
               <div class="genre-picker" aria-label="Choisir un genre de musique">
                 <button class="genre-btn active" type="button" data-genre="tous">Tous</button>
                 <button class="genre-btn" type="button" data-genre="rap">🎤 Rap</button>
                 <button class="genre-btn" type="button" data-genre="pop">✨ Pop</button>
-                <button class="genre-btn" type="button" data-genre="rnb">🎵 R&B</button>
+                <button class="genre-btn" type="button" data-genre="rnb">🎵 R&amp;B</button>
                 <button class="genre-btn" type="button" data-genre="kompa">💃 Kompa</button>
               </div>
             </div>
@@ -137,25 +120,6 @@
       </main>
     </div>
 
-    <script src="https://w.soundcloud.com/player/api.js"></script>
-    <script>
-      (function () {
-        const iframe = document.getElementById("soundcloudTestPlayer");
-        const widget = SC.Widget(iframe);
-        let stopTimer;
-
-        widget.bind(SC.Widget.Events.PLAY, function () {
-          window.clearTimeout(stopTimer);
-          stopTimer = window.setTimeout(function () {
-            widget.pause();
-          }, 15000);
-        });
-
-        widget.bind(SC.Widget.Events.PAUSE, function () {
-          window.clearTimeout(stopTimer);
-        });
-      })();
-    </script>
     <script src="script.js"></script>
   </body>
 </html>
