@@ -4,7 +4,7 @@
   const artistCatalog = {
     beyonce: {
       name: "Beyoncé",
-      intro: "7 blind tests et 3 questions de culture musicale. Écoute les extraits puis choisis parmi quatre réponses.",
+      intro: "7 blind tests et 3 questions de culture musicale.",
       blindTests: [
         { type: "blindtest", title: "Halo", artist: "Beyoncé", search: "Halo Beyoncé", fallbackTrackId: "2137356" },
         { type: "blindtest", title: "Crazy in Love", artist: "Beyoncé", search: "Crazy in Love Beyoncé" },
@@ -22,7 +22,7 @@
     },
     michaeljackson: {
       name: "Michael Jackson",
-      intro: "5 blind tests et 5 questions de culture musicale sur la carrière du roi de la pop. Écoute les extraits puis choisis parmi quatre réponses.",
+      intro: "5 blind tests et 5 questions de culture musicale.",
       blindTests: [
         { type: "blindtest", title: "Billie Jean", artist: "Michael Jackson", search: "Billie Jean Michael Jackson" },
         { type: "blindtest", title: "Thriller", artist: "Michael Jackson", search: "Thriller Michael Jackson" },
@@ -33,7 +33,7 @@
       cultureQuestions: [
         { type: "culture", prompt: "Quel album de Michael Jackson est considéré comme l’un des plus vendus de tous les temps ?", title: "Thriller", answers: ["Off the Wall", "Thriller", "Bad", "Dangerous"] },
         { type: "culture", prompt: "Quel groupe de musique a lancé la carrière de Michael Jackson avant sa carrière solo ?", title: "The Jackson 5", answers: ["The Jackson 5", "The Temptations", "The Supremes", "The Four Tops"] },
-        { type: "culture", prompt: "Quel titre de Michael Jackson est associé au célèbre pas de danse du moonwalk ?", title: "Smooth Criminal", answers: ["Beat It", "Smooth Criminal", "Black or White", "Man in the Mirror"] },
+        { type: "culture", prompt: "Quel titre de Michael Jackson est associé au célèbre pas de danse du moonwalk ?", title: "Billie Jean", answers: ["Beat It", "Billie Jean", "Smooth Criminal", "Man in the Mirror"] },
         { type: "culture", prompt: "Lequel de ces albums est sorti avant Dangerous ?", title: "Bad", answers: ["HIStory", "Bad", "Invincible", "Number Ones"] },
         { type: "culture", prompt: "Dans quelle ville Michael Jackson est-il né ?", title: "Gary", answers: ["Chicago", "Gary", "Detroit", "Los Angeles"] }
       ]
@@ -46,8 +46,10 @@
   const startScreen = document.getElementById("artistStartScreen");
   const gameScreen = document.getElementById("artistGameScreen");
   const endScreen = document.getElementById("artistEndScreen");
-  const startButton = document.getElementById("startArtistBtn");
+  const startBeyonceButton = document.getElementById("startBeyonceButton");
+  const startMichaelButton = document.getElementById("startMichaelButton");
   const restartButton = document.getElementById("restartArtistButton");
+  const directoryButton = document.getElementById("artistDirectoryButton");
   const roundBadge = document.getElementById("artistRoundBadge");
   const scoreBadge = document.getElementById("artistScoreBadge");
   const questionType = document.getElementById("artistQuestionType");
@@ -60,9 +62,8 @@
   const revealElement = document.getElementById("artistReveal");
   const nextButton = document.getElementById("artistNextButton");
   const finalScore = document.getElementById("artistFinalScore");
-  const artistTitle = document.getElementById("artistTitle");
-  const artistIntroText = document.getElementById("artistIntroText");
-  const artistOptions = document.querySelectorAll(".artist-option");
+  const endTitle = document.getElementById("artistEndTitle");
+  const endBadge = document.getElementById("artistEndBadge");
   const standardHeaderButtons = [...document.querySelectorAll(".header-actions button")];
 
   let currentIndex = 0;
@@ -76,7 +77,6 @@
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   }
-
   function shuffle(list) {
     const copy = [...list];
     for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -85,29 +85,16 @@
     }
     return copy;
   }
-
   function setStatus(message, kind = "") {
     audioStatus.textContent = message;
     audioStatus.className = `feedback ${kind}`.trim();
   }
-
   function getArtistQuestions() {
     const artist = artistCatalog[currentArtistId];
     return [...artist.blindTests, ...artist.cultureQuestions];
   }
 
-  function updateArtistSelection() {
-    const artist = artistCatalog[currentArtistId];
-    artistTitle.textContent = artist.name;
-    artistIntroText.textContent = artist.intro;
-    startButton.textContent = `Commencer le quiz ${artist.name}`;
-    artistOptions.forEach((button) => {
-      const active = button.dataset.artist === currentArtistId;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
-  }
-
+  // JSONP pattern retained from the tested Deezer prototype for GitHub Pages compatibility.
   function requestJSONP(url) {
     return new Promise((resolve, reject) => {
       const callback = `quizzmuCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
@@ -143,7 +130,6 @@
   async function getTrack(question) {
     const artistName = artistCatalog[currentArtistId].name;
     const search = question.search || `${question.title} ${artistName}`;
-
     try {
       const results = await requestJSONP(`https://api.deezer.com/search?q=${encodeURIComponent(search)}`);
       const list = Array.isArray(results.data) ? results.data : [];
@@ -151,28 +137,20 @@
       const match = list.find((item) => {
         const resultTitle = normalize(item.title);
         const resultArtist = normalize(item.artist?.name);
-        const titleMatches = resultTitle === expectedTitle || resultTitle.startsWith(`${expectedTitle} `);
-        return titleMatches && resultArtist.includes(normalize(artistName));
+        return (resultTitle === expectedTitle || resultTitle.startsWith(`${expectedTitle} `)) && resultArtist.includes(normalize(artistName));
       });
       if (match?.id) {
         const track = await requestJSONP(`https://api.deezer.com/track/${encodeURIComponent(match.id)}`);
-        if (normalize(track.title) !== expectedTitle && !normalize(track.title).startsWith(`${expectedTitle} `)) {
-          throw new Error("Le résultat Deezer ne correspond pas au titre demandé.");
-        }
-        if (!normalize(track.artist?.name).includes(normalize(artistName))) {
-          throw new Error(`Le résultat Deezer ne correspond pas à ${artistName}.`);
-        }
+        if (!(normalize(track.title) === expectedTitle || normalize(track.title).startsWith(`${expectedTitle} `))) throw new Error("Le résultat Deezer ne correspond pas au titre demandé.");
+        if (!normalize(track.artist?.name).includes(normalize(artistName))) throw new Error(`Le résultat Deezer ne correspond pas à ${artistName}.`);
         return track;
       }
     } catch (error) {
       if (!question.fallbackTrackId) throw error;
     }
-
     if (question.fallbackTrackId) {
       const track = await requestJSONP(`https://api.deezer.com/track/${encodeURIComponent(question.fallbackTrackId)}`);
-      if (normalize(track.title).startsWith(normalize(question.title)) === false || !normalize(track.artist?.name).includes(normalize(artistName))) {
-        throw new Error(`Le morceau de secours Deezer ne correspond pas à ${question.title} de ${artistName}.`);
-      }
+      if (!normalize(track.title).startsWith(normalize(question.title)) || !normalize(track.artist?.name).includes(normalize(artistName))) throw new Error(`Le morceau Deezer ne correspond pas à ${question.title} de ${artistName}.`);
       return track;
     }
     throw new Error("Deezer n’a pas trouvé ce morceau.");
@@ -189,25 +167,22 @@
     if (artistMode) {
       savedHeaderButtonState = standardHeaderButtons.map((button) => button.classList.contains("hidden"));
       standardHeaderButtons.forEach((button) => button.classList.add("hidden"));
-      showArtistStart();
+      showArtistDirectory();
     } else {
       startScreen.classList.add("hidden");
       gameScreen.classList.add("hidden");
       endScreen.classList.add("hidden");
-      if (savedHeaderButtonState.length) {
-        standardHeaderButtons.forEach((button, index) => button.classList.toggle("hidden", savedHeaderButtonState[index]));
-      }
+      if (savedHeaderButtonState.length) standardHeaderButtons.forEach((button, index) => button.classList.toggle("hidden", savedHeaderButtonState[index]));
     }
   }
 
-  function showArtistStart() {
+  function showArtistDirectory() {
     startScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
-    updateArtistSelection();
   }
-
-  function startGame() {
+  function startGame(artistId) {
+    if (artistId) currentArtistId = artistId;
     currentIndex = 0;
     score = 0;
     requestVersion += 1;
@@ -215,13 +190,11 @@
     gameScreen.classList.remove("hidden");
     renderQuestion();
   }
-
   function renderChoices(question) {
     const artist = artistCatalog[currentArtistId];
-    const allAnswers = question.answers || (artist.blindTests.map((item) => item.title).filter((title) => title !== question.title));
-    const options = shuffle([...allAnswers]);
+    const answers = question.answers || [question.title, ...shuffle(artist.blindTests.map((item) => item.title).filter((title) => title !== question.title)).slice(0, 3)];
     choicesElement.replaceChildren();
-    options.forEach((answerText) => {
+    shuffle(answers).forEach((answerText) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "artist-choice";
@@ -244,7 +217,6 @@
     questionType.textContent = question.type === "blindtest" ? `Blind test · ${artist.name}` : `Culture musicale · ${artist.name}`;
     prompt.textContent = question.prompt || "Quel est le titre du morceau ?";
     audioArea.hidden = question.type !== "blindtest";
-    choicesElement.replaceChildren();
     revealElement.hidden = true;
     nextButton.hidden = true;
     audio.pause();
@@ -254,13 +226,7 @@
     playButton.textContent = "Chargement de l’extrait…";
     if (question.type === "blindtest") setStatus("Recherche du morceau et de son extrait via Deezer…");
     renderChoices(question);
-
-    if (question.type !== "blindtest") {
-      setStatus("");
-      playButton.textContent = "▶ Lire l’extrait";
-      return;
-    }
-
+    if (question.type !== "blindtest") return;
     try {
       const track = await getTrack(question);
       if (version !== requestVersion) return;
@@ -282,12 +248,10 @@
       setStatus(`${error.message || "Une erreur Deezer est survenue."} Tu peux répondre et continuer.`, "error");
     }
   }
-
   function answer(selectedAnswer, selectedButton) {
     if (answered) return;
     answered = true;
-    const questions = getArtistQuestions();
-    const question = questions[currentIndex];
+    const question = getArtistQuestions()[currentIndex];
     const correct = normalize(selectedAnswer) === normalize(question.title);
     if (correct) score += 1;
     if (question.type === "blindtest") audio.pause();
@@ -297,25 +261,24 @@
       button.disabled = true;
       if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
     });
-    scoreBadge.textContent = `Score : ${score} / ${questions.length}`;
+    scoreBadge.textContent = `Score : ${score} / ${getArtistQuestions().length}`;
     const heading = document.createElement("strong");
     heading.textContent = correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
-    const revealedTitle = currentTrack?.title || question.title;
-    const revealedArtist = currentTrack?.artist?.name || artistCatalog[currentArtistId].name;
     details.textContent = question.type === "blindtest"
-      ? `La bonne réponse : ${revealedTitle} — ${revealedArtist}.`
+      ? `La bonne réponse : ${currentTrack?.title || question.title} — ${currentTrack?.artist?.name || artistCatalog[currentArtistId].name}.`
       : `La bonne réponse : ${question.title}.`;
     revealElement.replaceChildren(heading, details);
     revealElement.hidden = false;
     if (question.type === "blindtest") setStatus(correct ? "Bien joué !" : "Voici la bonne réponse.", correct ? "success" : "error");
-    nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Suivant →";
+    nextButton.textContent = currentIndex === getArtistQuestions().length - 1 ? "Voir mon score →" : "Suivant →";
     nextButton.hidden = false;
   }
-
   function finishGame() {
     gameScreen.classList.add("hidden");
     endScreen.classList.remove("hidden");
+    endTitle.textContent = `Quiz ${artistCatalog[currentArtistId].name} terminé !`;
+    endBadge.textContent = `Spécial ${artistCatalog[currentArtistId].name}`;
     finalScore.textContent = `Ton score : ${score} / ${getArtistQuestions().length}`;
   }
 
@@ -324,9 +287,7 @@
     if (audio.paused) {
       try { await audio.play(); }
       catch { setStatus("La lecture de l’extrait a échoué. Tu peux répondre et continuer.", "error"); }
-    } else {
-      audio.pause();
-    }
+    } else audio.pause();
   });
   audio.addEventListener("play", () => { playButton.textContent = "⏸ Pause"; });
   audio.addEventListener("pause", () => { if (currentTrack?.preview) playButton.textContent = "▶ Lire l’extrait"; });
@@ -337,25 +298,14 @@
     playButton.disabled = true;
     playButton.textContent = "Extrait indisponible";
   });
-
   nextButton.addEventListener("click", () => {
     if (!answered) return;
-    const questions = getArtistQuestions();
-    if (currentIndex < questions.length - 1) {
-      currentIndex += 1;
-      renderQuestion();
-    } else finishGame();
+    if (currentIndex < getArtistQuestions().length - 1) { currentIndex += 1; renderQuestion(); }
+    else finishGame();
   });
-
-  artistOptions.forEach((button) => {
-    button.addEventListener("click", () => {
-      currentArtistId = button.dataset.artist;
-      updateArtistSelection();
-    });
-  });
-
+  startBeyonceButton.addEventListener("click", () => startGame("beyonce"));
+  startMichaelButton.addEventListener("click", () => startGame("michaeljackson"));
+  restartButton.addEventListener("click", () => startGame());
+  directoryButton.addEventListener("click", showArtistDirectory);
   tabs.forEach((tab) => tab.addEventListener("click", () => setMode(tab.dataset.mode)));
-  startButton.addEventListener("click", startGame);
-  restartButton.addEventListener("click", startGame);
-  updateArtistSelection();
 })();
