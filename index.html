@@ -107,7 +107,11 @@
           <div class="panel-content artist-intro">
             <span class="badge glow">Spécial Artiste</span>
             <h2 id="artistTitle">Beyoncé</h2>
-            <p>7 blind tests et 3 questions de culture musicale. Écoute les extraits puis choisis parmi quatre réponses.</p>
+            <div class="artist-picker" aria-label="Choisir l'artiste spécial">
+              <button type="button" class="artist-option active" data-artist="beyonce" aria-pressed="true">Beyoncé</button>
+              <button type="button" class="artist-option" data-artist="michaeljackson" aria-pressed="false">Michael Jackson</button>
+            </div>
+            <p id="artistIntroText">7 blind tests et 3 questions de culture musicale. Écoute les extraits puis choisis parmi quatre réponses.</p>
             <div class="artist-facts"><span>10 questions</span><span>Blind test + culture</span><span>Score sur 10</span></div>
             <button id="startArtistBtn" class="primary-btn start-btn" type="button">Commencer le quiz Beyoncé</button>
           </div>
@@ -134,7 +138,7 @@
 
         <section id="artistEndScreen" class="panel artist-view hidden" aria-labelledby="artistEndTitle">
           <div class="panel-content center">
-            <span class="badge success">Spécial Beyoncé</span>
+            <span class="badge success">Spécial Artiste</span>
             <h2 id="artistEndTitle">Quiz terminé !</h2>
             <p id="artistFinalScore" class="artist-final-score"></p>
             <div class="end-actions"><button id="restartArtistButton" class="primary-btn" type="button">Rejouer</button></div>

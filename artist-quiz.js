@@ -1,37 +1,45 @@
 (() => {
   "use strict";
 
-  const blindTests = [
-    { type: "blindtest", title: "Halo", artist: "Beyoncé", search: "Halo Beyoncé", fallbackTrackId: "2137356" },
-    { type: "blindtest", title: "Crazy in Love", artist: "Beyoncé", search: "Crazy in Love Beyoncé" },
-    { type: "blindtest", title: "Single Ladies", artist: "Beyoncé", search: "Single Ladies Beyoncé" },
-    { type: "blindtest", title: "Irreplaceable", artist: "Beyoncé", search: "Irreplaceable Beyoncé" },
-    { type: "blindtest", title: "Love On Top", artist: "Beyoncé", search: "Love On Top Beyoncé" },
-    { type: "blindtest", title: "Formation", artist: "Beyoncé", search: "Formation Beyoncé" },
-    { type: "blindtest", title: "BREAK MY SOUL", artist: "Beyoncé", search: "BREAK MY SOUL Beyoncé" }
-  ];
-
-  const cultureQuestions = [
-    {
-      type: "culture",
-      prompt: "Dans quel groupe Beyoncé a-t-elle commencé sa carrière ?",
-      title: "Destiny’s Child",
-      answers: ["Destiny’s Child", "TLC", "En Vogue", "The Supremes"]
+  const artistCatalog = {
+    beyonce: {
+      name: "Beyoncé",
+      intro: "7 blind tests et 3 questions de culture musicale. Écoute les extraits puis choisis parmi quatre réponses.",
+      blindTests: [
+        { type: "blindtest", title: "Halo", artist: "Beyoncé", search: "Halo Beyoncé", fallbackTrackId: "2137356" },
+        { type: "blindtest", title: "Crazy in Love", artist: "Beyoncé", search: "Crazy in Love Beyoncé" },
+        { type: "blindtest", title: "Single Ladies", artist: "Beyoncé", search: "Single Ladies Beyoncé" },
+        { type: "blindtest", title: "Irreplaceable", artist: "Beyoncé", search: "Irreplaceable Beyoncé" },
+        { type: "blindtest", title: "Love On Top", artist: "Beyoncé", search: "Love On Top Beyoncé" },
+        { type: "blindtest", title: "Formation", artist: "Beyoncé", search: "Formation Beyoncé" },
+        { type: "blindtest", title: "BREAK MY SOUL", artist: "Beyoncé", search: "BREAK MY SOUL Beyoncé" }
+      ],
+      cultureQuestions: [
+        { type: "culture", prompt: "Dans quel groupe Beyoncé a-t-elle commencé sa carrière ?", title: "Destiny’s Child", answers: ["Destiny’s Child", "TLC", "En Vogue", "The Supremes"] },
+        { type: "culture", prompt: "En quelle année l’album Lemonade est-il sorti ?", title: "2016", answers: ["2014", "2015", "2016", "2018"] },
+        { type: "culture", prompt: "Dans quelle ville Beyoncé est-elle née ?", title: "Houston", answers: ["Atlanta", "Houston", "Dallas", "New Orleans"] }
+      ]
     },
-    {
-      type: "culture",
-      prompt: "En quelle année l’album Lemonade est-il sorti ?",
-      title: "2016",
-      answers: ["2014", "2015", "2016", "2018"]
-    },
-    {
-      type: "culture",
-      prompt: "Dans quelle ville Beyoncé est-elle née ?",
-      title: "Houston",
-      answers: ["Atlanta", "Houston", "Dallas", "New Orleans"]
+    michaeljackson: {
+      name: "Michael Jackson",
+      intro: "5 blind tests et 5 questions de culture musicale sur la carrière du roi de la pop. Écoute les extraits puis choisis parmi quatre réponses.",
+      blindTests: [
+        { type: "blindtest", title: "Billie Jean", artist: "Michael Jackson", search: "Billie Jean Michael Jackson" },
+        { type: "blindtest", title: "Thriller", artist: "Michael Jackson", search: "Thriller Michael Jackson" },
+        { type: "blindtest", title: "Beat It", artist: "Michael Jackson", search: "Beat It Michael Jackson" },
+        { type: "blindtest", title: "Smooth Criminal", artist: "Michael Jackson", search: "Smooth Criminal Michael Jackson" },
+        { type: "blindtest", title: "Bad", artist: "Michael Jackson", search: "Bad Michael Jackson" }
+      ],
+      cultureQuestions: [
+        { type: "culture", prompt: "Quel album de Michael Jackson est considéré comme l’un des plus vendus de tous les temps ?", title: "Thriller", answers: ["Off the Wall", "Thriller", "Bad", "Dangerous"] },
+        { type: "culture", prompt: "Quel groupe de musique a lancé la carrière de Michael Jackson avant sa carrière solo ?", title: "The Jackson 5", answers: ["The Jackson 5", "The Temptations", "The Supremes", "The Four Tops"] },
+        { type: "culture", prompt: "Quel titre de Michael Jackson est associé au célèbre pas de danse du moonwalk ?", title: "Smooth Criminal", answers: ["Beat It", "Smooth Criminal", "Black or White", "Man in the Mirror"] },
+        { type: "culture", prompt: "Lequel de ces albums est sorti avant Dangerous ?", title: "Bad", answers: ["HIStory", "Bad", "Invincible", "Number Ones"] },
+        { type: "culture", prompt: "Dans quelle ville Michael Jackson est-il né ?", title: "Gary", answers: ["Chicago", "Gary", "Detroit", "Los Angeles"] }
+      ]
     }
-  ];
-  const questions = [...blindTests, ...cultureQuestions];
+  };
+
   const API_TIMEOUT_MS = 10000;
   const appShell = document.getElementById("appShell");
   const tabs = document.querySelectorAll(".category-tab");
@@ -52,6 +60,9 @@
   const revealElement = document.getElementById("artistReveal");
   const nextButton = document.getElementById("artistNextButton");
   const finalScore = document.getElementById("artistFinalScore");
+  const artistTitle = document.getElementById("artistTitle");
+  const artistIntroText = document.getElementById("artistIntroText");
+  const artistOptions = document.querySelectorAll(".artist-option");
   const standardHeaderButtons = [...document.querySelectorAll(".header-actions button")];
 
   let currentIndex = 0;
@@ -59,6 +70,7 @@
   let answered = false;
   let requestVersion = 0;
   let currentTrack = null;
+  let currentArtistId = "beyonce";
   let savedHeaderButtonState = [];
 
   function normalize(value) {
@@ -79,7 +91,23 @@
     audioStatus.className = `feedback ${kind}`.trim();
   }
 
-  // Reuse the tested JSONP request pattern from the project's Deezer prototype.
+  function getArtistQuestions() {
+    const artist = artistCatalog[currentArtistId];
+    return [...artist.blindTests, ...artist.cultureQuestions];
+  }
+
+  function updateArtistSelection() {
+    const artist = artistCatalog[currentArtistId];
+    artistTitle.textContent = artist.name;
+    artistIntroText.textContent = artist.intro;
+    startButton.textContent = `Commencer le quiz ${artist.name}`;
+    artistOptions.forEach((button) => {
+      const active = button.dataset.artist === currentArtistId;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  }
+
   function requestJSONP(url) {
     return new Promise((resolve, reject) => {
       const callback = `quizzmuCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
@@ -113,23 +141,26 @@
   }
 
   async function getTrack(question) {
+    const artistName = artistCatalog[currentArtistId].name;
+    const search = question.search || `${question.title} ${artistName}`;
+
     try {
-      const results = await requestJSONP(`https://api.deezer.com/search?q=${encodeURIComponent(question.search)}`);
+      const results = await requestJSONP(`https://api.deezer.com/search?q=${encodeURIComponent(search)}`);
       const list = Array.isArray(results.data) ? results.data : [];
       const expectedTitle = normalize(question.title);
       const match = list.find((item) => {
         const resultTitle = normalize(item.title);
         const resultArtist = normalize(item.artist?.name);
         const titleMatches = resultTitle === expectedTitle || resultTitle.startsWith(`${expectedTitle} `);
-        return titleMatches && resultArtist.includes("beyonce");
+        return titleMatches && resultArtist.includes(normalize(artistName));
       });
       if (match?.id) {
         const track = await requestJSONP(`https://api.deezer.com/track/${encodeURIComponent(match.id)}`);
         if (normalize(track.title) !== expectedTitle && !normalize(track.title).startsWith(`${expectedTitle} `)) {
           throw new Error("Le résultat Deezer ne correspond pas au titre demandé.");
         }
-        if (!normalize(track.artist?.name).includes("beyonce")) {
-          throw new Error("Le résultat Deezer ne correspond pas à Beyoncé.");
+        if (!normalize(track.artist?.name).includes(normalize(artistName))) {
+          throw new Error(`Le résultat Deezer ne correspond pas à ${artistName}.`);
         }
         return track;
       }
@@ -139,8 +170,8 @@
 
     if (question.fallbackTrackId) {
       const track = await requestJSONP(`https://api.deezer.com/track/${encodeURIComponent(question.fallbackTrackId)}`);
-      if (!normalize(track.title).startsWith("halo") || !normalize(track.artist?.name).includes("beyonce")) {
-        throw new Error("Le morceau de secours Deezer ne correspond pas à Halo de Beyoncé.");
+      if (normalize(track.title).startsWith(normalize(question.title)) === false || !normalize(track.artist?.name).includes(normalize(artistName))) {
+        throw new Error(`Le morceau de secours Deezer ne correspond pas à ${question.title} de ${artistName}.`);
       }
       return track;
     }
@@ -160,22 +191,20 @@
       standardHeaderButtons.forEach((button) => button.classList.add("hidden"));
       showArtistStart();
     } else {
-      artistStartScreenHide();
+      startScreen.classList.add("hidden");
+      gameScreen.classList.add("hidden");
+      endScreen.classList.add("hidden");
       if (savedHeaderButtonState.length) {
         standardHeaderButtons.forEach((button, index) => button.classList.toggle("hidden", savedHeaderButtonState[index]));
       }
     }
   }
 
-  function artistStartScreenHide() {
-    startScreen.classList.add("hidden");
+  function showArtistStart() {
+    startScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
-  }
-
-  function showArtistStart() {
-    artistStartScreenHide();
-    startScreen.classList.remove("hidden");
+    updateArtistSelection();
   }
 
   function startGame() {
@@ -188,9 +217,11 @@
   }
 
   function renderChoices(question) {
+    const artist = artistCatalog[currentArtistId];
+    const allAnswers = question.answers || (artist.blindTests.map((item) => item.title).filter((title) => title !== question.title));
+    const options = shuffle([...allAnswers]);
     choicesElement.replaceChildren();
-    const answers = question.answers || makeBlindTestAnswers(question.title);
-    shuffle(answers).forEach((answerText) => {
+    options.forEach((answerText) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "artist-choice";
@@ -201,19 +232,16 @@
     });
   }
 
-  function makeBlindTestAnswers(correctTitle) {
-    const otherTitles = blindTests.map((question) => question.title).filter((title) => title !== correctTitle);
-    return [correctTitle, ...shuffle(otherTitles).slice(0, 3)];
-  }
-
   async function renderQuestion() {
     const version = ++requestVersion;
+    const artist = artistCatalog[currentArtistId];
+    const questions = getArtistQuestions();
     const question = questions[currentIndex];
     answered = false;
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / ${questions.length}`;
-    questionType.textContent = question.type === "blindtest" ? "Blind test · Beyoncé" : "Culture musicale · Beyoncé";
+    questionType.textContent = question.type === "blindtest" ? `Blind test · ${artist.name}` : `Culture musicale · ${artist.name}`;
     prompt.textContent = question.prompt || "Quel est le titre du morceau ?";
     audioArea.hidden = question.type !== "blindtest";
     choicesElement.replaceChildren();
@@ -258,6 +286,7 @@
   function answer(selectedAnswer, selectedButton) {
     if (answered) return;
     answered = true;
+    const questions = getArtistQuestions();
     const question = questions[currentIndex];
     const correct = normalize(selectedAnswer) === normalize(question.title);
     if (correct) score += 1;
@@ -273,7 +302,7 @@
     heading.textContent = correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
     const revealedTitle = currentTrack?.title || question.title;
-    const revealedArtist = currentTrack?.artist?.name || "Beyoncé";
+    const revealedArtist = currentTrack?.artist?.name || artistCatalog[currentArtistId].name;
     details.textContent = question.type === "blindtest"
       ? `La bonne réponse : ${revealedTitle} — ${revealedArtist}.`
       : `La bonne réponse : ${question.title}.`;
@@ -287,7 +316,7 @@
   function finishGame() {
     gameScreen.classList.add("hidden");
     endScreen.classList.remove("hidden");
-    finalScore.textContent = `Ton score : ${score} / ${questions.length}`;
+    finalScore.textContent = `Ton score : ${score} / ${getArtistQuestions().length}`;
   }
 
   playButton.addEventListener("click", async () => {
@@ -311,12 +340,22 @@
 
   nextButton.addEventListener("click", () => {
     if (!answered) return;
+    const questions = getArtistQuestions();
     if (currentIndex < questions.length - 1) {
       currentIndex += 1;
       renderQuestion();
     } else finishGame();
   });
+
+  artistOptions.forEach((button) => {
+    button.addEventListener("click", () => {
+      currentArtistId = button.dataset.artist;
+      updateArtistSelection();
+    });
+  });
+
   tabs.forEach((tab) => tab.addEventListener("click", () => setMode(tab.dataset.mode)));
   startButton.addEventListener("click", startGame);
   restartButton.addEventListener("click", startGame);
+  updateArtistSelection();
 })();

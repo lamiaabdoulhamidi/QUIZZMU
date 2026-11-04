@@ -33,6 +33,31 @@
 .artist-view:not(.hidden) { display: block; }
 .artist-intro { text-align: center; padding-top: 42px; padding-bottom: 42px; }
 .artist-intro > p { max-width: 580px; margin: 0 auto; }
+.artist-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px 0 18px;
+}
+.artist-option {
+  min-width: 170px;
+  padding: 0.8rem 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.artist-option:hover { transform: translateY(-1px); }
+.artist-option.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  color: #fffaf5;
+  border-color: transparent;
+}
 .artist-facts {
   display: flex;
   flex-wrap: wrap;
