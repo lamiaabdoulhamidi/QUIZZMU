@@ -111,10 +111,10 @@
       <section class="panel" aria-labelledby="pageTitle">
         <p class="eyebrow">QuizzMU · expérimentation isolée</p>
         <h1 id="pageTitle">Test Deezer</h1>
-        <p>Écoute l’extrait, puis retrouve son titre. Les informations du morceau sont demandées à l’API Deezer en JSONP et révélées après ta réponse.</p>
+        <p>Écoute l’extrait, puis retrouve le titre. Les informations des morceaux sont récupérées via l’API Deezer en JSONP et révélées seulement après ta réponse.</p>
 
         <div class="question">
-          <strong id="questionLabel">Question 1 / 4</strong>
+          <strong id="questionLabel">Question 1 / 3</strong>
           <span>Quel est le titre du morceau ?</span>
         </div>
 
@@ -131,7 +131,7 @@
           <button id="nextButton" type="button" hidden>Question suivante</button>
         </div>
         <button id="retryButton" type="button" hidden>Réessayer le chargement</button>
-        <p class="small">Un extrait peut être indisponible ou expirer. En cas d’échec, un message s’affichera ici. La lecture utilise uniquement l’URL preview fournie par Deezer.</p>
+        <p class="small">Si l’extrait est indisponible, expiré ou si l’API ne répond pas, un message clair s’affiche.</p>
         <a class="back" href="./">← Retour à QuizzMU</a>
       </section>
     </main>
@@ -140,7 +140,7 @@
       (() => {
         "use strict";
 
-        const TRACK_IDS = ["6297555", "2112079", "1109721", "464755222"];
+        const TRACK_IDS = ["6297555", "2137356", "1109880"];
         const API_TIMEOUT_MS = 10000;
         const audio = document.getElementById("previewAudio");
         const playButton = document.getElementById("playButton");
@@ -178,6 +178,7 @@
               script.remove();
               try { delete window[callbackName]; } catch { window[callbackName] = undefined; }
             };
+
             const fail = (message) => {
               if (settled) return;
               settled = true;
@@ -187,99 +188,135 @@
 
             window[callbackName] = (data) => {
               if (settled) return;
-              if (!data || data.error || !data.id || !data.title || !data.artist?.name) {
-                fail("Deezer n’a pas renvoyé les informations attendues pour un morceau.");
+              if (!data || data.error || !data.id || !data.title || !data.artist || !data.artist.name) {
+                fail("Deezer n’a pas renvoyé les informations du morceau attendues.");
                 return;
               }
+              if (!data.preview || typeof data.preview !== "string") {
+                fail("Le morceau a bien été trouvé, mais l’extrait preview est introuvable ou indisponible.");
+                return;
+              }
+
               settled = true;
               cleanup();
               resolve(data);
             };
 
-            script.onerror = () => fail("Impossible de joindre l’API Deezer en JSONP.");
+            script.onerror = () => fail("La requête JSONP vers Deezer a échoué.");
             script.src = `https://api.deezer.com/track/${encodeURIComponent(trackId)}?output=jsonp&callback=${encodeURIComponent(callbackName)}`;
-            timeoutId = window.setTimeout(() => fail("La demande à Deezer a expiré. Réessaie dans un instant."), API_TIMEOUT_MS);
+            timeoutId = window.setTimeout(() => fail("La demande à l’API Deezer a expiré."), API_TIMEOUT_MS);
             document.head.appendChild(script);
           });
         }
 
-        async function loadQuestion() {
+        async function loadAllTracks() {
           const token = ++requestToken;
-          answered = false;
-          audio.pause();
-          audio.removeAttribute("src");
-          audio.load();
-          choicesElement.replaceChildren();
+          setStatus("Récupération des morceaux et des previews depuis Deezer…");
+          setPlayButton("Chargement du morceau…", true);
+          retryButton.hidden = true;
           revealElement.hidden = true;
           nextButton.hidden = true;
-          retryButton.hidden = true;
-          questionLabel.textContent = `Question ${currentIndex + 1} / ${TRACK_IDS.length}`;
-          setPlayButton("Chargement du morceau…", true);
-          setStatus("Récupération des informations et des extraits depuis Deezer…");
 
           try {
             const loadedTracks = await Promise.all(TRACK_IDS.map(fetchTrack));
             if (token !== requestToken) return;
             tracks = loadedTracks;
-            const currentTrack = tracks[currentIndex];
-
-            if (!currentTrack.preview || typeof currentTrack.preview !== "string") {
-              throw new Error("Le morceau a été trouvé, mais Deezer ne fournit pas d’extrait preview disponible pour cette question.");
-            }
-
-            audio.src = currentTrack.preview;
-            audio.load();
-            renderChoices(currentTrack);
-            setPlayButton("▶ Lire l’extrait");
-            setStatus("Extrait chargé. Écoute-le et choisis une proposition.", "success");
+            currentIndex = 0;
+            renderCurrentQuestion();
           } catch (error) {
             if (token !== requestToken) return;
+            setStatus(error.message || "Un problème est survenu lors du chargement des morceaux.", "error");
             setPlayButton("Extrait indisponible", true);
-            setStatus(error.message || "Une erreur est survenue pendant le chargement du morceau.", "error");
             retryButton.hidden = false;
           }
         }
 
+        function renderCurrentQuestion() {
+          const track = tracks[currentIndex];
+          if (!track) {
+            setStatus("Aucun morceau disponible pour le moment.", "error");
+            return;
+          }
+
+          answered = false;
+          questionLabel.textContent = `Question ${currentIndex + 1} / ${tracks.length}`;
+          choicesElement.replaceChildren();
+          revealElement.hidden = true;
+          nextButton.hidden = true;
+          retryButton.hidden = true;
+          audio.pause();
+          audio.removeAttribute("src");
+          audio.load();
+
+          if (!track.preview || typeof track.preview !== "string") {
+            setStatus("Le preview de ce morceau est introuvable. Essayez une autre question.", "error");
+            setPlayButton("Extrait indisponible", true);
+            retryButton.hidden = false;
+            return;
+          }
+
+          audio.src = track.preview;
+          audio.load();
+          renderChoices(track);
+          setPlayButton("▶ Lire l’extrait");
+          setStatus("Extrait chargé. Écoute-le et choisis une proposition.", "success");
+        }
+
         function renderChoices(currentTrack) {
-          const options = tracks.map((track) => ({ title: track.title, isCorrect: track.id === currentTrack.id }));
-          for (let i = options.length - 1; i > 0; i -= 1) {
+          const optionTitles = tracks.map((track) => track.title);
+          const fillerTitles = ["Halo", "Umbrella", "Alors on danse", "One Dance", "Shape of You", "Someone Like You"];
+          const combined = [...new Set([...optionTitles, ...fillerTitles])];
+          const ordered = [currentTrack.title, ...combined.filter((title) => title !== currentTrack.title)].slice(0, 4);
+
+          for (let i = ordered.length - 1; i > 0; i -= 1) {
             const j = Math.floor(Math.random() * (i + 1));
-            [options[i], options[j]] = [options[j], options[i]];
+            [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
           }
 
           choicesElement.replaceChildren();
-          options.forEach((option) => {
+          ordered.forEach((title) => {
             const button = document.createElement("button");
             button.type = "button";
             button.className = "choice";
-            button.textContent = option.title;
+            button.textContent = title;
             button.setAttribute("aria-pressed", "false");
-            button.addEventListener("click", () => answer(option, button));
+            button.addEventListener("click", () => answer(title, button));
             choicesElement.appendChild(button);
           });
         }
 
-        function answer(option, selectedButton) {
+        function answer(selectedTitle, selectedButton) {
           const currentTrack = tracks[currentIndex];
           if (!currentTrack || answered) return;
+
           answered = true;
-          const correct = option.isCorrect;
+          const correct = selectedTitle === currentTrack.title;
           selectedButton.setAttribute("aria-pressed", "true");
           selectedButton.classList.add(correct ? "correct" : "incorrect");
+
           choicesElement.querySelectorAll("button").forEach((button) => {
             button.disabled = true;
-            if (button.textContent === currentTrack.title) button.classList.add("correct");
+            if (button.textContent === currentTrack.title) {
+              button.classList.add("correct");
+            }
           });
 
+          revealElement.replaceChildren();
           const heading = document.createElement("strong");
           heading.textContent = correct ? "Bonne réponse !" : "Pas tout à fait.";
           const details = document.createElement("p");
           details.textContent = `Titre : ${currentTrack.title} — Artiste : ${currentTrack.artist.name}`;
-          revealElement.replaceChildren(heading, details);
+          revealElement.append(heading, details);
           revealElement.hidden = false;
           setStatus(correct ? "Bien joué !" : "Voici la bonne réponse.", correct ? "success" : "error");
-          nextButton.textContent = currentIndex === TRACK_IDS.length - 1 ? "Recommencer le test" : "Question suivante";
-          nextButton.hidden = false;
+
+          if (currentIndex < tracks.length - 1) {
+            nextButton.textContent = "Question suivante";
+            nextButton.hidden = false;
+          } else {
+            nextButton.textContent = "Recommencer";
+            nextButton.hidden = false;
+          }
         }
 
         playButton.addEventListener("click", async () => {
@@ -301,17 +338,42 @@
         });
         audio.addEventListener("ended", () => setPlayButton("▶ Rejouer l’extrait"));
         audio.addEventListener("error", () => {
-          if (tracks[currentIndex]) setStatus("L’extrait est indisponible ou a expiré. Essaie de recharger cette question.", "error");
+          if (tracks[currentIndex]) {
+            setStatus("L’extrait est indisponible ou a expiré. Essaie de recharger cette question.", "error");
+          }
         });
 
         nextButton.addEventListener("click", () => {
           if (!answered) return;
-          currentIndex = (currentIndex + 1) % TRACK_IDS.length;
-          loadQuestion();
+          if (currentIndex < tracks.length - 1) {
+            currentIndex += 1;
+            renderCurrentQuestion();
+          } else {
+            currentIndex = 0;
+            loadAllTracks();
+          }
         });
-        retryButton.addEventListener("click", loadQuestion);
 
-        loadQuestion();
+        retryButton.addEventListener("click", () => {
+          refreshCurrentTrack();
+        });
+
+        function refreshCurrentTrack() {
+          const currentTrackId = TRACK_IDS[currentIndex];
+          fetchTrack(currentTrackId)
+            .then((track) => {
+              if (!tracks[currentIndex]) tracks[currentIndex] = track;
+              else tracks[currentIndex] = track;
+              renderCurrentQuestion();
+            })
+            .catch((error) => {
+              setStatus(error.message || "Le morceau n’a pas pu être rechargé.", "error");
+              setPlayButton("Extrait indisponible", true);
+              retryButton.hidden = false;
+            });
+        }
+
+        loadAllTracks();
       })();
     </script>
   </body>
