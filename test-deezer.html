@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5efe6" />
+    <title>Test Deezer — QuizzMU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f5efe6;
+        --bg-2: #efe1cf;
+        --bg-3: #dcc5a3;
+        --primary: #8a5a38;
+        --primary-strong: #6c432a;
+        --secondary: #b96f46;
+        --success: #3e7b5b;
+        --danger: #b75d52;
+        --text: #2f241d;
+        --muted: #695b4d;
+        --border: rgba(107, 74, 48, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 32px 16px;
+        display: grid;
+        place-items: center;
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(215, 168, 107, 0.22), transparent 26%),
+          radial-gradient(circle at bottom right, rgba(166, 121, 85, 0.12), transparent 25%),
+          linear-gradient(135deg, var(--bg), var(--bg-2) 40%, var(--bg-3));
+      }
+      main { width: min(680px, 100%); }
+      .panel {
+        padding: clamp(24px, 6vw, 40px);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 249, 242, 0.97), rgba(246, 236, 221, 0.95));
+        box-shadow: 0 18px 40px rgba(90, 67, 45, 0.14);
+      }
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--secondary);
+        font-size: .75rem;
+        font-weight: 800;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      h1 { margin: 0 0 12px; font-size: clamp(2rem, 5vw, 2.8rem); letter-spacing: -.05em; }
+      p { color: var(--muted); line-height: 1.65; }
+      .question {
+        margin: 24px 0 16px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(215, 168, 107, .1);
+        text-align: center;
+      }
+      .question strong { display: block; margin-bottom: 6px; }
+      .player-row { display: flex; justify-content: center; margin: 20px 0; }
+      button {
+        min-height: 48px;
+        border: 0;
+        border-radius: 14px;
+        padding: 12px 18px;
+        color: #fffaf6;
+        background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+        box-shadow: 0 10px 24px rgba(138, 90, 56, .18);
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform .15s ease, opacity .15s ease;
+      }
+      button:hover:not(:disabled) { transform: translateY(-1px); }
+      button:disabled { opacity: .5; cursor: not-allowed; }
+      .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+      .choice {
+        color: var(--text);
+        background: rgba(255, 255, 255, .48);
+        border: 1px solid var(--border);
+        box-shadow: none;
+        text-align: left;
+      }
+      .choice[aria-pressed="true"] { outline: 2px solid var(--primary); }
+      .choice.correct { color: #fff; background: var(--success); }
+      .choice.incorrect { color: #fff; background: var(--danger); }
+      .status { min-height: 28px; margin: 16px 0 0; font-weight: 600; }
+      .status.error { color: var(--danger); }
+      .status.success { color: var(--success); }
+      .reveal { margin-top: 14px; padding: 16px; border-radius: 16px; background: rgba(62, 123, 91, .1); }
+      .reveal strong { color: var(--success); }
+      .back { display: inline-block; margin-top: 22px; color: var(--primary-strong); font-weight: 700; }
+      .small { font-size: .88rem; }
+      [hidden] { display: none !important; }
+      @media (max-width: 520px) {
+        .choices { grid-template-columns: 1fr; }
+        .panel { padding: 24px 18px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel" aria-labelledby="pageTitle">
+        <p class="eyebrow">QuizzMU · expérimentation isolée</p>
+        <h1 id="pageTitle">Test Deezer</h1>
+        <p>Cette page demande les informations du morceau à l’API Deezer en JSONP. Le titre et l’artiste ne sont révélés qu’après ton choix.</p>
+
+        <div class="question">
+          <strong>Quel est le titre du morceau ?</strong>
+          <span>Lance l’extrait, puis choisis une proposition.</span>
+        </div>
+
+        <div class="player-row">
+          <button id="playButton" type="button" disabled aria-label="Lire l’extrait">Chargement du morceau…</button>
+        </div>
+        <audio id="previewAudio" preload="none"></audio>
+
+        <div id="choices" class="choices" aria-label="Propositions de réponse"></div>
+        <p id="status" class="status" role="status" aria-live="polite">Connexion à l’API Deezer…</p>
+        <div id="reveal" class="reveal" hidden aria-live="polite"></div>
+
+        <button id="retryButton" type="button" hidden>Réessayer le chargement</button>
+        <p class="small">Si la demande JSONP ou l’extrait échoue, un message d’erreur s’affichera ici. La lecture dépend de la disponibilité de l’extrait Deezer.</p>
+        <a class="back" href="./">← Retour à QuizzMU</a>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const TRACK_ID = "6297555";
+        const API_TIMEOUT_MS = 10000;
+        const audio = document.getElementById("previewAudio");
+        const playButton = document.getElementById("playButton");
+        const choicesElement = document.getElementById("choices");
+        const statusElement = document.getElementById("status");
+        const revealElement = document.getElementById("reveal");
+        const retryButton = document.getElementById("retryButton");
+
+        let track = null;
+        let answered = false;
+        let requestToken = 0;
+
+        const distractors = ["Papaoutai", "Formidable", "Tous les mêmes"];
+
+        function setStatus(message, type = "") {
+          statusElement.textContent = message;
+          statusElement.className = `status ${type}`.trim();
+        }
+
+        function setPlayButton(label, disabled = false) {
+          playButton.textContent = label;
+          playButton.disabled = disabled;
+        }
+
+        function loadTrack() {
+          const token = ++requestToken;
+          track = null;
+          answered = false;
+          audio.pause();
+          audio.removeAttribute("src");
+          audio.load();
+          choicesElement.replaceChildren();
+          revealElement.hidden = true;
+          retryButton.hidden = true;
+          setPlayButton("Chargement du morceau…", true);
+          setStatus("Connexion à l’API Deezer…");
+
+          const callbackName = `quizzmuDeezerCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+          const script = document.createElement("script");
+          let settled = false;
+
+          const cleanup = () => {
+            clearTimeout(timeoutId);
+            script.remove();
+            try { delete window[callbackName]; } catch { window[callbackName] = undefined; }
+          };
+
+          const fail = (message) => {
+            if (settled || token !== requestToken) return;
+            settled = true;
+            cleanup();
+            setPlayButton("Extrait indisponible", true);
+            setStatus(message, "error");
+            retryButton.hidden = false;
+          };
+
+          window[callbackName] = (data) => {
+            if (settled || token !== requestToken) return;
+            if (!data || data.error || !data.id) {
+              fail("Deezer n’a pas renvoyé les informations du morceau. Réessaie dans un instant.");
+              return;
+            }
+            if (!data.preview || typeof data.preview !== "string") {
+              fail("Le morceau a été trouvé, mais Deezer ne fournit pas d’extrait preview disponible.");
+              return;
+            }
+
+            settled = true;
+            cleanup();
+            track = data;
+            audio.src = data.preview;
+            audio.load();
+            renderChoices();
+            setPlayButton("▶ Lire l’extrait");
+            setStatus("Morceau chargé. Lance l’extrait puis choisis une réponse.", "success");
+          };
+
+          script.onerror = () => fail("Impossible de joindre l’API Deezer (JSONP). Vérifie ta connexion puis réessaie.");
+          script.src = `https://api.deezer.com/track/${TRACK_ID}?output=jsonp&callback=${encodeURIComponent(callbackName)}`;
+          const timeoutId = window.setTimeout(() => {
+            fail("La demande à Deezer a expiré. L’API ou le réseau n’a pas répondu à temps.");
+          }, API_TIMEOUT_MS);
+          document.head.appendChild(script);
+        }
+
+        function renderChoices() {
+          const options = [track.title, ...distractors];
+          for (let i = options.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+          }
+
+          choicesElement.replaceChildren();
+          options.forEach((title) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "choice";
+            button.textContent = title;
+            button.setAttribute("aria-pressed", "false");
+            button.addEventListener("click", () => answer(title, button));
+            choicesElement.appendChild(button);
+          });
+        }
+
+        function answer(selectedTitle, selectedButton) {
+          if (!track || answered) return;
+          answered = true;
+          const correct = selectedTitle === track.title;
+          selectedButton.setAttribute("aria-pressed", "true");
+          selectedButton.classList.add(correct ? "correct" : "incorrect");
+          choicesElement.querySelectorAll("button").forEach((button) => {
+            button.disabled = true;
+            if (button.textContent === track.title) button.classList.add("correct");
+          });
+          revealElement.innerHTML = "";
+          const heading = document.createElement("strong");
+          heading.textContent = correct ? "Bonne réponse !" : "Pas tout à fait.";
+          const details = document.createElement("p");
+          details.textContent = `Titre : ${track.title} — Artiste : ${track.artist?.name || "Artiste inconnu"}`;
+          revealElement.append(heading, details);
+          revealElement.hidden = false;
+          setStatus(correct ? "Bien joué !" : "Voici la bonne réponse.", correct ? "success" : "error");
+        }
+
+        playButton.addEventListener("click", async () => {
+          if (!track) return;
+          if (audio.paused) {
+            try {
+              await audio.play();
+            } catch {
+              setStatus("La lecture de l’extrait a échoué. Il est peut-être expiré ou indisponible : réessaie, ou recharge le test.", "error");
+            }
+          } else {
+            audio.pause();
+          }
+        });
+
+        audio.addEventListener("play", () => setPlayButton("⏸ Mettre en pause"));
+        audio.addEventListener("pause", () => {
+          if (track) setPlayButton("▶ Lire l’extrait");
+        });
+        audio.addEventListener("ended", () => setPlayButton("▶ Rejouer l’extrait"));
+        audio.addEventListener("error", () => {
+          if (track) setStatus("L’extrait est indisponible ou a expiré. Recharge la page ou réessaie plus tard.", "error");
+        });
+        retryButton.addEventListener("click", loadTrack);
+
+        loadTrack();
+      })();
+    </script>
+  </body>
+</html>
