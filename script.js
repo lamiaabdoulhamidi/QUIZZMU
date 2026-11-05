@@ -92,7 +92,7 @@ const state = {
   currentHintIndex: 0,
   questions: [],
   locked: false,
-  selectedGenre: "tous",
+  selectedGenre: "rap",
   selectedDifficulty: "facile",
   skipPending: false
 };
@@ -419,7 +419,7 @@ answerInput.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("load", () => {
-  selectGenre("tous");
+  selectGenre("rap");
   selectDifficulty("facile");
   updateDifficultyStats();
   showMenu();
