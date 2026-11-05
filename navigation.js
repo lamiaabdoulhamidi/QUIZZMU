@@ -32,6 +32,15 @@
   rapModule.src = "rap-deezer.js";
   document.body.appendChild(rapModule);
 
+  // R&B uses its own Deezer module; Rap and artist modules are unchanged.
+  const rnbStyles = document.createElement("link");
+  rnbStyles.rel = "stylesheet";
+  rnbStyles.href = "rnb-deezer.css";
+  document.head.appendChild(rnbStyles);
+  const rnbModule = document.createElement("script");
+  rnbModule.src = "rnb-deezer.js";
+  document.body.appendChild(rnbModule);
+
   function hideAllQuizScreens() {
     [startScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }
