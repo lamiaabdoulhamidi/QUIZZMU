@@ -41,22 +41,22 @@
     ]
   };
   const LEVEL_LABELS = { facile: "Facile", moyen: "Moyen", difficile: "Difficile" };
-  const rapButton = document.querySelector('.genre-btn[data-genre="rnb"]');
+  const rnbButton = document.querySelector('.genre-btn[data-genre="rnb"]');
   const startScreen = document.getElementById("startScreen");
-  if (!rapButton || !startScreen) return;
+  if (!rnbButton || !startScreen) return;
 
   const originalContent = startScreen.querySelector(":scope > .panel-content");
   const headerActions = document.querySelector(".header-actions");
   const chooseModeButton = document.getElementById("chooseModeBtn");
   if (!originalContent || !headerActions || !chooseModeButton) return;
 
-  const rapScreen = document.createElement("section");
-  rapScreen.className = "rnb-deezer-panel hidden";
-  rapScreen.setAttribute("aria-labelledby", "rapDeezerTitle");
-  rapScreen.innerHTML = `
+  const rnbScreen = document.createElement("section");
+  rnbScreen.className = "rnb-deezer-panel hidden";
+  rnbScreen.setAttribute("aria-labelledby", "rnbDeezerTitle");
+  rnbScreen.innerHTML = `
     <div class="rnb-deezer-heading">
       <span class="badge glow">BLIND TEST PAR GENRE · R&B</span>
-      <h2 id="rapDeezerTitle">Blind test R&B</h2>
+      <h2 id="rnbDeezerTitle">Blind test R&B</h2>
       <p>Choisis un niveau, écoute l’extrait Deezer et retrouve le titre parmi 4 propositions.</p>
     </div>
     <div class="rnb-level-picker" role="group" aria-label="Choisir le niveau">
@@ -64,44 +64,44 @@
       <button type="button" class="difficulty-btn" data-rnb-level="moyen" aria-pressed="false">Moyen</button>
       <button type="button" class="difficulty-btn" data-rnb-level="difficile" aria-pressed="false">Difficile</button>
     </div>
-    <div id="rapPlayArea" class="rnb-play-area hidden">
-      <div class="game-header"><span id="rapRoundBadge" class="round-badge">Question 1 / 10</span><span id="rapScoreBadge" class="score-badge">Score : 0 / 100</span></div>
-      <p id="rapDeezerStatus" class="feedback rnb-deezer-status" role="status" aria-live="polite">Recherche du morceau et de son extrait via Deezer…</p>
+    <div id="rnbPlayArea" class="rnb-play-area hidden">
+      <div class="game-header"><span id="rnbRoundBadge" class="round-badge">Question 1 / 10</span><span id="rnbScoreBadge" class="score-badge">Score : 0 / 100</span></div>
+      <p id="rnbDeezerStatus" class="feedback rnb-deezer-status" role="status" aria-live="polite">Recherche du morceau et de son extrait via Deezer…</p>
       <div class="rnb-audio-card">
         <p class="hint-label">ÉCOUTE L’EXTRAIT</p>
-        <button id="rapPlayAudio" class="primary-btn rnb-audio-button" type="button" disabled>Chargement de l’extrait…</button>
+        <button id="rnbPlayAudio" class="primary-btn rnb-audio-button" type="button" disabled>Chargement de l’extrait…</button>
       </div>
       <p class="rnb-answer-prompt">Quel est le titre de ce morceau ?</p>
-      <div id="rapChoices" class="rnb-choices" role="group" aria-label="Propositions de titres et artistes"></div>
-      <p id="rapAnswerFeedback" class="feedback rnb-answer-feedback" aria-live="polite"></p>
-      <button id="rapSkipButton" class="ghost-btn rnb-skip-button" type="button">Passer</button>
+      <div id="rnbChoices" class="rnb-choices" role="group" aria-label="Propositions de titres et artistes"></div>
+      <p id="rnbAnswerFeedback" class="feedback rnb-answer-feedback" aria-live="polite"></p>
+      <button id="rnbSkipButton" class="ghost-btn rnb-skip-button" type="button">Passer</button>
     </div>
-    <div id="rapFinalArea" class="rnb-final-area hidden" aria-live="polite">
+    <div id="rnbFinalArea" class="rnb-final-area hidden" aria-live="polite">
       <span class="badge success">FIN DE PARTIE</span>
-      <h3 id="rapFinalTitle">Partie terminée</h3>
-      <p id="rapFinalScore"></p>
-      <button id="rapReplayButton" class="primary-btn" type="button">Rejouer ce niveau</button>
+      <h3 id="rnbFinalTitle">Partie terminée</h3>
+      <p id="rnbFinalScore"></p>
+      <button id="rnbReplayButton" class="primary-btn" type="button">Rejouer ce niveau</button>
     </div>
     <p class="rnb-deezer-attribution">Extraits de 30 secondes fournis par <a href="https://www.deezer.com/" target="_blank" rel="noopener noreferrer">Deezer</a>. Lecture en ligne, sans téléchargement.</p>
-    <span id="rapBackButtonPlaceholder" hidden></span>
+    <span id="rnbBackButtonPlaceholder" hidden></span>
     <button id="backToGenreButton" class="ghost-btn rnb-back-button" type="button">← Retour</button>
-    <audio id="rapPreviewAudio" preload="none"></audio>
+    <audio id="rnbPreviewAudio" preload="none"></audio>
   `;
-  startScreen.appendChild(rapScreen);
+  startScreen.appendChild(rnbScreen);
 
-  const status = rapScreen.querySelector("#rapDeezerStatus");
-  const playArea = rapScreen.querySelector("#rapPlayArea");
-  const finalArea = rapScreen.querySelector("#rapFinalArea");
-  const roundBadge = rapScreen.querySelector("#rapRoundBadge");
-  const scoreBadge = rapScreen.querySelector("#rapScoreBadge");
-  const choices = rapScreen.querySelector("#rapChoices");
-  const answerFeedback = rapScreen.querySelector("#rapAnswerFeedback");
-  const audio = rapScreen.querySelector("#rapPreviewAudio");
-  const audioButton = rapScreen.querySelector("#rapPlayAudio");
-  const skipButton = rapScreen.querySelector("#rapSkipButton");
-  const levelButtons = [...rapScreen.querySelectorAll("[data-rnb-level]")];
-  const backButton = rapScreen.querySelector("#backToGenreButton");
-  const backPlaceholder = rapScreen.querySelector("#rapBackButtonPlaceholder");
+  const status = rnbScreen.querySelector("#rnbDeezerStatus");
+  const playArea = rnbScreen.querySelector("#rnbPlayArea");
+  const finalArea = rnbScreen.querySelector("#rnbFinalArea");
+  const roundBadge = rnbScreen.querySelector("#rnbRoundBadge");
+  const scoreBadge = rnbScreen.querySelector("#rnbScoreBadge");
+  const choices = rnbScreen.querySelector("#rnbChoices");
+  const answerFeedback = rnbScreen.querySelector("#rnbAnswerFeedback");
+  const audio = rnbScreen.querySelector("#rnbPreviewAudio");
+  const audioButton = rnbScreen.querySelector("#rnbPlayAudio");
+  const skipButton = rnbScreen.querySelector("#rnbSkipButton");
+  const levelButtons = [...rnbScreen.querySelectorAll("[data-rnb-level]")];
+  const backButton = rnbScreen.querySelector("#backToGenreButton");
+  const backPlaceholder = rnbScreen.querySelector("#rnbBackButtonPlaceholder");
   let selectedLevel = "facile";
   let questions = [];
   let currentIndex = 0;
@@ -141,7 +141,7 @@
   // Same JSONP approach as the artist blind test, so Deezer works on static GitHub Pages.
   function requestJSONP(url) {
     return new Promise((resolve, reject) => {
-      const callback = `quizzmuRap_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const callback = `quizzmuRnb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
       const script = document.createElement("script");
       let finished = false;
       let timeout;
@@ -206,7 +206,7 @@
     stopAudio();
     selectedLevel = level || selectedLevel;
     levelButtons.forEach((button) => {
-      const active = button.dataset.rapLevel === selectedLevel;
+      const active = button.dataset.rnbLevel === selectedLevel;
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
@@ -315,14 +315,14 @@
     stopAudio();
     playArea.classList.add("hidden");
     finalArea.classList.remove("hidden");
-    rapScreen.querySelector("#rapFinalTitle").textContent = `Niveau ${LEVEL_LABELS[selectedLevel]} terminé`;
-    rapScreen.querySelector("#rapFinalScore").textContent = `Ton score final : ${score} / 100 points.`;
+    rnbScreen.querySelector("#rnbFinalTitle").textContent = `Niveau ${LEVEL_LABELS[selectedLevel]} terminé`;
+    rnbScreen.querySelector("#rnbFinalScore").textContent = `Ton score final : ${score} / 100 points.`;
   }
 
-  function showRapScreen() {
+  function showRnbScreen() {
     window.setTimeout(() => {
       originalContent.hidden = true;
-      rapScreen.classList.remove("hidden");
+      rnbScreen.classList.remove("hidden");
       playArea.classList.add("hidden");
       finalArea.classList.add("hidden");
       chooseModeButton.classList.add("hidden");
@@ -332,18 +332,18 @@
     }, 0);
   }
 
-  function leaveRapScreen() {
+  function leaveRnbScreen() {
     requestVersion += 1;
     stopAudio();
-    rapScreen.classList.add("hidden");
+    rnbScreen.classList.add("hidden");
     originalContent.hidden = false;
     backPlaceholder.after(backButton);
     backButton.classList.add("hidden");
     chooseModeButton.classList.remove("hidden");
   }
 
-  rapButton.addEventListener("click", showRapScreen);
-  levelButtons.forEach((button) => button.addEventListener("click", () => startGame(button.dataset.rapLevel)));
+  rnbButton.addEventListener("click", showRnbScreen);
+  levelButtons.forEach((button) => button.addEventListener("click", () => startGame(button.dataset.rnbLevel)));
   audioButton.addEventListener("click", async () => {
     if (!currentTrack?.preview || answered) return;
     if (audio.paused) {
@@ -367,7 +367,7 @@
     audioButton.textContent = "Extrait indisponible";
   });
   skipButton.addEventListener("click", passQuestion);
-  rapScreen.querySelector("#rapReplayButton").addEventListener("click", () => startGame(selectedLevel));
-  backButton.addEventListener("click", leaveRapScreen);
+  rnbScreen.querySelector("#rnbReplayButton").addEventListener("click", () => startGame(selectedLevel));
+  backButton.addEventListener("click", leaveRnbScreen);
   window.addEventListener("pagehide", stopAudio);
 })();
