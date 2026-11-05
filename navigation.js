@@ -34,6 +34,15 @@
   const genreStartButton = document.getElementById("startBtn");
   if (genreStartButton) genreStartButton.innerHTML = 'Commencer le blind test <span aria-hidden="true">→</span>';
 
+  // Add the standalone RAP quiz module and its scoped styles; the other modes stay unchanged.
+  const rapStyles = document.createElement("link");
+  rapStyles.rel = "stylesheet";
+  rapStyles.href = "rap-deezer.css";
+  document.head.appendChild(rapStyles);
+  const rapModule = document.createElement("script");
+  rapModule.src = "rap-deezer.js";
+  document.body.appendChild(rapModule);
+
   function hideAllQuizScreens() {
     [startScreen, gameScreen, endScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }

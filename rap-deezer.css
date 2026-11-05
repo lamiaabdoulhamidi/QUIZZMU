@@ -1,0 +1,33 @@
+.rap-deezer-panel { padding: clamp(22px, 4vw, 36px); }
+.rap-deezer-heading { margin: 0 auto 22px; text-align: center; }
+.rap-deezer-heading h2 { margin: 0 0 10px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+.rap-deezer-heading p { max-width: 620px; margin: 0 auto; }
+.rap-level-picker { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
+.rap-deezer-status { text-align: center; }
+.rap-deezer-status.error, .rap-answer-feedback.error { color: var(--danger); }
+.rap-deezer-status.success, .rap-answer-feedback.success { color: var(--success); }
+.rap-deezer-status.info, .rap-answer-feedback.info { color: var(--warning); }
+.rap-play-area { margin-top: 24px; }
+.rap-audio-card { display: grid; justify-items: center; gap: 14px; padding: 22px; margin-bottom: 20px; border: 1px solid rgba(192,132,252,.16); border-radius: 18px; background: linear-gradient(120deg,rgba(142,59,208,.14),rgba(83,48,115,.08)); }
+.rap-audio-card .hint-label { margin: 0; color: #c795ef; font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+.rap-audio-button { width: min(300px, 100%); }
+.rap-answer-prompt { margin: 0 0 12px; text-align: center; font-weight: 700; }
+.rap-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.rap-choice { min-height: 58px; padding: 14px 16px; border: 1px solid rgba(192,132,252,.18); border-radius: 14px; background: rgba(255,255,255,.035); color: #eee5f7; font: inherit; font-weight: 700; cursor: pointer; transition: .18s ease; }
+.rap-choice:hover:not(:disabled) { transform: translateY(-2px); border-color: #b76aff; background: rgba(143,56,203,.14); }
+.rap-choice:disabled { cursor: default; opacity: .8; }
+.rap-choice.correct { border-color: #36ba7d; background: #19784d; color: white; }
+.rap-choice.incorrect { border-color: #e45b72; background: #922f43; color: white; }
+.rap-answer-feedback { min-height: 48px; margin: 14px 0; text-align: center; }
+.rap-skip-button { display: block; min-width: 130px; margin: 0 auto; }
+.rap-final-area { padding: 24px 12px; text-align: center; }
+.rap-final-area h3 { margin: 4px 0 10px; font-size: 1.6rem; }
+.rap-final-area .primary-btn { margin-top: 20px; }
+.rap-deezer-attribution { margin: 20px 0 14px; text-align: center; font-size: .8rem; }
+.rap-deezer-attribution a { color: #d6a8ff; }
+.rap-back-button { display: block; margin: 16px auto 0; }
+@media (max-width: 560px) {
+  .rap-deezer-panel { padding: 20px 16px; }
+  .rap-choices { grid-template-columns: 1fr; }
+  .rap-level-picker .difficulty-btn { flex: 1 1 30%; }
+}
