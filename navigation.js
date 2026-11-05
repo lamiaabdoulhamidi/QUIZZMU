@@ -8,8 +8,6 @@
   const back = document.getElementById("backToWelcome");
   const chooseMode = document.getElementById("chooseModeBtn");
   const startScreen = document.getElementById("startScreen");
-  const gameScreen = document.getElementById("gameScreen");
-  const endScreen = document.getElementById("endScreen");
   const artistStart = document.getElementById("artistStartScreen");
   const artistGame = document.getElementById("artistGameScreen");
   const artistEnd = document.getElementById("artistEndScreen");
@@ -25,15 +23,6 @@
   const genreTab = tabs.find((tab) => tab.dataset.mode === "questions");
   if (genreTab) genreTab.textContent = "Blind Test par genre";
 
-  const genreHeading = startScreen?.querySelector(".hero-intro h2");
-  if (genreHeading) genreHeading.textContent = "Blind Test par genre";
-  const genreIntro = startScreen?.querySelector(".hero-intro p");
-  if (genreIntro) genreIntro.textContent = "Choisis ton genre musical et ton niveau : Facile, Moyen ou Difficile.";
-  const difficultyPicker = startScreen?.querySelector(".difficulty-picker");
-  if (difficultyPicker) difficultyPicker.setAttribute("aria-label", "Choisir le niveau du blind test");
-  const genreStartButton = document.getElementById("startBtn");
-  if (genreStartButton) genreStartButton.innerHTML = 'Commencer le blind test <span aria-hidden="true">→</span>';
-
   // Add the standalone RAP quiz module and its scoped styles; the other modes stay unchanged.
   const rapStyles = document.createElement("link");
   rapStyles.rel = "stylesheet";
@@ -44,7 +33,7 @@
   document.body.appendChild(rapModule);
 
   function hideAllQuizScreens() {
-    [startScreen, gameScreen, endScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
+    [startScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }
 
   function showModeChooser() {
@@ -91,7 +80,7 @@
     if (tab.dataset.mode === "questions") {
       window.setTimeout(() => {
         if (!app.classList.contains("hidden") && !app.classList.contains("artist-mode-active")) {
-          const anyQuestionView = [startScreen, gameScreen, endScreen].some((screen) => !screen.classList.contains("hidden"));
+          const anyQuestionView = [startScreen].some((screen) => !screen.classList.contains("hidden"));
           if (!anyQuestionView) startScreen.classList.remove("hidden");
         }
       }, 0);
