@@ -58,32 +58,18 @@
           <button type="button" class="category-tab" data-mode="artist" aria-pressed="false">Spécial Artiste</button>
         </nav>
         <div class="header-actions">
-          <button id="menuBtn" class="ghost-btn hidden" type="button">Retour au menu</button>
-          <button id="restartBtn" class="ghost-btn hidden" type="button">Recommencer</button>
           <button id="chooseModeBtn" class="ghost-btn choose-mode-btn" type="button">Changer de rubrique</button>
         </div>
       </header>
       <main>
         <section id="startScreen" class="panel hero-panel quiz-view">
           <div class="panel-content">
-            <div class="hero-intro"><span class="badge glow">PRÊT·E À JOUER ?</span><h2>Teste ta culture musicale</h2><p>Choisis ton style, sélectionne la difficulté puis lance une série de questions sur les artistes, les morceaux et les titres qui tournent aujourd'hui.</p></div>
-            <div class="settings-block"><div class="section-label">1. Choisis ton genre</div><div class="genre-picker" aria-label="Choisir un genre de musique">
+            <div class="hero-intro"><span class="badge glow">PRÊT·E À JOUER ?</span><h2>Blind Test par genre</h2><p>Choisis ton genre musical pour commencer.</p></div>
+            <div class="settings-block"><div class="section-label">Choisis ton genre</div><div class="genre-picker" aria-label="Choisir un genre de musique">
               <button class="genre-btn active" type="button" data-genre="rap">🎤 Rap</button>
             </div></div>
-            <div class="settings-block"><div class="section-label">2. Choisis la difficulté</div><div class="difficulty-picker" aria-label="Choisir la difficulté du quiz">
-              <button class="difficulty-btn active" type="button" data-difficulty="facile">Facile</button><button class="difficulty-btn" type="button" data-difficulty="moyen">Moyen</button><button class="difficulty-btn" type="button" data-difficulty="difficile">Difficile</button>
-            </div></div>
-            <div class="stats-grid"><div class="stat-box"><strong id="totalQuestionsValue">5</strong><span>questions</span></div><div class="stat-box"><strong id="hintCountValue">2</strong><span>indices</span></div><div class="stat-box"><strong id="difficultyValue">Facile</strong><span>niveau</span></div></div>
-            <button id="startBtn" class="primary-btn start-btn" type="button">Commencer le quiz <span aria-hidden="true">→</span></button>
           </div>
         </section>
-        <section id="gameScreen" class="panel hidden quiz-view">
-          <div class="game-header"><span id="roundBadge" class="round-badge">Question 1 / 5</span><span id="scoreBadge" class="score-badge">Score : 0</span></div>
-          <div class="hint-card"><p class="hint-label">QUESTION</p><h3 id="clueText">Chargement...</h3></div>
-          <form id="answerForm"><label for="answerInput">Ta réponse</label><div class="input-row"><input id="answerInput" type="text" placeholder="Ex : Kendrick Lamar, Sabrina Carpenter, ou le titre" autocomplete="off" /><button type="submit" class="primary-btn">Valider</button></div><div class="actions-row"><button type="button" id="skipBtn" class="secondary-btn skip-btn" disabled>Passer</button></div></form>
-          <p id="feedback" class="feedback" aria-live="polite"></p>
-        </section>
-        <section id="endScreen" class="panel hidden quiz-view"><div class="panel-content center"><span class="badge success">FIN DE PARTIE</span><h2 id="endTitle">Partie terminée</h2><p id="endMessage">Ton score final :</p><div class="end-actions"><button id="playAgainBtn" class="primary-btn" type="button">Rejouer</button><button id="menuFromEndBtn" class="ghost-btn" type="button">Retour au menu</button></div></div></section>
         <section id="artistStartScreen" class="panel artist-view hidden" aria-labelledby="artistTitle"><div class="panel-content artist-intro"><span class="badge glow">SPÉCIAL ARTISTE</span><h2 id="artistTitle">Choisis ton quiz artiste</h2><p class="artist-directory-intro">Chaque artiste a sa rubrique et ses propres questions. Choisis un quiz pour commencer.</p><div class="artist-cards">
           <article class="artist-card" aria-labelledby="beyonceCardTitle"><div class="artist-card-copy"><p class="eyebrow">QUIZ ARTISTE · 10 QUESTIONS</p><h3 id="beyonceCardTitle">Beyoncé</h3><p>7 blind tests et 3 questions de culture musicale.</p></div><button id="startBeyonceButton" class="primary-btn artist-start-button" type="button">Jouer le quiz Beyoncé</button></article>
           <article class="artist-card" aria-labelledby="michaelCardTitle"><div class="artist-card-copy"><p class="eyebrow">QUIZ ARTISTE · 10 QUESTIONS</p><h3 id="michaelCardTitle">Michael Jackson</h3><p>5 blind tests et 5 questions de culture musicale.</p></div><button id="startMichaelButton" class="primary-btn artist-start-button" type="button">Jouer le quiz Michael Jackson</button></article>
@@ -92,7 +78,6 @@
         <section id="artistEndScreen" class="panel artist-view hidden" aria-labelledby="artistEndTitle"><div class="panel-content center"><span id="artistEndBadge" class="badge success">QUIZ ARTISTE TERMINÉ</span><h2 id="artistEndTitle">Quiz terminé !</h2><p id="artistFinalScore" class="artist-final-score"></p><div class="end-actions"><button id="restartArtistButton" class="primary-btn" type="button">Rejouer ce quiz</button><button id="artistDirectoryButton" class="ghost-btn" type="button">Retour aux artistes</button></div></div></section>
       </main>
     </div>
-    <script src="script.js"></script>
     <script src="artist-quiz.js"></script>
     <script src="navigation.js"></script>
     <script src="ambient.js"></script>
