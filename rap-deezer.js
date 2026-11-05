@@ -46,7 +46,9 @@
   if (!rapButton || !startScreen) return;
 
   const originalContent = startScreen.querySelector(":scope > .panel-content");
-  if (!originalContent) return;
+  const headerActions = document.querySelector(".header-actions");
+  const chooseModeButton = document.getElementById("chooseModeBtn");
+  if (!originalContent || !headerActions || !chooseModeButton) return;
 
   const rapScreen = document.createElement("section");
   rapScreen.className = "rap-deezer-panel hidden";
@@ -70,7 +72,7 @@
         <button id="rapPlayAudio" class="primary-btn rap-audio-button" type="button" disabled>Chargement de l’extrait…</button>
       </div>
       <p class="rap-answer-prompt">Quel est le titre de ce morceau ?</p>
-      <div id="rapChoices" class="rap-choices" role="group" aria-label="Propositions de titres"></div>
+      <div id="rapChoices" class="rap-choices" role="group" aria-label="Propositions de titres et artistes"></div>
       <p id="rapAnswerFeedback" class="feedback rap-answer-feedback" aria-live="polite"></p>
       <button id="rapSkipButton" class="ghost-btn rap-skip-button" type="button">Passer</button>
     </div>
@@ -81,7 +83,8 @@
       <button id="rapReplayButton" class="primary-btn" type="button">Rejouer ce niveau</button>
     </div>
     <p class="rap-deezer-attribution">Extraits de 30 secondes fournis par <a href="https://www.deezer.com/" target="_blank" rel="noopener noreferrer">Deezer</a>. Lecture en ligne, sans téléchargement.</p>
-    <button id="backToGenreButton" class="ghost-btn rap-back-button" type="button">← Retour aux genres</button>
+    <span id="rapBackButtonPlaceholder" hidden></span>
+    <button id="backToGenreButton" class="ghost-btn rap-back-button" type="button">← Retour</button>
     <audio id="rapPreviewAudio" preload="none"></audio>
   `;
   startScreen.appendChild(rapScreen);
@@ -97,6 +100,8 @@
   const audioButton = rapScreen.querySelector("#rapPlayAudio");
   const skipButton = rapScreen.querySelector("#rapSkipButton");
   const levelButtons = [...rapScreen.querySelectorAll("[data-rap-level]")];
+  const backButton = rapScreen.querySelector("#backToGenreButton");
+  const backPlaceholder = rapScreen.querySelector("#rapBackButtonPlaceholder");
   let selectedLevel = "facile";
   let questions = [];
   let currentIndex = 0;
@@ -120,6 +125,17 @@
   function setStatus(message, kind = "") {
     status.textContent = message;
     status.className = `feedback rap-deezer-status ${kind}`.trim();
+  }
+  function stopAudio() {
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    audioButton.textContent = "▶ Lire l’extrait";
+  }
+  function answerLabel(track) {
+    const artist = track.artist || track.expectedArtist;
+    const feature = track.featuring ? ` feat. ${track.featuring}` : "";
+    return `${artist}${feature} — ${track.title}`;
   }
 
   // Same JSONP approach as the artist blind test, so Deezer works on static GitHub Pages.
@@ -187,6 +203,7 @@
   }
 
   function startGame(level) {
+    stopAudio();
     selectedLevel = level || selectedLevel;
     levelButtons.forEach((button) => {
       const active = button.dataset.rapLevel === selectedLevel;
@@ -196,7 +213,7 @@
     requestVersion += 1;
     questions = shuffle(TRACKS[selectedLevel]).map((track) => ({
       ...track,
-      options: shuffle([track.title, ...shuffle(TRACKS[selectedLevel].filter((item) => item.title !== track.title).map((item) => item.title)).slice(0, 3)])
+      options: shuffle([track, ...shuffle(TRACKS[selectedLevel].filter((item) => item.title !== track.title)).slice(0, 3)])
     }));
     currentIndex = 0;
     score = 0;
@@ -216,21 +233,19 @@
     scoreBadge.textContent = `Score : ${score} / 100`;
     answerFeedback.textContent = "";
     answerFeedback.className = "feedback rap-answer-feedback";
-    audio.pause();
-    audio.removeAttribute("src");
-    audio.load();
+    stopAudio();
     audioButton.disabled = true;
     audioButton.textContent = "Chargement de l’extrait…";
     skipButton.disabled = false;
     setStatus("Recherche du morceau et de son extrait via Deezer…");
 
     choices.replaceChildren();
-    question.options.forEach((answerText) => {
+    question.options.forEach((option) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "rap-choice";
-      button.textContent = answerText;
-      button.addEventListener("click", () => answer(answerText, button));
+      button.textContent = answerLabel(option);
+      button.addEventListener("click", () => answer(option, button));
       choices.appendChild(button);
     });
 
@@ -251,17 +266,18 @@
     }
   }
 
-  function answer(selectedAnswer, selectedButton) {
+  function answer(selectedOption, selectedButton) {
     if (answered) return;
     answered = true;
     const question = questions[currentIndex];
-    const correct = normalize(selectedAnswer) === normalize(question.title);
+    const correct = normalize(selectedOption.title) === normalize(question.title);
+    stopAudio();
     if (correct) score += 10;
-    audio.pause();
     selectedButton.classList.add(correct ? "correct" : "incorrect");
     choices.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
-      if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
+      const answerText = button.textContent;
+      if (normalize(answerText) === normalize(answerLabel(question))) button.classList.add("correct");
     });
     scoreBadge.textContent = `Score : ${score} / 100`;
     answerFeedback.textContent = correct ? "Bonne réponse ! +10 points" : "Réponse incorrecte.";
@@ -272,10 +288,10 @@
   function passQuestion() {
     if (answered) return;
     answered = true;
-    audio.pause();
+    stopAudio();
     choices.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
-      if (normalize(button.textContent) === normalize(questions[currentIndex].title)) button.classList.add("correct");
+      if (normalize(button.textContent) === normalize(answerLabel(questions[currentIndex]))) button.classList.add("correct");
     });
     answerFeedback.textContent = "Question passée.";
     answerFeedback.className = "feedback rap-answer-feedback info";
@@ -296,23 +312,37 @@
 
   function showFinal() {
     requestVersion += 1;
-    audio.pause();
-    audio.removeAttribute("src");
-    audio.load();
+    stopAudio();
     playArea.classList.add("hidden");
     finalArea.classList.remove("hidden");
     rapScreen.querySelector("#rapFinalTitle").textContent = `Niveau ${LEVEL_LABELS[selectedLevel]} terminé`;
     rapScreen.querySelector("#rapFinalScore").textContent = `Ton score final : ${score} / 100 points.`;
   }
 
-  rapButton.addEventListener("click", () => {
+  function showRapScreen() {
     window.setTimeout(() => {
       originalContent.hidden = true;
       rapScreen.classList.remove("hidden");
       playArea.classList.add("hidden");
       finalArea.classList.add("hidden");
+      chooseModeButton.classList.add("hidden");
+      backPlaceholder.before(backButton);
+      headerActions.appendChild(backButton);
+      backButton.classList.remove("hidden");
     }, 0);
-  });
+  }
+
+  function leaveRapScreen() {
+    requestVersion += 1;
+    stopAudio();
+    rapScreen.classList.add("hidden");
+    originalContent.hidden = false;
+    backPlaceholder.after(backButton);
+    backButton.classList.add("hidden");
+    chooseModeButton.classList.remove("hidden");
+  }
+
+  rapButton.addEventListener("click", showRapScreen);
   levelButtons.forEach((button) => button.addEventListener("click", () => startGame(button.dataset.rapLevel)));
   audioButton.addEventListener("click", async () => {
     if (!currentTrack?.preview || answered) return;
@@ -338,12 +368,6 @@
   });
   skipButton.addEventListener("click", passQuestion);
   rapScreen.querySelector("#rapReplayButton").addEventListener("click", () => startGame(selectedLevel));
-  rapScreen.querySelector("#backToGenreButton").addEventListener("click", () => {
-    requestVersion += 1;
-    audio.pause();
-    audio.removeAttribute("src");
-    audio.load();
-    rapScreen.classList.add("hidden");
-    originalContent.hidden = false;
-  });
+  backButton.addEventListener("click", leaveRapScreen);
+  window.addEventListener("pagehide", stopAudio);
 })();
