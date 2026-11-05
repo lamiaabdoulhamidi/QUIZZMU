@@ -46,9 +46,7 @@
   afroStyles.rel = "stylesheet";
   afroStyles.href = "afro-deezer.css";
   document.head.appendChild(afroStyles);
-  const afroModule = document.createElement("script");
-  afroModule.src = "afro-deezer.js";
-  document.body.appendChild(afroModule);
+  // The Afro script is loaded directly by index.html to guarantee initialization.
 
   function hideAllQuizScreens() {
     [startScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
