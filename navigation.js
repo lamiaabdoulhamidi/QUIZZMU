@@ -41,6 +41,15 @@
   rnbModule.src = "rnb-deezer.js";
   document.body.appendChild(rnbModule);
 
+  // Afro has its own Deezer module; existing genres and artist quizzes stay unchanged.
+  const afroStyles = document.createElement("link");
+  afroStyles.rel = "stylesheet";
+  afroStyles.href = "afro-deezer.css";
+  document.head.appendChild(afroStyles);
+  const afroModule = document.createElement("script");
+  afroModule.src = "afro-deezer.js";
+  document.body.appendChild(afroModule);
+
   function hideAllQuizScreens() {
     [startScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }
