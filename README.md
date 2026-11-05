@@ -1,29 +1,45 @@
 # QuizzMU
 
-Blind test musical en français, avec des extraits récupérés en direct depuis l’API publique Deezer.
+Un petit site web de quiz musical en français.
 
-## Blind test Rap
+## Fonctionnement
 
-- Genre Deezer Rap/Hip-Hop (`116`), catalogue et extraits chargés automatiquement.
-- Chaque morceau doit avoir un titre, un artiste, un rang Deezer valide et une preview.
-- Les trois niveaux sont calculés en triant les rangs réels reçus : les rangs les plus élevés en Facile, ceux du milieu en Moyen et les plus faibles en Difficile. Aucun score n’est inventé.
-- Chaque partie propose 10 morceaux tirés au hasard. Pour chaque question, quatre titres issus du catalogue Deezer sont proposés.
-- Le titre, l’artiste et le rang du morceau joué sont révélés seulement après le choix du joueur.
+- 5 questions aléatoires
+- 3 indices maximum par chanson
+- Le joueur répond avec le titre de la chanson
+- Le score augmente selon la difficulté
 
 ## Lancer le projet
 
-Ouvre `index.html` dans un navigateur, ou démarre un serveur local :
+### Option 1 : ouvrir directement
+Ouvre le fichier `index.html` dans ton navigateur.
+
+### Option 2 : serveur local
+Dans le terminal du projet :
 
 ```bash
 python -m http.server 8000
 ```
 
-Puis visite `http://localhost:8000`.
+Puis ouvre :
 
-Le site utilise JSONP pour interroger Deezer depuis GitHub Pages sans serveur intermédiaire. Une connexion Internet est nécessaire.
+```text
+http://localhost:8000
+```
 
 ## Fichiers principaux
 
-- `index.html` : interface du blind test.
-- `script.js` : récupération Deezer, répartition des difficultés et logique de partie.
-- `styles.css`, `artist-quiz.css`, `dark-theme.css` : styles de l’interface.
+- `index.html` : structure de la page
+- `styles.css` : design de l'interface
+- `script.js` : logique du jeu et liste des chansons
+
+## Idée d'évolution
+
+Tu peux ensuite ajouter :
+- plus de chansons
+- un système de niveaux
+- un timer
+- des catégories (rock, pop, rap, french touch)
+- des effets sonores
+- un classement local
+
