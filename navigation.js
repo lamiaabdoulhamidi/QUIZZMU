@@ -15,6 +15,25 @@
   const artistEnd = document.getElementById("artistEndScreen");
   const tabs = [...document.querySelectorAll(".category-tab")];
 
+  // Rename and describe only the genre-based quiz UI; leave the welcome and artist quiz intact.
+  const genreMode = document.querySelector('[data-open-mode="questions"]');
+  if (genreMode) {
+    genreMode.querySelector(".mode-overline").textContent = "BLIND TEST PAR GENRE";
+    genreMode.querySelector("strong").textContent = "Blind Test par genre";
+    genreMode.querySelector(".mode-card-copy > span:last-child").textContent = "Choisis un genre musical et un niveau de difficulté.";
+  }
+  const genreTab = tabs.find((tab) => tab.dataset.mode === "questions");
+  if (genreTab) genreTab.textContent = "Blind Test par genre";
+
+  const genreHeading = startScreen?.querySelector(".hero-intro h2");
+  if (genreHeading) genreHeading.textContent = "Blind Test par genre";
+  const genreIntro = startScreen?.querySelector(".hero-intro p");
+  if (genreIntro) genreIntro.textContent = "Choisis ton genre musical et ton niveau : Facile, Moyen ou Difficile.";
+  const difficultyPicker = startScreen?.querySelector(".difficulty-picker");
+  if (difficultyPicker) difficultyPicker.setAttribute("aria-label", "Choisir le niveau du blind test");
+  const genreStartButton = document.getElementById("startBtn");
+  if (genreStartButton) genreStartButton.innerHTML = 'Commencer le blind test <span aria-hidden="true">→</span>';
+
   function hideAllQuizScreens() {
     [startScreen, gameScreen, endScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }
