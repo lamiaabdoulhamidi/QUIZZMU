@@ -177,6 +177,10 @@
   }
 
   function showArtistDirectory() {
+    requestVersion += 1;
+    audio.pause();
+    audio.removeAttribute("src");
+    currentTrack = null;
     startScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
@@ -186,8 +190,11 @@
     currentIndex = 0;
     score = 0;
     requestVersion += 1;
+    audio.pause();
+    startScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
+    window.scrollTo(0, 0);
     renderQuestion();
   }
   function renderChoices(question) {
