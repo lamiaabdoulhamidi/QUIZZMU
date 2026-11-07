@@ -54,6 +54,11 @@
   document.head.appendChild(afroStyles);
   // The Afro script is loaded directly by index.html to guarantee initialization.
 
+  const varieteStyles = document.createElement("link");
+  varieteStyles.rel = "stylesheet";
+  varieteStyles.href = "variete-deezer.css";
+  document.head.appendChild(varieteStyles);
+
   function hideAllQuizScreens() {
     [startScreen, artistStart, artistGame, artistEnd].forEach((screen) => screen?.classList.add("hidden"));
   }
