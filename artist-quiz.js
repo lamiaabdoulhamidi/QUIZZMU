@@ -32,8 +32,8 @@
       ],
       cultureQuestions: [
         { type: "culture", prompt: "Quel album de Michael Jackson est considéré comme l’un des plus vendus de tous les temps ?", title: "Thriller", answers: ["Off the Wall", "Thriller", "Bad", "Dangerous"] },
-        { type: "culture", prompt: "Quel groupe de musique a lancé la carrière de Michael Jackson avant sa carrière solo ?", title: "The Jackson 5", answers: ["The Jackson 5", "The Temptations", "The Supremes", "The Four Tops"] },
-        { type: "culture", prompt: "Quel titre de Michael Jackson est associé au célèbre pas de danse du moonwalk ?", title: "Billie Jean", answers: ["Beat It", "Billie Jean", "Smooth Criminal", "Man in the Mirror"] },
+        { type: "culture", prompt: "Quel groupe de musique a lancé la carrière de Michael Jackson avant sa carrière solo ?", title: "The Jackson 5", answers: ["The Jackson 5", "The Temptations", "The Commodores", "Earth, Wind & Fire"] },
+        { type: "culture", prompt: "Quel titre de Michael Jackson est associé au célèbre pas de danse du moonwalk ?", title: "Billie Jean", answers: ["Beat It", "Billie Jean", "Smooth Criminal", "Black or White"] },
         { type: "culture", prompt: "Lequel de ces albums est sorti avant Dangerous ?", title: "Bad", answers: ["HIStory", "Bad", "Invincible", "Number Ones"] },
         { type: "culture", prompt: "Dans quelle ville Michael Jackson est-il né ?", title: "Gary", answers: ["Chicago", "Gary", "Detroit", "Los Angeles"] }
       ]
@@ -50,6 +50,8 @@
   const startMichaelButton = document.getElementById("startMichaelButton");
   const restartButton = document.getElementById("restartArtistButton");
   const directoryButton = document.getElementById("artistDirectoryButton");
+  const artistBackButton = document.getElementById("artistBackButton");
+  const artistEndBackButton = document.getElementById("artistEndBackButton");
   const roundBadge = document.getElementById("artistRoundBadge");
   const scoreBadge = document.getElementById("artistScoreBadge");
   const questionType = document.getElementById("artistQuestionType");
@@ -88,6 +90,16 @@
   function setStatus(message, kind = "") {
     audioStatus.textContent = message;
     audioStatus.className = `feedback ${kind}`.trim();
+  }
+  function stopCurrentAudio() {
+    if (!audio) return;
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    if (playButton) {
+      playButton.disabled = true;
+      playButton.textContent = "▶ Lire l’extrait";
+    }
   }
   function getArtistQuestions() {
     const artist = artistCatalog[currentArtistId];
@@ -150,7 +162,7 @@
     }
     if (question.fallbackTrackId) {
       const track = await requestJSONP(`https://api.deezer.com/track/${encodeURIComponent(question.fallbackTrackId)}`);
-      if (!normalize(track.title).startsWith(normalize(question.title)) || !normalize(track.artist?.name).includes(normalize(artistName))) throw new Error(`Le morceau Deezer ne correspond pas à ${question.title} de ${artistName}.`);
+      if (!normalize(track.title).startsWith(normalize(question.title)) || !normalize(track.artist?.name).includes(normalize(artistName))) throw new Error(`Le morceau Deezer ne correspond pas à ${artistName}.`);
       return track;
     }
     throw new Error("Deezer n’a pas trouvé ce morceau.");
@@ -181,11 +193,19 @@
     gameScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
   }
+
+  function goBackToArtistDirectory() {
+    requestVersion += 1;
+    stopCurrentAudio();
+    showArtistDirectory();
+  }
+
   function startGame(artistId) {
     if (artistId) currentArtistId = artistId;
     currentIndex = 0;
     score = 0;
     requestVersion += 1;
+    startScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
     renderQuestion();
@@ -306,6 +326,8 @@
   startBeyonceButton.addEventListener("click", () => startGame("beyonce"));
   startMichaelButton.addEventListener("click", () => startGame("michaeljackson"));
   restartButton.addEventListener("click", () => startGame());
-  directoryButton.addEventListener("click", showArtistDirectory);
+  directoryButton.addEventListener("click", goBackToArtistDirectory);
+  artistBackButton?.addEventListener("click", goBackToArtistDirectory);
+  artistEndBackButton?.addEventListener("click", goBackToArtistDirectory);
   tabs.forEach((tab) => tab.addEventListener("click", () => setMode(tab.dataset.mode)));
 })();
