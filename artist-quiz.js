@@ -176,21 +176,25 @@
     }
   }
 
-  function showArtistDirectory() {
+  function stopArtistAudio() {
     requestVersion += 1;
     audio.pause();
     audio.removeAttribute("src");
+    audio.load();
     currentTrack = null;
+  }
+  function showArtistDirectory() {
+    stopArtistAudio();
     startScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
+    window.scrollTo(0, 0);
   }
   function startGame(artistId) {
     if (artistId) currentArtistId = artistId;
+    stopArtistAudio();
     currentIndex = 0;
     score = 0;
-    requestVersion += 1;
-    audio.pause();
     startScreen.classList.add("hidden");
     endScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
@@ -282,6 +286,7 @@
     nextButton.hidden = false;
   }
   function finishGame() {
+    stopArtistAudio();
     gameScreen.classList.add("hidden");
     endScreen.classList.remove("hidden");
     endTitle.textContent = `Quiz ${artistCatalog[currentArtistId].name} terminé !`;
