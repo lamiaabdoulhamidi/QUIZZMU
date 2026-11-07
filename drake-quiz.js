@@ -10,7 +10,7 @@
     { type: "blindtest", title: "Nice for What", search: "Nice for What Drake" },
     { type: "blindtest", title: "Started From the Bottom", search: "Started From the Bottom Drake" },
     { type: "culture", prompt: "Dans quelle ville Drake est-il né ?", title: "Toronto", answers: ["Toronto", "Montréal", "Vancouver", "Ottawa"] },
-    { type: "culture", prompt: "Dans quelle série télévisée Drake a-t-il joué avant sa carrière musicale ?", title: "Degrassi: The Next Generation", answers: ["The O.C.", "Degrassi: The Next Generation", "Gossip Girl", "One Tree Hill"] },
+    { type: "culture", prompt: "Dans quelle série télévisée Drake a-t-il joué avant sa carrière musicale ?", title: "Degrassi: The Next Generation", answers: ["The O.C.", "Degrassi: The Next Generation", "Glee", "One Tree Hill"] },
     { type: "culture", prompt: "Quel est le titre du premier album studio de Drake, sorti en 2010 ?", title: "Thank Me Later", answers: ["So Far Gone", "Thank Me Later", "Take Care", "Nothing Was the Same"] },
     { type: "culture", prompt: "Quel label Drake a-t-il cofondé avec le producteur Noah ‘40’ Shebib et Oliver El-Khatib ?", title: "OVO Sound", answers: ["Cash Money Records", "OVO Sound", "Young Money Entertainment", "Dreamville Records"] }
   ];
@@ -28,7 +28,7 @@
   cards.appendChild(card);
 
   const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers de Beyoncé, Michael Jackson, Rihanna et Drake.";
+  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers de Beyoncé, Michael Jackson, Rihanna, Drake, Céline Dion et Johnny Hallyday.";
 
   const game = document.createElement("section");
   game.className = "panel artist-view hidden";
@@ -264,7 +264,14 @@
   end.querySelector("[data-restart]").addEventListener("click", start);
   end.querySelector("[data-directory]").addEventListener("click", leaveToDirectory);
   document.getElementById("artistDirectoryButton")?.addEventListener("click", leaveToDirectory);
-  document.querySelectorAll(".category-tab").forEach((button) => button.addEventListener("click", leaveToDirectory));
+  document.getElementById("restartArtistButton")?.addEventListener("click", () => {
+    if (end.classList.contains("hidden")) return;
+    start();
+  });
+  document.querySelectorAll(".category-tab").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.mode !== "artist") leaveToDirectory();
+    else if (inDrakeQuiz) leaveToDirectory();
+  }));
   document.getElementById("chooseModeBtn")?.addEventListener("click", leaveToDirectory);
   window.addEventListener("pagehide", () => { inDrakeQuiz = false; requestVersion += 1; stopAudio(); });
   document.addEventListener("visibilitychange", () => { if (document.hidden && inDrakeQuiz) stopAudio(); });
