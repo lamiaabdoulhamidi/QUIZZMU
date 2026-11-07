@@ -23,6 +23,12 @@
   const genreTab = tabs.find((tab) => tab.dataset.mode === "questions");
   if (genreTab) genreTab.textContent = "Blind Test par genre";
 
+  // Add scoped styles for the shared artist-quiz back button.
+  const artistBackStyles = document.createElement("link");
+  artistBackStyles.rel = "stylesheet";
+  artistBackStyles.href = "artist-back.css";
+  document.head.appendChild(artistBackStyles);
+
   // Add the standalone RAP quiz module and its scoped styles; the other modes stay unchanged.
   const rapStyles = document.createElement("link");
   rapStyles.rel = "stylesheet";
@@ -88,6 +94,41 @@
   chooseMode.addEventListener("click", showModeChooser);
   document.querySelectorAll("[data-open-mode]").forEach((button) => {
     button.addEventListener("click", () => openMode(button.dataset.openMode));
+  });
+
+  // Add the same return control to the game panel of every artist quiz, including
+  // quiz panels created dynamically by Rihanna, Drake, Céline Dion and Johnny Hallyday.
+  function addArtistBackButtons(root = document) {
+    root.querySelectorAll?.(".artist-game-content").forEach((content) => {
+      if (content.querySelector(":scope > .artist-back-button")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "artist-back-button";
+      button.textContent = "← Retour";
+      content.prepend(button);
+    });
+  }
+  addArtistBackButtons();
+  const artistPanelObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      if (node.matches?.(".artist-game-content")) addArtistBackButtons(node.parentElement || document);
+      else addArtistBackButtons(node);
+    }));
+  });
+  const appMain = app.querySelector("main");
+  if (appMain) artistPanelObserver.observe(appMain, { childList: true, subtree: true });
+
+  // Return to the artist directory and stop any currently playing preview immediately.
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".artist-back-button")) return;
+    app.querySelectorAll(".artist-view audio").forEach((audio) => {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+    });
+    const artistTab = tabs.find((tab) => tab.dataset.mode === "artist");
+    if (artistTab) artistTab.click();
   });
 
   // Keep the compact category tabs usable after entering the app, including from quiz screens.

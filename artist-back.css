@@ -1,0 +1,17 @@
+.artist-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.artist-back-button:hover {
+  opacity: 0.8;
+}
