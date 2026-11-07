@@ -142,7 +142,7 @@
   // Same JSONP approach as the artist blind test, so Deezer works on static GitHub Pages.
   function requestJSONP(url) {
     return new Promise((resolve, reject) => {
-      const callback = `quizzmuVariété française_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const callback = `quizzmuVariete_${Date.now()}_${Math.random().toString(36).slice(2)}`;
       const script = document.createElement("script");
       let finished = false;
       let timeout;
@@ -322,7 +322,7 @@
     varieteScreen.querySelector("#varieteFinalScore").textContent = `Ton score final : ${score} / 100 points.`;
   }
 
-  function showVariété françaiseScreen() {
+  function showVarieteScreen() {
     window.setTimeout(() => {
       window.clearTimeout(advanceTimer);
       originalContent.hidden = true;
@@ -336,7 +336,7 @@
     }, 0);
   }
 
-  function leaveVariété françaiseScreen() {
+  function leaveVarieteScreen() {
     requestVersion += 1;
     stopAudio();
     varieteScreen.classList.add("hidden");
@@ -346,7 +346,7 @@
     chooseModeButton.classList.remove("hidden");
   }
 
-  varieteButton.addEventListener("click", showVariété françaiseScreen);
+  varieteButton.addEventListener("click", showVarieteScreen);
   levelButtons.forEach((button) => button.addEventListener("click", () => startGame(button.dataset.varieteLevel)));
   audioButton.addEventListener("click", async () => {
     if (!currentTrack?.preview || answered) return;
@@ -372,6 +372,6 @@
   });
   skipButton.addEventListener("click", passQuestion);
   varieteScreen.querySelector("#varieteReplayButton").addEventListener("click", () => startGame(selectedLevel));
-  backButton.addEventListener("click", leaveVariété françaiseScreen);
+  backButton.addEventListener("click", leaveVarieteScreen);
   window.addEventListener("pagehide", stopAudio);
 })();
