@@ -337,6 +337,7 @@
   }
 
   function leaveVarieteScreen() {
+    window.clearTimeout(advanceTimer);
     requestVersion += 1;
     stopAudio();
     varieteScreen.classList.add("hidden");
