@@ -92,6 +92,19 @@
     welcome.classList.remove("hidden");
   });
   chooseMode.addEventListener("click", showModeChooser);
+  // Return from either selection screen to the two-mode chooser.
+  document.querySelectorAll(".mode-directory-back").forEach((button) => {
+    button.addEventListener("click", () => {
+      app.querySelectorAll("audio").forEach((audio) => {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      });
+      hideAllQuizScreens();
+      showModeChooser();
+      window.scrollTo(0, 0);
+    });
+  });
   document.querySelectorAll("[data-open-mode]").forEach((button) => {
     button.addEventListener("click", () => openMode(button.dataset.openMode));
   });
