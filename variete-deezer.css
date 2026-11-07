@@ -1,0 +1,33 @@
+.variete-deezer-panel { padding: clamp(22px, 4vw, 36px); }
+.variete-deezer-heading { margin: 0 auto 22px; text-align: center; }
+.variete-deezer-heading h2 { margin: 0 0 10px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+.variete-deezer-heading p { max-width: 620px; margin: 0 auto; }
+.variete-level-picker { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
+.variete-deezer-status { text-align: center; }
+.variete-deezer-status.error, .variete-answer-feedback.error { color: var(--danger); }
+.variete-deezer-status.success, .variete-answer-feedback.success { color: var(--success); }
+.variete-deezer-status.info, .variete-answer-feedback.info { color: var(--warning); }
+.variete-play-area { margin-top: 24px; }
+.variete-audio-card { display: grid; justify-items: center; gap: 14px; padding: 22px; margin-bottom: 20px; border: 1px solid rgba(192,132,252,.16); border-radius: 18px; background: linear-gradient(120deg,rgba(142,59,208,.14),rgba(83,48,115,.08)); }
+.variete-audio-card .hint-label { margin: 0; color: #c795ef; font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+.variete-audio-button { width: min(300px, 100%); }
+.variete-answer-prompt { margin: 0 0 12px; text-align: center; font-weight: 700; }
+.variete-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.variete-choice { min-height: 58px; padding: 14px 16px; border: 1px solid rgba(192,132,252,.18); border-radius: 14px; background: rgba(255,255,255,.035); color: #eee5f7; font: inherit; font-weight: 700; cursor: pointer; transition: .18s ease; }
+.variete-choice:hover:not(:disabled) { transform: translateY(-2px); border-color: #b76aff; background: rgba(143,56,203,.14); }
+.variete-choice:disabled { cursor: default; opacity: .8; }
+.variete-choice.correct { border-color: #36ba7d; background: #19784d; color: white; }
+.variete-choice.incorrect { border-color: #e45b72; background: #922f43; color: white; }
+.variete-answer-feedback { min-height: 48px; margin: 14px 0; text-align: center; }
+.variete-skip-button { display: block; min-width: 130px; margin: 0 auto; }
+.variete-final-area { padding: 24px 12px; text-align: center; }
+.variete-final-area h3 { margin: 4px 0 10px; font-size: 1.6rem; }
+.variete-final-area .primary-btn { margin-top: 20px; }
+.variete-deezer-attribution { margin: 20px 0 14px; text-align: center; font-size: .8rem; }
+.variete-deezer-attribution a { color: #d6a8ff; }
+.variete-back-button { display: block; margin: 16px auto 0; }
+@media (max-width: 560px) {
+  .variete-deezer-panel { padding: 20px 16px; }
+  .variete-choices { grid-template-columns: 1fr; }
+  .variete-level-picker .difficulty-btn { flex: 1 1 30%; }
+}
