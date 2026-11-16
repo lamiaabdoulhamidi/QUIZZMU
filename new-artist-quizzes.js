@@ -47,7 +47,7 @@
   if (!cards || !main) return;
 
   const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers de Beyoncé, Michael Jackson, Rihanna, Drake, Céline Dion et Johnny Hallyday.";
+  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers de tes artistes préférés entre blind tests et questions de culture musicale.";
 
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
