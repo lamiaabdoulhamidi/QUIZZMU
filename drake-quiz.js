@@ -27,9 +27,6 @@
   card.innerHTML = '<div class="artist-card-copy"><p class="eyebrow">QUIZ ARTISTE · 10 QUESTIONS</p><h3 id="drakeCardTitle">Drake</h3><p>6 blind tests et 4 questions de culture musicale.</p></div><button class="primary-btn artist-start-button" type="button">Jouer le quiz Drake</button>';
   cards.appendChild(card);
 
-  const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers d’un de tes artistes préférés.";
-
   const game = document.createElement("section");
   game.className = "panel artist-view hidden";
   game.setAttribute("aria-labelledby", "drakeQuestionPrompt");
