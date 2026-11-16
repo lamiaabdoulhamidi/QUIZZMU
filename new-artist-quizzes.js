@@ -46,9 +46,6 @@
   const main = appShell?.querySelector("main");
   if (!cards || !main) return;
 
-  const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers d’un de tes artistes préférés.";
-
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   }
