@@ -127,29 +127,6 @@
     button.addEventListener("click", () => openMode(button.dataset.openMode));
   });
 
-  // Add the same return control to the game panel of every artist quiz, including
-  // quiz panels created dynamically by Rihanna, Drake, Céline Dion and Johnny Hallyday.
-  function addArtistBackButtons(root = document) {
-    root.querySelectorAll?.(".artist-game-content").forEach((content) => {
-      if (content.querySelector(":scope > .artist-back-button")) return;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "artist-back-button";
-      button.textContent = "← Retour";
-      content.prepend(button);
-    });
-  }
-  addArtistBackButtons();
-  const artistPanelObserver = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
-      if (node.nodeType !== Node.ELEMENT_NODE) return;
-      if (node.matches?.(".artist-game-content")) addArtistBackButtons(node.parentElement || document);
-      else addArtistBackButtons(node);
-    }));
-  });
-  const appMain = app.querySelector("main");
-  if (appMain) artistPanelObserver.observe(appMain, { childList: true, subtree: true });
-
   // Return to the artist directory and stop any currently playing preview immediately.
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".artist-back-button")) return;
