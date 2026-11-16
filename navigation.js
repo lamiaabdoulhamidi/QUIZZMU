@@ -96,7 +96,20 @@
     selector.classList.add("hidden");
     welcome.classList.remove("hidden");
   });
-  chooseMode.addEventListener("click", showModeChooser);
+  chooseMode.addEventListener("click", () => {
+    // In an artist quiz, the previous screen is the artist directory.
+    if (!artistGame?.classList.contains("hidden") || !artistEnd?.classList.contains("hidden")) {
+      const artistTab = tabs.find((tab) => tab.dataset.mode === "artist");
+      if (artistTab) artistTab.click();
+      app.querySelectorAll("audio").forEach((audio) => audio.pause());
+      window.scrollTo(0, 0);
+      return;
+    }
+    // From the genre or artist directory, return to mode selection.
+    app.querySelectorAll("audio").forEach((audio) => audio.pause());
+    showModeChooser();
+    window.scrollTo(0, 0);
+  });
   // Return from either selection screen to the two-mode chooser.
   document.querySelectorAll(".mode-directory-back").forEach((button) => {
     button.addEventListener("click", () => {
