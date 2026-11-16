@@ -153,6 +153,6 @@
 
   // Load Drake as a separate artist quiz module without changing the other artist quizzes.
   const drakeModule = document.createElement("script");
-  drakeModule.src = "drake-quiz.js";
+  drakeModule.src = "drake-quiz.js?v=20261116b";
   document.body.appendChild(drakeModule);
 })();
