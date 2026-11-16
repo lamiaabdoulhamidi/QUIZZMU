@@ -64,7 +64,7 @@
   const finalScore = document.getElementById("artistFinalScore");
   const endTitle = document.getElementById("artistEndTitle");
   const endBadge = document.getElementById("artistEndBadge");
-  const standardHeaderButtons = [...document.querySelectorAll(".header-actions button")];
+  const standardHeaderButtons = [...document.querySelectorAll(".header-actions button")].filter((button) => button.id !== "chooseModeBtn");
 
   let currentIndex = 0;
   let score = 0;
