@@ -16,9 +16,8 @@
   // Rename and describe only the genre-based quiz UI; leave the welcome and artist quiz intact.
   const genreMode = document.querySelector('[data-open-mode="questions"]');
   if (genreMode) {
-    genreMode.querySelector(".mode-overline").textContent = "BLIND TEST PAR GENRE";
     genreMode.querySelector("strong").textContent = "Blind Test par genre";
-    genreMode.querySelector(".mode-card-copy > span:last-child").textContent = "Choisis un genre musical et un niveau de difficulté.";
+    genreMode.querySelector(".mode-card-copy > span:last-child").textContent = "Choisis ton genre musical et devine les morceaux avant la fin du chrono.";
   }
   const genreTab = tabs.find((tab) => tab.dataset.mode === "questions");
   if (genreTab) genreTab.textContent = "Blind Test par genre";
