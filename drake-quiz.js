@@ -28,7 +28,7 @@
   cards.appendChild(card);
 
   const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers de Beyoncé, Michael Jackson, Rihanna, Drake, Céline Dion et Johnny Hallyday.";
+  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers d’un de tes artistes préférés.";
 
   const game = document.createElement("section");
   game.className = "panel artist-view hidden";
