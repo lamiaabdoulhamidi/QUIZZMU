@@ -109,6 +109,7 @@
   let answered = false;
   let requestVersion = 0;
   let currentTrack = null;
+  const quizTimer = QuizzmuTimer.create(playArea.querySelector(".game-header"), () => passQuestion(true));
 
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -228,6 +229,7 @@
     const question = questions[currentIndex];
     if (!question) return showFinal();
     answered = false;
+    quizTimer.reset(true);
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / 100`;
@@ -262,6 +264,7 @@
       if (version !== requestVersion) return;
       audioButton.disabled = true;
       audioButton.textContent = "Extrait indisponible";
+      quizTimer.start();
       setStatus(`${error.message || "Une erreur Deezer est survenue."} Tu peux répondre ou passer.`, "error");
     }
   }
@@ -269,6 +272,7 @@
   function answer(selectedOption, selectedButton) {
     if (answered) return;
     answered = true;
+    quizTimer.stop();
     const question = questions[currentIndex];
     const correct = normalize(selectedOption.title) === normalize(question.title);
     stopAudio();
@@ -285,15 +289,16 @@
     revealAndAdvance(question);
   }
 
-  function passQuestion() {
+  function passQuestion(timedOut = false) {
     if (answered) return;
     answered = true;
+    quizTimer.stop();
     stopAudio();
     choices.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
       if (normalize(button.textContent) === normalize(answerLabel(questions[currentIndex]))) button.classList.add("correct");
     });
-    answerFeedback.textContent = "Question passée.";
+    answerFeedback.textContent = timedOut ? "Temps écoulé !" : "Question passée.";
     answerFeedback.className = "feedback rap-answer-feedback info";
     revealAndAdvance(questions[currentIndex]);
   }
@@ -311,6 +316,7 @@
   }
 
   function showFinal() {
+    quizTimer.stop();
     requestVersion += 1;
     stopAudio();
     playArea.classList.add("hidden");
@@ -333,6 +339,7 @@
   }
 
   function leaveRapScreen() {
+    quizTimer.stop();
     requestVersion += 1;
     stopAudio();
     rapScreen.classList.add("hidden");
@@ -355,7 +362,7 @@
       }
     } else audio.pause();
   });
-  audio.addEventListener("play", () => { audioButton.textContent = "⏸ Pause"; });
+  audio.addEventListener("play", () => { if (!answered) quizTimer.start(); audioButton.textContent = "⏸ Pause"; });
   audio.addEventListener("pause", () => {
     if (currentTrack?.preview && !answered) audioButton.textContent = "▶ Lire l’extrait";
   });
@@ -366,8 +373,8 @@
     audioButton.disabled = true;
     audioButton.textContent = "Extrait indisponible";
   });
-  skipButton.addEventListener("click", passQuestion);
+  skipButton.addEventListener("click", () => passQuestion());
   rapScreen.querySelector("#rapReplayButton").addEventListener("click", () => startGame(selectedLevel));
   backButton.addEventListener("click", leaveRapScreen);
-  window.addEventListener("pagehide", stopAudio);
+  window.addEventListener("pagehide", () => { quizTimer.stop(); stopAudio(); });
 })();
