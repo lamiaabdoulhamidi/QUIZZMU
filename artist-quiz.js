@@ -73,6 +73,7 @@
   let currentTrack = null;
   let currentArtistId = "beyonce";
   let savedHeaderButtonState = [];
+  const quizTimer = QuizzmuTimer.create(gameScreen.querySelector(".game-header"), () => answer("", null, true));
 
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
@@ -184,6 +185,7 @@
     currentTrack = null;
   }
   function showArtistDirectory() {
+    quizTimer.stop();
     stopArtistAudio();
     startScreen.classList.remove("hidden");
     gameScreen.classList.add("hidden");
@@ -222,6 +224,7 @@
     const questions = getArtistQuestions();
     const question = questions[currentIndex];
     answered = false;
+    quizTimer.reset(question.type === "blindtest");
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / ${questions.length}`;
@@ -244,7 +247,8 @@
       currentTrack = track;
       if (!track.preview || typeof track.preview !== "string") {
         playButton.textContent = "Extrait indisponible";
-        setStatus("Le morceau a été trouvé, mais Deezer ne fournit pas de preview. Tu peux répondre et continuer.", "error");
+        quizTimer.start();
+      setStatus("Le morceau a été trouvé, mais Deezer ne fournit pas de preview. Tu peux répondre et continuer.", "error");
         return;
       }
       audio.src = track.preview;
@@ -256,25 +260,29 @@
       if (version !== requestVersion) return;
       playButton.disabled = true;
       playButton.textContent = "Extrait indisponible";
+      quizTimer.start();
       setStatus(`${error.message || "Une erreur Deezer est survenue."} Tu peux répondre et continuer.`, "error");
     }
   }
-  function answer(selectedAnswer, selectedButton) {
+  function answer(selectedAnswer, selectedButton, timedOut = false) {
     if (answered) return;
     answered = true;
+    quizTimer.stop();
     const question = getArtistQuestions()[currentIndex];
     const correct = normalize(selectedAnswer) === normalize(question.title);
     if (correct) score += 1;
     if (question.type === "blindtest") audio.pause();
-    selectedButton.setAttribute("aria-pressed", "true");
-    selectedButton.classList.add(correct ? "correct" : "incorrect");
+    if (selectedButton) {
+      selectedButton.setAttribute("aria-pressed", "true");
+      selectedButton.classList.add(correct ? "correct" : "incorrect");
+    }
     choicesElement.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
       if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
     });
     scoreBadge.textContent = `Score : ${score} / ${getArtistQuestions().length}`;
     const heading = document.createElement("strong");
-    heading.textContent = correct ? "Bonne réponse !" : "Réponse incorrecte.";
+    heading.textContent = timedOut ? "Temps écoulé !" : correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
     details.textContent = question.type === "blindtest"
       ? `La bonne réponse : ${currentTrack?.title || question.title} — ${currentTrack?.artist?.name || artistCatalog[currentArtistId].name}.`
@@ -286,6 +294,7 @@
     nextButton.hidden = false;
   }
   function finishGame() {
+    quizTimer.stop();
     stopArtistAudio();
     gameScreen.classList.add("hidden");
     endScreen.classList.remove("hidden");
@@ -301,7 +310,7 @@
       catch { setStatus("La lecture de l’extrait a échoué. Tu peux répondre et continuer.", "error"); }
     } else audio.pause();
   });
-  audio.addEventListener("play", () => { playButton.textContent = "⏸ Pause"; });
+  audio.addEventListener("play", () => { if (!answered) quizTimer.start(); playButton.textContent = "⏸ Pause"; });
   audio.addEventListener("pause", () => { if (currentTrack?.preview) playButton.textContent = "▶ Lire l’extrait"; });
   audio.addEventListener("ended", () => { playButton.textContent = "▶ Rejouer l’extrait"; });
   audio.addEventListener("error", () => {
