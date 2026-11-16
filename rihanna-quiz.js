@@ -28,8 +28,6 @@
 
   const intro = artistStart.querySelector(".artist-directory-intro");
   if (intro) intro.textContent = "Chaque artiste a sa rubrique et ses propres questions. Choisis un quiz pour commencer.";
-  const modeDescription = document.querySelector('[data-open-mode="artist"] .mode-card-copy > span:last-child');
-  if (modeDescription) modeDescription.textContent = "Plonge dans l’univers d’un de tes artistes préférés.";
 
   const main = appShell.querySelector("main");
   const game = document.createElement("section");
