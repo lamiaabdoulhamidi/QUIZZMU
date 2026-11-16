@@ -55,6 +55,7 @@
   let answered = false;
   let requestVersion = 0;
   let currentTrack = null;
+    const quizTimer = QuizzmuTimer.create(game.querySelector(".game-header"), () => answer("", true, true));
   let inRihannaQuiz = false;
 
   function normalize(value) {
@@ -143,6 +144,7 @@
     const question = questions[currentIndex];
     if (!question) return finish();
     answered = false;
+    quizTimer.reset(question.type === "blindtest");
     currentTrack = null;
     stopAudio();
     game.querySelector("[data-round]").textContent = `Question ${currentIndex + 1} / ${questions.length}`;
@@ -164,7 +166,8 @@
       currentTrack = track;
       if (!track.preview || typeof track.preview !== "string") {
         playButton.textContent = "Extrait indisponible";
-        setStatus("L’extrait Deezer est indisponible pour ce morceau. Tu peux répondre ou passer la question.", "error");
+        quizTimer.start();
+    setStatus("L’extrait Deezer est indisponible pour ce morceau. Tu peux répondre ou passer la question.", "error");
         return;
       }
       audio.src = track.preview;
@@ -175,12 +178,14 @@
     } catch (error) {
       if (version !== requestVersion || !inRihannaQuiz) return;
       playButton.textContent = "Extrait indisponible";
-      setStatus(`${error.message || "Une erreur Deezer est survenue."} Tu peux répondre ou passer la question.`, "error");
+      quizTimer.start();
+    setStatus(`${error.message || "Une erreur Deezer est survenue."} Tu peux répondre ou passer la question.`, "error");
     }
   }
-  function answer(selectedAnswer, wasPassed = false) {
+  function answer(selectedAnswer, wasPassed = false, timedOut = false) {
     if (answered) return;
     answered = true;
+    quizTimer.stop();
     const question = questions[currentIndex];
     stopAudio();
     const correct = normalize(selectedAnswer) === normalize(question.title);
@@ -192,7 +197,7 @@
     });
     game.querySelector("[data-score]").textContent = `Score : ${score} / ${questions.length}`;
     const heading = document.createElement("strong");
-    heading.textContent = wasPassed ? "Question passée." : correct ? "Bonne réponse !" : "Réponse incorrecte.";
+    heading.textContent = timedOut ? "Temps écoulé !" : wasPassed ? "Question passée." : correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
     details.textContent = question.type === "blindtest"
       ? `La bonne réponse : ${currentTrack?.title || question.title} — ${currentTrack?.artist?.name || ARTIST}.`
@@ -217,6 +222,7 @@
     renderQuestion();
   }
   function finish() {
+    quizTimer.stop();
     stopAudio();
     inRihannaQuiz = false;
     game.classList.add("hidden");
@@ -225,6 +231,7 @@
     end.querySelector("[data-final-score]").textContent = `Ton score : ${score} / ${questions.length}`;
   }
   function leaveToDirectory() {
+    quizTimer.stop();
     if (!inRihannaQuiz && game.classList.contains("hidden") && end.classList.contains("hidden")) return;
     inRihannaQuiz = false;
     requestVersion += 1;
@@ -249,7 +256,7 @@
       catch { setStatus("La lecture de l’extrait a échoué. Tu peux répondre ou passer.", "error"); }
     } else audio.pause();
   });
-  audio.addEventListener("play", () => { playButton.textContent = "⏸ Pause"; });
+  audio.addEventListener("play", () => { if (!answered) quizTimer.start(); playButton.textContent = "⏸ Pause"; });
   audio.addEventListener("pause", () => { if (currentTrack?.preview && !answered) playButton.textContent = "▶ Lire l’extrait"; });
   audio.addEventListener("ended", () => { if (!answered) playButton.textContent = "▶ Rejouer l’extrait"; });
   audio.addEventListener("error", () => {
