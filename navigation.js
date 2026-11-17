@@ -4,7 +4,7 @@
   // Shared result animations are observed centrally, so every current and future quiz
   // (genre, artist, and dynamically-rendered results) gets the same celebration.
   const celebrationScript = document.createElement("script");
-  celebrationScript.src = "quiz-celebration.js?v=20261117results1";
+  celebrationScript.src = "quiz-celebration.js?v=20261117final2";
   document.head.appendChild(celebrationScript);
 
   const welcome = document.getElementById("welcomeScreen");
