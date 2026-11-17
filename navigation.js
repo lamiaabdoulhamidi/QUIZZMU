@@ -34,7 +34,7 @@
   rapStyles.href = "rap-deezer.css";
   document.head.appendChild(rapStyles);
   const rapModule = document.createElement("script");
-  rapModule.src = "rap-deezer.js?v=20261117next2";
+  rapModule.src = "rap-deezer.js?v=20261117nextvisible3";
   document.body.appendChild(rapModule);
 
   // R&B uses its own Deezer module; Rap and artist modules are unchanged.
@@ -43,7 +43,7 @@
   rnbStyles.href = "rnb-deezer.css";
   document.head.appendChild(rnbStyles);
   const rnbModule = document.createElement("script");
-  rnbModule.src = "rnb-deezer.js?v=20261117next2";
+  rnbModule.src = "rnb-deezer.js?v=20261117nextvisible3";
   document.body.appendChild(rnbModule);
 
   // Afro has its own Deezer module; existing genres and artist quizzes stay unchanged.
