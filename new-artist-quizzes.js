@@ -182,7 +182,8 @@
       game.querySelector("[data-prompt]").textContent = question.prompt || "Quel est le titre du morceau ?";
       game.querySelector("[data-audio-area]").hidden = question.type !== "blindtest";
       reveal.hidden = true;
-      reveal.replaceChildren();
+      QuizzmuReactions.clear(reveal);
+    reveal.replaceChildren();
       nextButton.hidden = true;
       passButton.disabled = false;
       renderChoices(question);
