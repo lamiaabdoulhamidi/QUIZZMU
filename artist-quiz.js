@@ -288,6 +288,7 @@
       ? `La bonne réponse : ${currentTrack?.title || question.title} — ${currentTrack?.artist?.name || artistCatalog[currentArtistId].name}.`
       : `La bonne réponse : ${question.title}.`;
     revealElement.replaceChildren(heading, details);
+    QuizzmuReactions.show(revealElement, correct, selectedButton);
     revealElement.hidden = false;
     if (question.type === "blindtest") setStatus(correct ? "Bien joué !" : "Voici la bonne réponse.", correct ? "success" : "error");
     nextButton.textContent = currentIndex === getArtistQuestions().length - 1 ? "Voir mon score →" : "Suivant →";
