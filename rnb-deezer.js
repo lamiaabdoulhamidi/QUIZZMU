@@ -318,6 +318,10 @@
     skipButton.disabled = true;
     nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Question suivante →";
     nextButton.hidden = false;
+    // Afficher le bouton dans la zone visible, même sur un petit écran.
+    window.requestAnimationFrame(() => {
+      if (answered && !nextButton.hidden) nextButton.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
   }
 
   function showFinal() {
