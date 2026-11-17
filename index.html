@@ -120,45 +120,29 @@
         const style = document.createElement("style");
         style.textContent = `
           .quizzmu-reaction {
-            display: block; width: fit-content; max-width: 100%; margin: 12px auto;
-            padding: 12px 18px; border-radius: 16px; text-align: center;
-            font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: 800; line-height: 1.4;
-            letter-spacing: -.015em; border: 1px solid; pointer-events: none;
+            display: block; width: 100%; max-width: 100%;
+            margin: 8px 0 4px; padding: 0; border: 0; background: transparent;
+            box-shadow: none; border-radius: 0; text-align: center;
+            font-size: .92rem; font-weight: 600; line-height: 1.45;
+            letter-spacing: normal; pointer-events: none;
+            animation: quizzmu-reaction-appear .32s ease-out both;
           }
-          .quizzmu-reaction--correct {
-            color: #bbf7d0; background: rgba(21,128,61,.26);
-            border-color: rgba(74,222,128,.55); box-shadow: 0 0 25px rgba(34,197,94,.22);
-            animation: quizzmu-reaction-pop .46s cubic-bezier(.2,1.6,.4,1) both;
+          .quizzmu-reaction--correct { color: #86efac; }
+          .quizzmu-reaction--wrong { color: #fda4af; }
+          .quizzmu-reaction--leaving {
+            animation: quizzmu-reaction-out .25s ease-in forwards;
           }
-          .quizzmu-reaction--wrong {
-            color: #fecdd3; background: rgba(159,18,57,.24);
-            border-color: rgba(251,113,133,.53); box-shadow: 0 0 24px rgba(244,63,94,.16);
-            animation: quizzmu-reaction-shake .48s ease-out both;
-          }
-          .quizzmu-reaction--correct.quizzmu-reaction--leaving,
-          .quizzmu-reaction--wrong.quizzmu-reaction--leaving {
-            animation: quizzmu-reaction-out .32s ease-in forwards;
-          }
-          .quizzmu-answer-pulse { animation: quizzmu-answer-pulse .45s ease-out; }
-          @keyframes quizzmu-reaction-pop {
-            0% { opacity: 0; transform: translateY(12px) scale(.82); }
-            70% { opacity: 1; transform: translateY(-3px) scale(1.06); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          @keyframes quizzmu-reaction-shake {
-            0% { opacity: 0; transform: translateX(0) scale(.94); }
-            20% { opacity: 1; transform: translateX(-7px); }
-            40% { transform: translateX(6px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(2px); }
-            100% { opacity: 1; transform: translateX(0) scale(1); }
+          .quizzmu-answer-pulse { animation: quizzmu-answer-pulse .28s ease-out; }
+          @keyframes quizzmu-reaction-appear {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
           }
           @keyframes quizzmu-answer-pulse {
-            50% { transform: scale(1.035); }
-            100% { transform: scale(1); }
+            50% { transform: scale(1.012); }
+            to { transform: scale(1); }
           }
           @keyframes quizzmu-reaction-out {
-            to { opacity: 0; transform: translateY(-5px) scale(.97); }
+            to { opacity: 0; transform: translateY(-3px); }
           }
           @media (prefers-reduced-motion: reduce) {
             .quizzmu-reaction, .quizzmu-answer-pulse { animation: none !important; }
@@ -205,7 +189,11 @@
             reaction.textContent = pick(state, kind);
             reaction.setAttribute("role", "status");
             reaction.setAttribute("aria-live", "polite");
-            if (anchor.classList.contains("artist-reveal")) anchor.prepend(reaction);
+            // Afficher la petite phrase sous les propositions, sans grosse carte.
+            const choices = anchor.parentElement?.querySelector(
+              '.artist-choices, [data-choices], [id$="Choices"]'
+            );
+            if (choices) choices.insertAdjacentElement("afterend", reaction);
             else anchor.insertAdjacentElement("afterend", reaction);
             state.element = reaction;
             if (selectedButton) {
