@@ -1,6 +1,12 @@
 (() => {
   "use strict";
 
+  // Shared result animations are observed centrally, so every current and future quiz
+  // (genre, artist, and dynamically-rendered results) gets the same celebration.
+  const celebrationScript = document.createElement("script");
+  celebrationScript.src = "quiz-celebration.js?v=20261117results1";
+  document.head.appendChild(celebrationScript);
+
   const welcome = document.getElementById("welcomeScreen");
   const selector = document.getElementById("modeSelection");
   const app = document.getElementById("appShell");
