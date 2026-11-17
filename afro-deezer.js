@@ -74,6 +74,7 @@
       <p class="afro-answer-prompt">Quel est le titre de ce morceau ?</p>
       <div id="afroChoices" class="afro-choices" role="group" aria-label="Propositions de titres et artistes"></div>
       <p id="afroAnswerFeedback" class="feedback afro-answer-feedback" aria-live="polite"></p>
+      <button id="afroNextButton" class="primary-btn quizzmu-next-question" type="button" hidden>Question suivante →</button>
       <button id="afroSkipButton" class="ghost-btn afro-skip-button" type="button">Passer</button>
     </div>
     <div id="afroFinalArea" class="afro-final-area hidden" aria-live="polite">
@@ -96,6 +97,7 @@
   const scoreBadge = afroScreen.querySelector("#afroScoreBadge");
   const choices = afroScreen.querySelector("#afroChoices");
   const answerFeedback = afroScreen.querySelector("#afroAnswerFeedback");
+  const nextButton = afroScreen.querySelector("#afroNextButton");
   const audio = afroScreen.querySelector("#afroPreviewAudio");
   const audioButton = afroScreen.querySelector("#afroPlayAudio");
   const skipButton = afroScreen.querySelector("#afroSkipButton");
@@ -204,6 +206,8 @@
   }
 
   function startGame(level) {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     stopAudio();
     selectedLevel = level || selectedLevel;
     levelButtons.forEach((button) => {
@@ -233,6 +237,8 @@
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / 100`;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     answerFeedback.textContent = "";
     answerFeedback.className = "feedback afro-answer-feedback";
     stopAudio();
@@ -310,14 +316,13 @@
     answerFeedback.textContent += ` Réponse : « ${currentTrack?.title || question.title} » — ${artist}${question.featuring ? ` feat. ${question.featuring}` : ""}.`;
     audioButton.disabled = true;
     skipButton.disabled = true;
-    window.setTimeout(() => {
-      currentIndex += 1;
-      if (currentIndex >= questions.length) showFinal();
-      else showQuestion();
-    }, 1200);
+    nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Question suivante →";
+    nextButton.hidden = false;
   }
 
   function showFinal() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
     requestVersion += 1;
     stopAudio();
@@ -341,6 +346,8 @@
   }
 
   function leaveAfroScreen() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
     requestVersion += 1;
     stopAudio();
@@ -374,6 +381,14 @@
     setStatus("L’extrait est indisponible ou a expiré. Tu peux quand même répondre ou passer.", "error");
     audioButton.disabled = true;
     audioButton.textContent = "Extrait indisponible";
+  });
+  nextButton.addEventListener("click", () => {
+    if (!answered) return;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
+    currentIndex += 1;
+    if (currentIndex >= questions.length) showFinal();
+    else showQuestion();
   });
   skipButton.addEventListener("click", () => passQuestion());
   afroScreen.querySelector("#afroReplayButton").addEventListener("click", () => startGame(selectedLevel));
