@@ -133,6 +133,8 @@
             animation: quizzmu-reaction-out .25s ease-in forwards;
           }
           .quizzmu-answer-pulse { animation: quizzmu-answer-pulse .28s ease-out; }
+          .quizzmu-next-question { display: block; width: fit-content; max-width: 100%; margin: 16px auto 8px; }
+          .quizzmu-next-question[hidden] { display: none !important; }
           @keyframes quizzmu-reaction-appear {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -178,6 +180,15 @@
           return state;
         }
         window.QuizzmuReactions = {
+          clear(anchor) {
+            if (!anchor) return;
+            const state = states.get(anchor);
+            if (!state) return;
+            if (state.timer) clearTimeout(state.timer);
+            if (state.element) state.element.remove();
+            state.timer = null;
+            state.element = null;
+          },
           show(anchor, isCorrect, selectedButton) {
             if (!anchor) return;
             const state = getState(anchor);
@@ -211,12 +222,12 @@
         };
       })();
     </script>
-    <script src="artist-quiz.js?v=20261117fix2"></script>
-    <script src="rihanna-quiz.js?v=20261117fix2"></script>
-    <script src="new-artist-quizzes.js?v=20261117fix2"></script>
-    <script src="navigation.js?v=20261117fix2"></script>
-    <script src="afro-deezer.js?v=20261117fix2"></script>
-    <script src="variete-deezer.js?v=20261117fix2"></script>
+    <script src="artist-quiz.js?v=20261117next2"></script>
+    <script src="rihanna-quiz.js?v=20261117next2"></script>
+    <script src="new-artist-quizzes.js?v=20261117next2"></script>
+    <script src="navigation.js?v=20261117next2"></script>
+    <script src="afro-deezer.js?v=20261117next2"></script>
+    <script src="variete-deezer.js?v=20261117next2"></script>
     <script src="ambient.js"></script>
   </body>
 </html>
