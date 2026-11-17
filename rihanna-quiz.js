@@ -201,6 +201,7 @@
       ? `La bonne réponse : ${currentTrack?.title || question.title} — ${currentTrack?.artist?.name || ARTIST}.`
       : `La bonne réponse : ${question.title}.`;
     reveal.replaceChildren(heading, details);
+      QuizzmuReactions.show(reveal, correct);
     reveal.hidden = false;
     if (question.type === "blindtest" && !currentTrack?.preview) setStatus("L’extrait Deezer est indisponible, mais tu peux continuer.", "error");
     nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Question suivante →";
