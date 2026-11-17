@@ -34,7 +34,7 @@
   rapStyles.href = "rap-deezer.css";
   document.head.appendChild(rapStyles);
   const rapModule = document.createElement("script");
-  rapModule.src = "rap-deezer.js";
+  rapModule.src = "rap-deezer.js?v=20261117fix2";
   document.body.appendChild(rapModule);
 
   // R&B uses its own Deezer module; Rap and artist modules are unchanged.
@@ -43,7 +43,7 @@
   rnbStyles.href = "rnb-deezer.css";
   document.head.appendChild(rnbStyles);
   const rnbModule = document.createElement("script");
-  rnbModule.src = "rnb-deezer.js";
+  rnbModule.src = "rnb-deezer.js?v=20261117fix2";
   document.body.appendChild(rnbModule);
 
   // Afro has its own Deezer module; existing genres and artist quizzes stay unchanged.
@@ -153,6 +153,6 @@
 
   // Load Drake as a separate artist quiz module without changing the other artist quizzes.
   const drakeModule = document.createElement("script");
-  drakeModule.src = "drake-quiz.js?v=20261116b";
+  drakeModule.src = "drake-quiz.js?v=20261117fix2";
   document.body.appendChild(drakeModule);
 })();
