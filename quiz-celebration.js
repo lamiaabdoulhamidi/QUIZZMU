@@ -18,6 +18,55 @@
   };
   const style = document.createElement("style");
   style.textContent = `
+    /* Ecran final commun : laisser uniquement le résultat, logo, retour et attribution. */
+    body.quizzmu-results-mode #appShell .panel {
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      overflow: visible !important;
+    }
+    body.quizzmu-results-mode .rap-deezer-heading,
+    body.quizzmu-results-mode .rnb-deezer-heading,
+    body.quizzmu-results-mode .afro-deezer-heading,
+    body.quizzmu-results-mode .variete-deezer-heading,
+    body.quizzmu-results-mode .rap-level-picker,
+    body.quizzmu-results-mode .rnb-level-picker,
+    body.quizzmu-results-mode .afro-level-picker,
+    body.quizzmu-results-mode .variete-level-picker {
+      display: none !important;
+    }
+    body.quizzmu-results-mode .rap-deezer-panel,
+    body.quizzmu-results-mode .rnb-deezer-panel,
+    body.quizzmu-results-mode .afro-deezer-panel,
+    body.quizzmu-results-mode .variete-deezer-panel {
+      padding-top: clamp(48px, 9vh, 100px) !important;
+      padding-bottom: 28px !important;
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    body.quizzmu-results-mode .rap-final-area,
+    body.quizzmu-results-mode .rnb-final-area,
+    body.quizzmu-results-mode .afro-final-area,
+    body.quizzmu-results-mode .variete-final-area {
+      width: 100%;
+      max-width: 640px;
+    }
+    body.quizzmu-results-mode #artistEndScreen .panel-content,
+    body.quizzmu-results-mode .artist-view:has([data-final-score]) .panel-content {
+      padding-top: clamp(44px, 9vh, 100px);
+      padding-bottom: clamp(44px, 9vh, 100px);
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
     .quizzmu-final-message {
       margin: 12px 0 0;
       color: #e9c8ff;
@@ -135,8 +184,6 @@
     let scale = 1;
     let particles = [];
     let rainDrops = [];
-    let cloud = { x: 0, y: 0 };
-
     function resize() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
@@ -146,10 +193,8 @@
       canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (celebration.kind === "rain") {
-        const bounds = scoreElement.getBoundingClientRect();
-        cloud.x = Math.min(width - 48, Math.max(48, bounds.left + bounds.width / 2));
-        cloud.y = Math.max(42, bounds.top - 24);
-        rainDrops = Array.from({ length: 20 }, () => makeRaindrop(true));
+        // Les gouttes couvrent toute la fenêtre, comme les confettis.
+        rainDrops = Array.from({ length: Math.min(190, Math.max(90, Math.round(width / 7))) }, () => makeRaindrop(true));
       } else {
         particles = Array.from({ length: celebration.pieces }, () => makeConfetti(true));
       }
@@ -174,27 +219,14 @@
 
     function makeRaindrop(initial = false) {
       return {
-        x: cloud.x + (Math.random() - .5) * 76,
-        y: initial ? cloud.y + 13 + Math.random() * 190 : cloud.y + 14,
-        length: 8 + Math.random() * 8,
-        speed: 2.2 + Math.random() * 2.8,
-        drift: 5 + Math.random() * 10
+        x: Math.random() * width,
+        y: initial ? Math.random() * height : -15 - Math.random() * 110,
+        length: 12 + Math.random() * 20,
+        speed: 5 + Math.random() * 8,
+        slant: 2 + Math.random() * 4,
+        opacity: .25 + Math.random() * .48,
+        width: .8 + Math.random() * .9
       };
-    }
-
-    function drawCloud() {
-      const x = cloud.x;
-      const y = cloud.y;
-      context.save();
-      context.fillStyle = "rgba(203, 213, 225, .94)";
-      context.beginPath();
-      context.arc(x - 15, y + 3, 11, Math.PI * .5, Math.PI * 1.5);
-      context.arc(x - 5, y - 5, 14, Math.PI, Math.PI * 1.9);
-      context.arc(x + 10, y - 3, 12, Math.PI * 1.1, Math.PI * 2);
-      context.arc(x + 17, y + 4, 9, Math.PI * 1.5, Math.PI * .5);
-      context.closePath();
-      context.fill();
-      context.restore();
     }
 
     function draw(now) {
@@ -202,18 +234,18 @@
       const elapsed = now - startedAt;
       context.clearRect(0, 0, width, height);
       if (celebration.kind === "rain") {
-        drawCloud();
-        context.strokeStyle = "rgba(147, 197, 253, .8)";
-        context.lineWidth = 2;
+        const fade = elapsed > DURATION_MS - 850 ? Math.max(0, (DURATION_MS - elapsed) / 850) : 1;
         context.lineCap = "round";
         for (const drop of rainDrops) {
+          context.strokeStyle = `rgba(147, 197, 253, ${drop.opacity * fade})`;
+          context.lineWidth = drop.width;
           context.beginPath();
           context.moveTo(drop.x, drop.y);
-          context.lineTo(drop.x - 3, drop.y + drop.length);
+          context.lineTo(drop.x - drop.slant, drop.y + drop.length);
           context.stroke();
           drop.y += drop.speed;
-          drop.x += drop.drift * .012;
-          if (drop.y > Math.min(height - 8, cloud.y + 230)) Object.assign(drop, makeRaindrop());
+          drop.x -= drop.slant * .065;
+          if (drop.y > height + drop.length || drop.x < -30) Object.assign(drop, makeRaindrop());
         }
       } else {
         const fade = elapsed > DURATION_MS - 850 ? Math.max(0, (DURATION_MS - elapsed) / 850) : 1;
@@ -263,6 +295,7 @@
   }
 
   function scanResults() {
+    let visibleResult = false;
     const scoreElements = document.querySelectorAll(
       '#artistEndScreen [data-final-score], .artist-view [data-final-score], .artist-view .artist-final-score, .artist-view #artistFinalScore, [class*="-final-area"] [id$="FinalScore"]'
     );
@@ -275,6 +308,7 @@
         activeScreens.set(resultScreen, false);
         return;
       }
+      visibleResult = true;
       const score = getScore(scoreElement);
       if (!score) return;
       const key = `${score.score}/${score.maximum}`;
@@ -283,6 +317,8 @@
       completedScreens.set(resultScreen, key);
       celebrate(resultScreen, scoreElement);
     });
+    // La mise en page de résultat ne s'applique que pendant l'écran final.
+    document.body.classList.toggle("quizzmu-results-mode", visibleResult);
     // Remember hidden result screens so replaying the same score starts a fresh celebration.
     document.querySelectorAll('#artistEndScreen, .artist-view, [class*="-final-area"]').forEach((screen) => {
       if (!seenScreens.has(screen) && !isVisible(screen)) activeScreens.set(screen, false);
