@@ -231,6 +231,7 @@
     questionType.textContent = question.type === "blindtest" ? `Blind test · ${artist.name}` : `Culture musicale · ${artist.name}`;
     prompt.textContent = question.prompt || "Quel est le titre du morceau ?";
     audioArea.hidden = question.type !== "blindtest";
+    QuizzmuReactions.clear(revealElement);
     revealElement.hidden = true;
     nextButton.hidden = true;
     audio.pause();
