@@ -285,6 +285,7 @@
     });
     scoreBadge.textContent = `Score : ${score} / 100`;
     answerFeedback.textContent = correct ? "Bonne réponse ! +10 points" : "Réponse incorrecte.";
+    QuizzmuReactions.show(answerFeedback, correct, selectedButton);
     answerFeedback.className = `feedback afro-answer-feedback ${correct ? "success" : "error"}`;
     revealAndAdvance(question);
   }
@@ -299,6 +300,7 @@
       if (normalize(button.textContent) === normalize(answerLabel(questions[currentIndex]))) button.classList.add("correct");
     });
     answerFeedback.textContent = timedOut ? "Temps écoulé !" : "Question passée.";
+    QuizzmuReactions.show(answerFeedback, false);
     answerFeedback.className = "feedback afro-answer-feedback info";
     revealAndAdvance(questions[currentIndex]);
   }
