@@ -74,6 +74,7 @@
       <p class="rap-answer-prompt">Quel est le titre de ce morceau ?</p>
       <div id="rapChoices" class="rap-choices" role="group" aria-label="Propositions de titres et artistes"></div>
       <p id="rapAnswerFeedback" class="feedback rap-answer-feedback" aria-live="polite"></p>
+      <button id="rapNextButton" class="primary-btn quizzmu-next-question" type="button" hidden>Question suivante →</button>
       <button id="rapSkipButton" class="ghost-btn rap-skip-button" type="button">Passer</button>
     </div>
     <div id="rapFinalArea" class="rap-final-area hidden" aria-live="polite">
@@ -96,6 +97,7 @@
   const scoreBadge = rapScreen.querySelector("#rapScoreBadge");
   const choices = rapScreen.querySelector("#rapChoices");
   const answerFeedback = rapScreen.querySelector("#rapAnswerFeedback");
+  const nextButton = rapScreen.querySelector("#rapNextButton");
   const audio = rapScreen.querySelector("#rapPreviewAudio");
   const audioButton = rapScreen.querySelector("#rapPlayAudio");
   const skipButton = rapScreen.querySelector("#rapSkipButton");
@@ -204,6 +206,8 @@
   }
 
   function startGame(level) {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     stopAudio();
     selectedLevel = level || selectedLevel;
     levelButtons.forEach((button) => {
@@ -233,6 +237,8 @@
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / 100`;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     answerFeedback.textContent = "";
     answerFeedback.className = "feedback rap-answer-feedback";
     stopAudio();
@@ -310,14 +316,13 @@
     answerFeedback.textContent += ` Réponse : « ${currentTrack?.title || question.title} » — ${artist}${question.featuring ? ` feat. ${question.featuring}` : ""}.`;
     audioButton.disabled = true;
     skipButton.disabled = true;
-    window.setTimeout(() => {
-      currentIndex += 1;
-      if (currentIndex >= questions.length) showFinal();
-      else showQuestion();
-    }, 1200);
+    nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Question suivante →";
+    nextButton.hidden = false;
   }
 
   function showFinal() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
     requestVersion += 1;
     stopAudio();
@@ -341,6 +346,8 @@
   }
 
   function leaveRapScreen() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
     requestVersion += 1;
     stopAudio();
@@ -374,6 +381,14 @@
     setStatus("L’extrait est indisponible ou a expiré. Tu peux quand même répondre ou passer.", "error");
     audioButton.disabled = true;
     audioButton.textContent = "Extrait indisponible";
+  });
+  nextButton.addEventListener("click", () => {
+    if (!answered) return;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
+    currentIndex += 1;
+    if (currentIndex >= questions.length) showFinal();
+    else showQuestion();
   });
   skipButton.addEventListener("click", () => passQuestion());
   rapScreen.querySelector("#rapReplayButton").addEventListener("click", () => startGame(selectedLevel));
