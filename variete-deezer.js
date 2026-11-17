@@ -74,6 +74,7 @@
       <p class="variete-answer-prompt">Quel est le titre de ce morceau ?</p>
       <div id="varieteChoices" class="variete-choices" role="group" aria-label="Propositions de titres et artistes"></div>
       <p id="varieteAnswerFeedback" class="feedback variete-answer-feedback" aria-live="polite"></p>
+      <button id="varieteNextButton" class="primary-btn quizzmu-next-question" type="button" hidden>Question suivante →</button>
       <button id="varieteSkipButton" class="ghost-btn variete-skip-button" type="button">Passer</button>
     </div>
     <div id="varieteFinalArea" class="variete-final-area hidden" aria-live="polite">
@@ -96,6 +97,7 @@
   const scoreBadge = varieteScreen.querySelector("#varieteScoreBadge");
   const choices = varieteScreen.querySelector("#varieteChoices");
   const answerFeedback = varieteScreen.querySelector("#varieteAnswerFeedback");
+  const nextButton = varieteScreen.querySelector("#varieteNextButton");
   const audio = varieteScreen.querySelector("#varietePreviewAudio");
   const audioButton = varieteScreen.querySelector("#varietePlayAudio");
   const skipButton = varieteScreen.querySelector("#varieteSkipButton");
@@ -110,7 +112,6 @@
   let requestVersion = 0;
   let currentTrack = null;
   const quizTimer = QuizzmuTimer.create(playArea.querySelector(".game-header"), () => passQuestion(true));
-  let advanceTimer = null;
 
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -205,7 +206,8 @@
   }
 
   function startGame(level) {
-    window.clearTimeout(advanceTimer);
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     stopAudio();
     selectedLevel = level || selectedLevel;
     levelButtons.forEach((button) => {
@@ -235,6 +237,8 @@
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
     scoreBadge.textContent = `Score : ${score} / 100`;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     answerFeedback.textContent = "";
     answerFeedback.className = "feedback variete-answer-feedback";
     stopAudio();
@@ -312,15 +316,13 @@
     answerFeedback.textContent += ` Réponse : « ${currentTrack?.title || question.title} » — ${artist}${question.featuring ? ` feat. ${question.featuring}` : ""}.`;
     audioButton.disabled = true;
     skipButton.disabled = true;
-    advanceTimer = window.setTimeout(() => {
-      if (varieteScreen.classList.contains("hidden")) return;
-      currentIndex += 1;
-      if (currentIndex >= questions.length) showFinal();
-      else showQuestion();
-    }, 1200);
+    nextButton.textContent = currentIndex === questions.length - 1 ? "Voir mon score →" : "Question suivante →";
+    nextButton.hidden = false;
   }
 
   function showFinal() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
     requestVersion += 1;
     stopAudio();
@@ -332,7 +334,6 @@
 
   function showVarieteScreen() {
     window.setTimeout(() => {
-      window.clearTimeout(advanceTimer);
       originalContent.hidden = true;
       varieteScreen.classList.remove("hidden");
       playArea.classList.add("hidden");
@@ -345,8 +346,9 @@
   }
 
   function leaveVarieteScreen() {
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
     quizTimer.stop();
-    window.clearTimeout(advanceTimer);
     requestVersion += 1;
     stopAudio();
     varieteScreen.classList.add("hidden");
@@ -379,6 +381,14 @@
     setStatus("L’extrait est indisponible ou a expiré. Tu peux quand même répondre ou passer.", "error");
     audioButton.disabled = true;
     audioButton.textContent = "Extrait indisponible";
+  });
+  nextButton.addEventListener("click", () => {
+    if (!answered) return;
+    QuizzmuReactions.clear(answerFeedback);
+    nextButton.hidden = true;
+    currentIndex += 1;
+    if (currentIndex >= questions.length) showFinal();
+    else showQuestion();
   });
   skipButton.addEventListener("click", () => passQuestion());
   varieteScreen.querySelector("#varieteReplayButton").addEventListener("click", () => startGame(selectedLevel));
