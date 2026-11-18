@@ -65,7 +65,7 @@
       <button type="button" class="difficulty-btn" data-rnb-level="difficile" aria-pressed="false">Difficile</button>
     </div>
     <div id="rnbPlayArea" class="rnb-play-area hidden">
-      <div class="game-header"><span id="rnbRoundBadge" class="round-badge">Question 1 / 10</span><span id="rnbScoreBadge" class="score-badge">Score : 0 / 100</span></div>
+      <div class="game-header"><span id="rnbRoundBadge" class="round-badge">Question 1 / 10</span><span id="rnbScoreBadge" class="score-badge">Score : 0 / 10</span></div>
       <p id="rnbDeezerStatus" class="feedback rnb-deezer-status" role="status" aria-live="polite">Recherche du morceau et de son extrait via Deezer…</p>
       <div class="rnb-audio-card">
         <p class="hint-label">ÉCOUTE L’EXTRAIT</p>
@@ -236,7 +236,7 @@
     quizTimer.reset(true);
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
-    scoreBadge.textContent = `Score : ${score} / 100`;
+    scoreBadge.textContent = `Score : ${score} / 10`;
     QuizzmuReactions.clear(answerFeedback);
     nextButton.hidden = true;
     answerFeedback.textContent = "";
@@ -282,15 +282,15 @@
     const question = questions[currentIndex];
     const correct = normalize(selectedOption.title) === normalize(question.title);
     stopAudio();
-    if (correct) score += 10;
+    if (correct) score += 1;
     selectedButton.classList.add(correct ? "correct" : "incorrect");
     choices.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
       const answerText = button.textContent;
       if (normalize(answerText) === normalize(answerLabel(question))) button.classList.add("correct");
     });
-    scoreBadge.textContent = `Score : ${score} / 100`;
-    answerFeedback.textContent = correct ? "Bonne réponse ! +10 points" : "Réponse incorrecte.";
+    scoreBadge.textContent = `Score : ${score} / 10`;
+    answerFeedback.textContent = correct ? "Bonne réponse ! +1 point" : "Réponse incorrecte.";
     QuizzmuReactions.show(answerFeedback, correct, selectedButton);
     answerFeedback.className = `feedback rnb-answer-feedback ${correct ? "success" : "error"}`;
     revealAndAdvance(question);
@@ -333,7 +333,7 @@
     playArea.classList.add("hidden");
     finalArea.classList.remove("hidden");
     rnbScreen.querySelector("#rnbFinalTitle").textContent = `Niveau ${LEVEL_LABELS[selectedLevel]} terminé`;
-    rnbScreen.querySelector("#rnbFinalScore").textContent = `Ton score final : ${score} / 100 points.`;
+    rnbScreen.querySelector("#rnbFinalScore").textContent = `Ton score final : ${score} / 10 points.`;
   }
 
   function showRnbScreen() {
