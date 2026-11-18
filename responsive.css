@@ -1,0 +1,355 @@
+/* QuizzMU — responsive layout shared by every quiz mode.
+   Loaded last in index.html so these rules only adjust sizing and layout. */
+
+:root {
+  --quizzmu-safe-x: clamp(12px, 4vw, 18px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+img,
+canvas,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+button,
+.mode-card,
+.genre-btn,
+.difficulty-btn,
+.artist-choice,
+.rap-choice,
+.rnb-choice,
+.afro-choice,
+.variete-choice {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell,
+.welcome-screen,
+.mode-selection,
+.panel,
+.artist-game-content,
+.game-header,
+.genre-picker,
+.difficulty-picker,
+.mode-cards,
+.artist-cards,
+.artist-choices,
+.rap-choices,
+.rnb-choices,
+.afro-choices,
+.variete-choices {
+  min-width: 0;
+}
+
+.app-shell {
+  width: min(1000px, calc(100vw - (2 * var(--quizzmu-safe-x))));
+}
+
+@media (max-width: 760px) {
+  body {
+    align-items: flex-start;
+  }
+
+  .welcome-screen,
+  .mode-selection {
+    min-height: calc(100svh - 36px);
+  }
+
+  .welcome-content,
+  .mode-selection-inner {
+    width: 100%;
+  }
+
+  .topbar {
+    width: 100%;
+  }
+
+  .brand-lockup {
+    min-width: 0;
+  }
+
+  .brand-lockup h1 {
+    white-space: nowrap;
+  }
+
+  .mode-card-copy {
+    min-width: 0;
+  }
+
+  .mode-card-copy strong {
+    overflow-wrap: anywhere;
+  }
+
+  .panel,
+  .artist-card,
+  .mode-card,
+  .hint-card,
+  .rap-audio-card,
+  .rnb-audio-card,
+  .afro-audio-card,
+  .variete-audio-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .genre-picker,
+  .difficulty-picker,
+  .rap-level-picker,
+  .rnb-level-picker,
+  .afro-level-picker,
+  .variete-level-picker {
+    width: 100%;
+  }
+
+  .genre-btn,
+  .difficulty-btn {
+    min-height: 44px;
+  }
+
+  .game-header {
+    width: 100%;
+  }
+
+  .round-badge,
+  .score-badge {
+    white-space: nowrap;
+  }
+
+  .artist-choice,
+  .rap-choice,
+  .rnb-choice,
+  .afro-choice,
+  .variete-choice,
+  .artist-play-button,
+  .rap-audio-button,
+  .rnb-audio-button,
+  .afro-audio-button,
+  .variete-audio-button {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 14px 12px;
+  }
+
+  .app-shell {
+    width: 100%;
+  }
+
+  .welcome-screen,
+  .mode-selection {
+    min-height: calc(100svh - 28px);
+  }
+
+  .welcome-kicker {
+    font-size: clamp(.58rem, 2.5vw, .72rem);
+    letter-spacing: .16em;
+  }
+
+  .welcome-description,
+  .mode-intro {
+    width: 100%;
+  }
+
+  .welcome-button {
+    width: min(100%, 300px);
+    min-width: 0;
+  }
+
+  .topbar {
+    margin-bottom: 14px;
+  }
+
+  .brand-lockup .eyebrow {
+    max-width: 190px;
+  }
+
+  .category-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .category-tab {
+    min-width: 0;
+    padding-inline: 8px;
+    text-align: center;
+  }
+
+  .choose-mode-btn,
+  .header-actions,
+  .header-actions .ghost-btn {
+    width: 100%;
+  }
+
+  .panel {
+    border-radius: 18px;
+  }
+
+  .panel-content,
+  #gameScreen,
+  .artist-game-content,
+  .rap-deezer-panel,
+  .rnb-deezer-panel,
+  .afro-deezer-panel,
+  .variete-deezer-panel {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hero-intro,
+  .artist-intro,
+  .rap-deezer-heading,
+  .rnb-deezer-heading,
+  .afro-deezer-heading,
+  .variete-deezer-heading {
+    margin-bottom: 22px;
+  }
+
+  .genre-picker,
+  .difficulty-picker,
+  .rap-level-picker,
+  .rnb-level-picker,
+  .afro-level-picker,
+  .variete-level-picker {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .genre-btn,
+  .difficulty-btn,
+  .rap-level-picker .difficulty-btn,
+  .rnb-level-picker .difficulty-btn,
+  .afro-level-picker .difficulty-btn,
+  .variete-level-picker .difficulty-btn {
+    width: 100%;
+    flex: none;
+  }
+
+  .mode-cards,
+  .artist-cards,
+  .artist-choices,
+  .rap-choices,
+  .rnb-choices,
+  .afro-choices,
+  .variete-choices,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-card {
+    min-height: 160px;
+  }
+
+  .mode-card-copy strong {
+    font-size: clamp(1.25rem, 7vw, 1.7rem);
+  }
+
+  .game-header,
+  .end-actions,
+  .artist-next-row,
+  .input-row {
+    width: 100%;
+  }
+
+  .game-header {
+    align-items: center;
+  }
+
+  .input-row,
+  .end-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .input-row input,
+  .input-row button,
+  .end-actions button,
+  .artist-next-row button,
+  .rap-final-area .primary-btn,
+  .rnb-final-area .primary-btn,
+  .afro-final-area .primary-btn,
+  .variete-final-area .primary-btn {
+    width: 100%;
+  }
+
+  .hint-card,
+  .stat-box,
+  .artist-card,
+  .rap-audio-card,
+  .rnb-audio-card,
+  .afro-audio-card,
+  .variete-audio-card {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .stat-box strong {
+    font-size: 1.05rem;
+  }
+
+  .stat-box span {
+    font-size: .78rem;
+  }
+
+  .rap-skip-button,
+  .rnb-skip-button,
+  .afro-skip-button,
+  .variete-skip-button,
+  .rap-back-button,
+  .rnb-back-button,
+  .afro-back-button,
+  .variete-back-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  body {
+    padding-inline: 8px;
+  }
+
+  .welcome-title {
+    font-size: 3.7rem;
+  }
+
+  .brand-lockup h1 {
+    font-size: 1.55rem;
+  }
+
+  .mode-card {
+    gap: 12px;
+  }
+
+  .mode-arrow {
+    top: 18px;
+    right: 18px;
+  }
+
+  .stats-grid {
+    gap: 6px;
+  }
+}
