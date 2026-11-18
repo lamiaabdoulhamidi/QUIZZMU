@@ -16,6 +16,15 @@
       #appShell .artist-back-button { display: none !important; }
       /* Le délai de 15 s remplace le bouton Passer, sans changer la gestion du temps écoulé. */
       #appShell [id$="SkipButton"], #appShell [data-pass] { display: none !important; }
+      /* Après le choix du niveau, afficher seulement le quiz (ou le résultat).
+         Conserver l'en-tête et les niveaux sur l'écran de sélection. */
+      :is(.rap-deezer-panel, .rnb-deezer-panel, .afro-deezer-panel, .variete-deezer-panel):has(
+        :is(.rap-play-area, .rnb-play-area, .afro-play-area, .variete-play-area,
+            .rap-final-area, .rnb-final-area, .afro-final-area, .variete-final-area):not(.hidden)
+      ) > :is(.rap-deezer-heading, .rnb-deezer-heading, .afro-deezer-heading, .variete-deezer-heading,
+               .rap-level-picker, .rnb-level-picker, .afro-level-picker, .variete-level-picker) {
+        display: none !important;
+      }
     </style>
   </head>
   <body>
