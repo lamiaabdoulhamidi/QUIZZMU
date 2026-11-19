@@ -29,3 +29,85 @@ body.quizzmu-results-mode .genre-free-final { background:transparent; }
  .genre-free-form { flex-direction:column; }
  .genre-free-form button,.genre-free-help button { width:100%; }
 }
+
+/* Présentation épurée de la Réponse libre : l'essentiel à l'écran. */
+.genre-free-panel {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(18px,3vw,32px);
+  text-align: center;
+}
+.genre-free-top {
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  margin-bottom:22px; flex-wrap:wrap;
+}
+.genre-free-identity { display:flex; gap:9px; align-items:center; flex-wrap:wrap; }
+.genre-free-tag {
+  display:inline-flex; align-items:center; padding:8px 13px;
+  border:1px solid rgba(192,132,252,.2); border-radius:999px;
+  color:#d6c7e6; background:rgba(155,80,210,.09);
+  font-size:.82rem; font-weight:700;
+}
+.genre-free-score { font-size:1rem; padding:10px 16px; }
+.genre-free-progress-header { text-align:right; color:#bdb0cc; font-size:.82rem; margin-bottom:11px; }
+.genre-free-steps { display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); gap:6px; margin-bottom:17px; }
+.genre-free-step { height:6px; border-radius:999px; background:rgba(202,172,226,.15); }
+.genre-free-step.done { background:#8d47cd; }
+.genre-free-step.active { background:#d9a4ff; box-shadow:0 0 9px rgba(168,85,247,.45); }
+.genre-free-game { width:100%; }
+.genre-free-center {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:clamp(245px,36vh,390px); padding:32px 12px 22px;
+}
+.genre-free-symbol {
+  display:grid; place-items:center; width:72px; height:72px;
+  border:1px solid rgba(192,132,252,.24); border-radius:50%;
+  background:rgba(167,78,227,.08); color:#b77aff; font-size:2.1rem;
+  margin-bottom:19px;
+}
+.genre-free-center h3 { color:#fff; font-size:clamp(1.65rem,3vw,2.15rem); margin:0 0 8px; letter-spacing:-.045em; }
+.genre-free-center > p { margin:0; }
+.genre-free-player {
+  display:flex; align-items:center; justify-content:center; gap:22px;
+  margin:27px 0 15px; width:100%;
+}
+.genre-free-player .primary-btn { min-width:185px; }
+.genre-free-timer {
+  min-width:68px; border-radius:999px; padding:11px 13px;
+  border:1px solid rgba(192,132,252,.25); font-weight:750; color:#e9d5ff;
+  background:rgba(155,80,210,.07);
+}
+.genre-free-rules { font-size:.8rem; color:#a99bb9; }
+.genre-free-status { min-height:20px; margin:12px 0 0; font-size:.8rem; font-weight:500; }
+.genre-free-form { display:grid; grid-template-columns:1fr; gap:8px; max-width:600px; margin:4px auto 0; text-align:left; }
+.genre-free-label { font-size:.8rem; margin:6px 0 0; color:#c3b4d1; font-weight:700; }
+.genre-free-form input {
+  width:100%; min-height:52px; border-radius:13px;
+  padding:13px 16px; background:rgba(255,255,255,.035);
+}
+.genre-free-actions { display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:10px; margin-top:16px; }
+.genre-free-actions button { min-width:0; width:100%; border-radius:12px; }
+.genre-free-help { max-width:600px; margin:14px auto 0; padding:14px 18px; text-align:left; }
+.genre-free-help p { margin:3px 0; }
+.genre-free-feedback { max-width:650px; margin:15px auto 0; }
+.genre-free-next { margin:19px auto 8px; }
+.genre-free-attribution { text-align:center; margin-top:24px; font-size:.72rem; color:#7f748c; }
+.genre-free-attribution a { color:#b68cdb; }
+.genre-free-final { max-width:650px; margin:auto; }
+@media(max-width:600px) {
+ .genre-free-panel { padding:18px 14px 24px; }
+ .genre-free-top { align-items:flex-start; }
+ .genre-free-identity { gap:6px; }
+ .genre-free-tag { padding:7px 10px; font-size:.74rem; }
+ .genre-free-score { padding:7px 11px; font-size:.84rem; }
+ .genre-free-center { min-height:255px; padding:22px 0 15px; }
+ .genre-free-symbol { width:58px; height:58px; margin-bottom:15px; }
+ .genre-free-center h3 { font-size:1.65rem; }
+ .genre-free-player { gap:10px; margin:19px 0 12px; }
+ .genre-free-player .primary-btn { min-width:0; }
+ .genre-free-rules { max-width:290px; line-height:1.5; }
+ .genre-free-actions { grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+ .genre-free-actions button { padding:12px 5px; font-size:.78rem; }
+ .genre-free-form button { width:100%; }
+}
