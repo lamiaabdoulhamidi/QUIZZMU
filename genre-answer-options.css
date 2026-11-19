@@ -1,0 +1,31 @@
+/* Sélection QCM / Réponse libre : ajout isolé aux blind tests par genre. */
+.genre-answer-picker { margin: 22px auto; max-width: 740px; text-align: center; padding: 20px 14px; }
+.genre-answer-picker h3 { font-size: clamp(1.5rem,4vw,2rem); margin: 0 0 8px; }
+.genre-answer-picker p { margin: 0 0 22px; }
+.genre-answer-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.genre-answer-option { display:flex; flex-direction:column; gap:8px; min-height:145px; align-items:center; justify-content:center; border:1px solid rgba(192,132,252,.25); border-radius:20px; padding:20px; background:linear-gradient(145deg,rgba(40,24,57,.8),rgba(17,14,24,.92)); color:white; cursor:pointer; font:inherit; transition:transform .2s,border-color .2s; }
+.genre-answer-option:hover { border-color:#b76aff; transform:translateY(-2px); }
+.genre-answer-option strong { font-size:1.15rem; }
+.genre-answer-option span { color:#b5a9c3; font-size:.9rem; }
+.genre-free-panel { padding:clamp(18px,4vw,32px); }
+.genre-free-panel .game-header { flex-wrap:wrap; }
+.genre-free-audio { padding:24px 12px; text-align:center; border-radius:18px; background:rgba(145,53,225,.1); border:1px solid rgba(192,132,252,.2); margin:20px 0; }
+.genre-free-audio .primary-btn { min-width:min(230px,100%); margin-top:12px; }
+.genre-free-title { text-align:center; font-size:1.15rem; font-weight:800; margin:16px 0; }
+.genre-free-form { display:flex; gap:10px; }
+.genre-free-form input { width:100%; min-width:0; }
+.genre-free-form button { flex-shrink:0; }
+.genre-free-help { padding:16px; margin:18px 0; border:1px solid rgba(192,132,252,.2); border-radius:16px; background:rgba(255,255,255,.025); }
+.genre-free-help p { margin:10px 0; overflow-wrap:anywhere; }
+.genre-free-mask { letter-spacing:.09em; font-weight:800; color:#e9d5ff; line-height:1.8; }
+.genre-free-feedback { text-align:center; min-height:30px; margin-top:16px; }
+.genre-free-next { display:block; margin:16px auto; }
+.genre-free-final { text-align:center; padding:clamp(44px,8vh,90px) 15px; min-height:55vh; }
+.genre-free-final .primary-btn { margin-top:24px; }
+body.quizzmu-results-mode .genre-free-final { background:transparent; }
+@media(max-width:600px){
+ .genre-answer-options { grid-template-columns:1fr; }
+ .genre-answer-option { min-height:110px; }
+ .genre-free-form { flex-direction:column; }
+ .genre-free-form button,.genre-free-help button { width:100%; }
+}
