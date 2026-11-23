@@ -87,7 +87,7 @@
     if (genreButton && Object.hasOwn(labels,genreButton.dataset.genre)) {
       const genre = genreButton.dataset.genre;
       // Existing genre modules first reveal the panel in a setTimeout(0).
-      window.setTimeout(() => openSetup(genre), 0);
+      window.setTimeout(() => window.setTimeout(() => openSetup(genre), 0), 0);
       return;
     }
     if (event.target.closest(".rap-back-button,.rnb-back-button,.afro-back-button,.variete-back-button,#chooseModeBtn,[data-open-mode],.category-tab")) {
