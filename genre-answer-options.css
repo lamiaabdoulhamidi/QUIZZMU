@@ -124,3 +124,50 @@ body.quizzmu-results-mode .genre-free-final { background:transparent; }
  .genre-free-countdown { gap:7px; margin-bottom:14px; }
  .genre-free-center { min-height:auto; padding-top:12px; }
 }
+
+/* Réponse libre : même composition que l'écran QCM, sans changer les réponses. */
+.genre-free-panel .genre-free-hud { margin-bottom:16px; }
+.genre-free-panel .genre-free-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.genre-free-panel .genre-free-hud-left { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.genre-free-panel .genre-free-question {
+  display:inline-flex; align-items:center; padding:8px 13px;
+  border:1px solid rgba(192,132,252,.35); border-radius:999px;
+  background:rgba(140,77,205,.16); color:#eddaff; font-size:.84rem; font-weight:750;
+}
+.genre-free-panel .genre-free-score {
+  border:1px solid rgba(94,220,187,.35); border-radius:999px;
+  color:#8ff1d7; background:rgba(40,184,152,.1);
+  font-size:.84rem; padding:8px 13px;
+}
+.genre-free-panel .genre-free-timer { min-width:72px; text-align:center; padding:8px 12px; }
+.genre-free-panel .genre-free-timebar { width:100%; margin:0 0 15px; }
+.genre-free-panel .genre-free-game { width:100%; }
+.genre-free-panel .genre-free-intro {
+  min-height:20px; margin:12px 0 10px;
+  text-align:center; color:#73edc6; font-size:.9rem; font-weight:650;
+}
+.genre-free-panel .genre-free-intro.error { color:#ff8095; }
+.genre-free-panel .genre-free-listen {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; min-height:130px; padding:20px 18px;
+  border:1px solid rgba(168,118,240,.28); border-radius:18px;
+  background:linear-gradient(130deg,rgba(112,57,184,.22),rgba(69,40,133,.12));
+}
+.genre-free-panel .genre-free-listen-label {
+  font-size:.78rem; letter-spacing:.085em; font-weight:800; color:#eacaff;
+}
+.genre-free-panel .genre-free-listen .primary-btn { min-width:clamp(190px,32vw,290px); }
+.genre-free-panel .genre-free-prompt {
+  margin:21px 0 12px; color:#fff; font-size:clamp(1rem,1.7vw,1.2rem);
+  font-weight:750; text-align:center; letter-spacing:normal;
+}
+.genre-free-panel .genre-free-rules { margin:0 auto 16px; line-height:1.5; }
+.genre-free-panel .genre-free-form { margin-top:10px; }
+@media(max-width:600px) {
+  .genre-free-panel .genre-free-hud-left { gap:6px; }
+  .genre-free-panel .genre-free-question,.genre-free-panel .genre-free-score { padding:7px 9px; font-size:.73rem; }
+  .genre-free-panel .genre-free-timer { padding:7px 9px; min-width:59px; font-size:.78rem; }
+  .genre-free-panel .genre-free-listen { min-height:116px; padding:16px 12px; }
+  .genre-free-panel .genre-free-listen .primary-btn { min-width:190px; }
+  .genre-free-panel .genre-free-prompt { margin:17px 0 10px; }
+}
