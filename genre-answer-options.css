@@ -111,3 +111,16 @@ body.quizzmu-results-mode .genre-free-final { background:transparent; }
  .genre-free-actions button { padding:12px 5px; font-size:.78rem; }
  .genre-free-form button { width:100%; }
 }
+
+/* Alignement visuel du chronomètre réponse libre sur le QCM. */
+.genre-free-countdown { width:100%; max-width:760px; margin:0 auto 16px; display:flex; flex-direction:column; align-items:stretch; gap:10px; }
+.genre-free-countdown .genre-free-timer { align-self:flex-end; min-width:62px; text-align:center; }
+.genre-free-timebar { height:6px; width:100%; border-radius:999px; overflow:hidden; background:rgba(177,145,214,.22); }
+.genre-free-timebar [data-timefill] { display:block; height:100%; width:100%; border-radius:inherit; background:linear-gradient(90deg,#a449e8,#8e42ef); transition:width 1s linear,background .2s ease; }
+.genre-free-timebar [data-timefill].is-urgent { background:linear-gradient(90deg,#ff7993,#ff4267); }
+.genre-free-center { min-height:auto; padding-top:18px; }
+.genre-free-player { margin:16px 0 15px; }
+@media(max-width:600px) {
+ .genre-free-countdown { gap:7px; margin-bottom:14px; }
+ .genre-free-center { min-height:auto; padding-top:12px; }
+}
