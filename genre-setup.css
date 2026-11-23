@@ -3,7 +3,7 @@
 .rap-level-picker,.rnb-level-picker,.afro-level-picker,.variete-level-picker,
 .rap-deezer-attribution,.rnb-deezer-attribution,.afro-deezer-attribution,.variete-deezer-attribution) { display:none !important; }
 .genre-config-stage > .genre-setup { display:block; }
-.genre-setup { width:min(760px,100%); margin:12px auto 32px; text-align:center; }
+.genre-setup { width:min(760px,100%); margin:12px auto 32px; text-align:center; animation:enter-up .75s cubic-bezier(.2,.8,.2,1) both; }
 .genre-setup h2 { font-size:clamp(1.8rem,4vw,2.6rem); margin:0 0 10px; letter-spacing:-.04em; }
 .genre-setup > p { margin:0 0 35px; }
 .genre-setup-field { text-align:left; margin-bottom:30px; }
