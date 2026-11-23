@@ -1,0 +1,27 @@
+/* QUIZZMU - regroupement du niveau et du mode de réponse, sans changer le thème. */
+.genre-config-stage > :is(.rap-deezer-heading,.rnb-deezer-heading,.afro-deezer-heading,.variete-deezer-heading,
+.rap-level-picker,.rnb-level-picker,.afro-level-picker,.variete-level-picker,
+.rap-deezer-attribution,.rnb-deezer-attribution,.afro-deezer-attribution,.variete-deezer-attribution) { display:none !important; }
+.genre-config-stage > .genre-setup { display:block; }
+.genre-setup { width:min(760px,100%); margin:12px auto 32px; text-align:center; }
+.genre-setup h2 { font-size:clamp(1.8rem,4vw,2.6rem); margin:0 0 10px; letter-spacing:-.04em; }
+.genre-setup > p { margin:0 0 35px; }
+.genre-setup-field { text-align:left; margin-bottom:30px; }
+.genre-setup-field h3 { font-size:1rem; font-weight:750; margin:0 0 15px; }
+.genre-setup-levels { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.genre-setup-level { border:1px solid rgba(194,157,222,.17); background:rgba(255,255,255,.035); color:#d7cce1; border-radius:14px; padding:16px 9px; font:inherit; font-weight:700; cursor:pointer; }
+.genre-setup-level:hover, .genre-setup-level:focus-visible { border-color:#a84af1; }
+.genre-setup-level.active { border-color:transparent; background:linear-gradient(120deg,#a84af1,#7024d5); color:white; box-shadow:0 7px 20px rgba(145,53,225,.25); }
+.genre-setup-modes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.genre-setup-mode { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; min-height:128px; padding:18px; border:1px solid rgba(192,132,252,.25); border-radius:20px; background:linear-gradient(145deg,rgba(40,24,57,.8),rgba(17,14,24,.92)); color:white; font:inherit; cursor:pointer; }
+.genre-setup-mode span { color:#b5a9c3; font-size:.84rem; }
+.genre-setup-mode:hover,.genre-setup-mode:focus-visible { border-color:#b76aff; }
+.genre-setup-mode.active { border-color:#d5a0ff; background:linear-gradient(145deg,rgba(121,61,167,.4),rgba(53,30,73,.8)); }
+.genre-setup-start { display:block; width:min(380px,100%); margin:27px auto 0; padding:16px 24px; border-radius:15px; font:inherit; font-weight:800; cursor:pointer; }
+@media(max-width:560px) {
+ .genre-setup { padding:0 7px; }
+ .genre-setup-levels { gap:7px; }
+ .genre-setup-level { padding:13px 4px; font-size:.85rem; }
+ .genre-setup-modes { gap:9px; }
+ .genre-setup-mode { min-height:115px; padding:12px 7px; font-size:.9rem; }
+}
