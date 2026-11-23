@@ -25,3 +25,13 @@
  .genre-setup-modes { gap:9px; }
  .genre-setup-mode { min-height:115px; padding:12px 7px; font-size:.9rem; }
 }
+
+/* Test sans grand encadrement : uniquement sélection du genre et Prépare ta partie.
+   Les cadres du jeu lui-même restent inchangés. Supprimer ce bloc pour revenir en arrière. */
+#startScreen:has(> .panel-content:not([hidden])),
+#startScreen:has(> .genre-config-stage) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
