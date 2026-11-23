@@ -35,3 +35,15 @@
   box-shadow: none !important;
   backdrop-filter: none !important;
 }
+
+/* Même présentation sans grand encadrement pendant les quiz de genre
+   (QCM et réponse libre) et dans la sélection / le jeu spécial artiste.
+   Les petits blocs du lecteur, des réponses et des boutons restent intacts. */
+#startScreen:has(> :is(.rap-deezer-panel,.rnb-deezer-panel,.afro-deezer-panel,.variete-deezer-panel):not(.hidden)),
+#artistStartScreen,
+#artistGameScreen {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
