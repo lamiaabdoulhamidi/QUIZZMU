@@ -171,3 +171,60 @@ body.quizzmu-results-mode .genre-free-final { background:transparent; }
   .genre-free-panel .genre-free-listen .primary-btn { min-width:190px; }
   .genre-free-panel .genre-free-prompt { margin:17px 0 10px; }
 }
+
+/* Interface réponse libre épurée : validation artiste/morceau progressive. */
+.genre-free-panel .genre-free-found {
+  width:min(100%,510px); margin:27px auto 25px;
+  border:1px solid rgba(184,131,243,.38); border-radius:17px;
+  background:rgba(36,23,62,.4); padding:9px 20px;
+  text-align:left;
+}
+.genre-free-panel .genre-free-found-row {
+  display:grid; grid-template-columns:minmax(105px,38%) 1fr;
+  align-items:center; gap:12px; min-height:54px;
+}
+.genre-free-panel .genre-free-found-row + .genre-free-found-row {
+  border-top:1px solid rgba(184,131,243,.18);
+}
+.genre-free-panel .genre-free-found-row > span {
+  color:#d2b2f4; letter-spacing:.055em; font-size:.82rem; font-weight:800;
+}
+.genre-free-panel .genre-free-found-row > strong {
+  color:#d8c7e8; font-size:1rem; font-weight:700; overflow-wrap:anywhere;
+}
+.genre-free-panel .genre-free-found-row > strong.is-found { color:#78f0c8; }
+.genre-free-panel .genre-free-form {
+  max-width:820px; margin:0 auto; gap:8px;
+}
+.genre-free-panel .genre-free-entry {
+  display:grid; grid-template-columns:minmax(0,1fr) 64px; gap:10px;
+}
+.genre-free-panel .genre-free-entry input {
+  width:100%; min-width:0; min-height:56px;
+  border:1px solid rgba(182,139,236,.55);
+  background:rgba(255,255,255,.045);
+}
+.genre-free-panel .genre-free-send {
+  width:64px; min-width:0; min-height:56px;
+  border-radius:14px; font-size:1.6rem;
+}
+.genre-free-panel .genre-free-actions {
+  display:flex; justify-content:center; align-items:center; gap:24px;
+  margin-top:6px;
+}
+.genre-free-panel .genre-free-actions button {
+  background:transparent; border:0; padding:9px 12px; width:auto;
+  font-size:.92rem; color:#e2d4ec; box-shadow:none;
+}
+.genre-free-panel .genre-free-actions button:hover {
+  color:#fff; background:rgba(157,94,225,.15);
+}
+@media(max-width:600px) {
+  .genre-free-panel .genre-free-found { margin:22px auto; padding:6px 12px; }
+  .genre-free-panel .genre-free-found-row { grid-template-columns:90px 1fr; min-height:48px; gap:8px; }
+  .genre-free-panel .genre-free-found-row > span { font-size:.74rem; }
+  .genre-free-panel .genre-free-found-row > strong { font-size:.88rem; }
+  .genre-free-panel .genre-free-entry { grid-template-columns:minmax(0,1fr) 52px; gap:7px; }
+  .genre-free-panel .genre-free-send { width:52px; min-height:52px; }
+  .genre-free-panel .genre-free-actions { gap:12px; }
+}
