@@ -30,6 +30,10 @@
     context.clearRect(0, 0, width, height);
     const centerY = height * (height < 600 ? 0.78 : 0.72) + (pointer.y - 0.5) * 18;
     const motion = reducedMotion.matches ? 0 : frame;
+    const elapsed = window.qmWaveStart == null || reducedMotion.matches ? 5 : (performance.now() - window.qmWaveStart) / 1000;
+    const p = Math.max(0, Math.min(1, (elapsed - 1.85) / 1.65));
+    const emergence = p * p * (3 - 2 * p);
+    context.globalAlpha = emergence;
     const layers = [
       { amp: height * 0.105, freq: 0.010, speed: 0.012, phase: 0.2, color: "rgba(135, 57, 255, .46)", glow: "#872dff", weight: 2.2 },
       { amp: height * 0.075, freq: 0.014, speed: 0.016, phase: 2.1, color: "rgba(191, 82, 255, .38)", glow: "#bb4dff", weight: 1.8 },
@@ -42,10 +46,10 @@
       const shift = (pointer.x - 0.5) * (18 + layerIndex * 12);
       for (let x = -2; x <= width + 2; x += 3) {
         const normalizedX = x / Math.max(width, 1);
-        const envelope = 0.26 + Math.pow(Math.sin(normalizedX * Math.PI), 0.75) * 0.74;
+        const envelope = 0.26 + Math.pow(Math.max(0, Math.sin(normalizedX * Math.PI)), 0.75) * 0.74;
         const wave = Math.sin(x * layer.freq + motion * layer.speed + layer.phase + shift * 0.012) * layer.amp * envelope;
         const detail = Math.sin(x * layer.freq * 2.1 - motion * layer.speed * 1.7 + layer.phase) * layer.amp * 0.16;
-        const y = centerY + wave + detail;
+        const y = centerY + (wave + detail) * emergence;
         if (x === -2) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
@@ -62,6 +66,7 @@
     haze.addColorStop(1, "rgba(8, 6, 13, 0)");
     context.fillStyle = haze;
     context.fillRect(0, 0, width, height);
+    context.globalAlpha = 1;
   }
 
   function animate() {
