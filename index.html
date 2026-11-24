@@ -28,6 +28,30 @@
                .rap-level-picker, .rnb-level-picker, .afro-level-picker, .variete-level-picker) {
         display: none !important;
       }
+
+      /* Intro uniquement au premier affichage de l'accueil. */
+      @media (prefers-reduced-motion: no-preference) {
+        #welcomeScreen.qm-intro .welcome-content { animation: none; }
+        #welcomeScreen.qm-intro .welcome-title { animation: qm-logo 1.65s 1.65s cubic-bezier(.2,.8,.25,1) both; }
+        #welcomeScreen.qm-intro .welcome-kicker { animation: qm-reveal .65s 2.8s both; }
+        #welcomeScreen.qm-intro .welcome-description { animation: qm-reveal .65s 3.12s both; }
+        #welcomeScreen.qm-intro .welcome-button { animation: qm-reveal .65s 3.48s both; }
+        #welcomeScreen.qm-intro .welcome-hint { animation: qm-reveal .65s 3.82s both; }
+        #welcomeScreen.qm-intro .sound-bars { animation: qm-bars .6s 4.05s both; }
+        body.qm-opening #soundscape { animation: qm-waves 1.6s 2.65s both; }
+        #qmIntroFx { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        #qmIntroFx .qm-q { position:absolute; left:50%; top:50%; font-size:clamp(7rem,24vw,18rem); font-weight:900; line-height:1; color:#fff; text-shadow:0 0 42px #ad54f8aa; animation:qm-q 1.95s both; }
+        #qmIntroFx .qm-ring { position:absolute; left:50%; top:50%; width:clamp(100px,28vw,340px); aspect-ratio:1; border:2px solid #b95bff; border-radius:50%; box-shadow:0 0 24px #a238ff; animation:qm-ring 1.35s var(--delay) ease-out both; }
+        #qmIntroFx .qm-spark { position:absolute; left:50%; top:50%; width:5px; height:5px; background:#d8a0ff; border-radius:50%; box-shadow:0 0 12px #c065ff; animation:qm-spark 1.55s var(--delay) ease-out both; }
+        @keyframes qm-q { 0% {opacity:0;transform:translate(-50%,-50%) scale(.05) rotate(-25deg)} 20% {opacity:1;transform:translate(-50%,-50%) scale(.48) rotate(12deg)} 40% {opacity:1;transform:translate(-50%,-50%) scale(.8) rotate(-8deg)} 65% {opacity:1;transform:translate(-50%,-50%) scale(1.18)} 80% {opacity:1;transform:translate(-50%,-50%) scale(1)} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.35)} }
+        @keyframes qm-ring { 0% {opacity:0;transform:translate(-50%,-50%) scale(.15)} 20% {opacity:.85} 100% {opacity:0;transform:translate(-50%,-50%) scale(2.35)} }
+        @keyframes qm-spark { 0% {opacity:0;transform:translate(-50%,-50%) scale(0)} 25% {opacity:1} 75% {opacity:.75} 100% {opacity:0;transform:translate(var(--x),var(--y)) scale(.2)} }
+        @keyframes qm-logo { 0% {opacity:0;transform:translateY(var(--qm-offset, 90px)) scale(.72)} 32% {opacity:1;transform:translateY(var(--qm-offset, 90px)) scale(1.035)} 52% {opacity:1;transform:translateY(var(--qm-offset, 90px)) scale(1)} 100% {opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes qm-reveal { from {opacity:0;transform:translateY(18px) scale(.96)} to {opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
+        @keyframes qm-waves { from {opacity:0;clip-path:inset(0 50% 0 50%)} to {opacity:1;clip-path:inset(0 0 0 0)} }
+      }
+      @media (prefers-reduced-motion: reduce) { #qmIntroFx { display:none !important; } }
     </style>
   </head>
   <body>
@@ -45,6 +69,46 @@
       </div>
       <div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </main>
+
+
+    <script>
+      (() => {
+        const home = document.getElementById('welcomeScreen');
+        const title = document.getElementById('welcomeTitle');
+        const start = document.getElementById('beginJourney');
+        if (!home || !title || !start || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+        const fx = document.createElement('div');
+        fx.id = 'qmIntroFx';
+        fx.setAttribute('aria-hidden','true');
+        fx.innerHTML = '<div class="qm-q">Q</div>';
+        for (let i=0;i<3;i++) {
+          const ring=document.createElement('i');
+          ring.className='qm-ring'; ring.style.setProperty('--delay', (i*.32)+'s'); fx.appendChild(ring);
+        }
+        const radius=Math.min(innerWidth*.42,innerHeight*.37,290);
+        for(let i=0;i<30;i++){
+          const a=i*Math.PI*2/30, r=radius*(.55+(i%5)*.11);
+          const spark=document.createElement('i'); spark.className='qm-spark';
+          spark.style.setProperty('--x',Math.cos(a)*r+'px');
+          spark.style.setProperty('--y',Math.sin(a)*r+'px');
+          spark.style.setProperty('--delay',(i%5*.12)+'s'); fx.appendChild(spark);
+        }
+        home.classList.add('qm-intro');
+        document.body.classList.add('qm-opening');
+        const h=home.getBoundingClientRect(), t=title.getBoundingClientRect();
+        title.style.setProperty('--qm-offset',(h.top+h.height/2-t.top-t.height/2)+'px');
+        home.appendChild(fx);
+        let timer;
+        function finish(){
+          clearTimeout(timer); fx.remove(); home.classList.remove('qm-intro');
+          document.body.classList.remove('qm-opening'); title.style.removeProperty('--qm-offset');
+          start.removeEventListener('focus',finish); start.removeEventListener('click',finish);
+        }
+        start.addEventListener('focus',finish);
+        start.addEventListener('click',finish);
+        timer=setTimeout(finish,4750);
+      })();
+    </script>
 
     <section id="modeSelection" class="mode-selection hidden" aria-labelledby="modeTitle">
       <div class="mode-selection-inner">
