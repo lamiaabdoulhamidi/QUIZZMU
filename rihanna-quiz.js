@@ -33,7 +33,7 @@
   const game = document.createElement("section");
   game.className = "panel artist-view hidden";
   game.setAttribute("aria-labelledby", "rihannaQuestionPrompt");
-  game.innerHTML = '<div class="artist-game-content"><div class="game-header"><span class="round-badge" data-round>Question 1 / 10</span><span class="score-badge" data-score>Score : 0 / 10</span></div><p class="eyebrow" data-type></p><div class="hint-card artist-question-card"><p class="hint-label">QUESTION</p><h3 data-prompt></h3></div><div class="artist-audio-area" data-audio-area><button class="primary-btn artist-play-button" type="button" data-play disabled>Chargement de l’extrait…</button><audio preload="none"></audio><p class="feedback" role="status" aria-live="polite" data-status></p></div><div class="artist-choices" aria-label="Propositions de réponse" data-choices></div><div class="artist-reveal" hidden aria-live="polite" data-reveal></div><div class="artist-next-row" style="justify-content:space-between"><button class="ghost-btn" type="button" data-pass>Passer</button><button class="primary-btn" type="button" data-next hidden>Question suivante →</button></div></div>';
+  game.innerHTML = '<div class="artist-game-content"><div class="game-header"><span class="round-badge" data-round>Question 1 / 10</span><span class="score-badge" data-score>Score : 0 / 100</span></div><p class="eyebrow" data-type></p><div class="hint-card artist-question-card"><p class="hint-label">QUESTION</p><h3 data-prompt></h3></div><div class="artist-audio-area" data-audio-area><button class="primary-btn artist-play-button" type="button" data-play disabled>Chargement de l’extrait…</button><audio preload="none"></audio><p class="feedback" role="status" aria-live="polite" data-status></p></div><div class="artist-choices" aria-label="Propositions de réponse" data-choices></div><div class="artist-reveal" hidden aria-live="polite" data-reveal></div><div class="artist-next-row" style="justify-content:space-between"><button class="ghost-btn" type="button" data-pass>Passer</button><button class="primary-btn" type="button" data-next hidden>Question suivante →</button></div></div>';
   const end = document.createElement("section");
   end.className = "panel artist-view hidden";
   end.setAttribute("aria-labelledby", "rihannaEndTitle");
@@ -146,7 +146,7 @@
     currentTrack = null;
     stopAudio();
     game.querySelector("[data-round]").textContent = `Question ${currentIndex + 1} / ${questions.length}`;
-    game.querySelector("[data-score]").textContent = `Score : ${score} / ${questions.length}`;
+    game.querySelector("[data-score]").textContent = `Score : ${score} / 100`;
     game.querySelector("[data-type]").textContent = question.type === "blindtest" ? `Blind test · ${ARTIST}` : `Culture musicale · ${ARTIST}`;
     game.querySelector("[data-prompt]").textContent = question.prompt || "Quel est le titre du morceau ?";
     game.querySelector("[data-audio-area]").hidden = question.type !== "blindtest";
@@ -188,13 +188,13 @@
     const question = questions[currentIndex];
     stopAudio();
     const correct = normalize(selectedAnswer) === normalize(question.title);
-    if (!wasPassed && correct) score += 1;
+    if (!wasPassed && correct) score += 10;
     choices.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
       if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
       else if (!wasPassed && normalize(button.textContent) === normalize(selectedAnswer)) button.classList.add("incorrect");
     });
-    game.querySelector("[data-score]").textContent = `Score : ${score} / ${questions.length}`;
+    game.querySelector("[data-score]").textContent = `Score : ${score} / 100`;
     const heading = document.createElement("strong");
     heading.textContent = timedOut ? "Temps écoulé !" : wasPassed ? "Question passée." : correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
@@ -228,7 +228,7 @@
     game.classList.add("hidden");
     artistStart.classList.add("hidden");
     end.classList.remove("hidden");
-    end.querySelector("[data-final-score]").textContent = `Ton score : ${score} / ${questions.length}`;
+    end.querySelector("[data-final-score]").textContent = `Ton score : ${score} / 100`;
   }
   function leaveToDirectory() {
     quizTimer.stop();

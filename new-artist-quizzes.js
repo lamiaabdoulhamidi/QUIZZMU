@@ -177,7 +177,7 @@
     currentTrack = null;
       stopAudio();
       game.querySelector("[data-round]").textContent = `Question ${currentIndex + 1} / ${runQuestions.length}`;
-      game.querySelector("[data-score]").textContent = `Score : ${score} / ${runQuestions.length}`;
+      game.querySelector("[data-score]").textContent = `Score : ${score} / 100`;
       game.querySelector("[data-type]").textContent = question.type === "blindtest" ? `Blind test · ${artist.name}` : `Culture musicale · ${artist.name}`;
       game.querySelector("[data-prompt]").textContent = question.prompt || "Quel est le titre du morceau ?";
       game.querySelector("[data-audio-area]").hidden = question.type !== "blindtest";
@@ -220,13 +220,13 @@
       const question = runQuestions[currentIndex];
       stopAudio();
       const correct = !wasPassed && normalize(selectedAnswer) === normalize(question.title);
-      if (correct) score += 1;
+      if (correct) score += 10;
       choices.querySelectorAll("button").forEach((button) => {
         button.disabled = true;
         if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
         else if (!wasPassed && normalize(button.textContent) === normalize(selectedAnswer)) button.classList.add("incorrect");
       });
-      game.querySelector("[data-score]").textContent = `Score : ${score} / ${runQuestions.length}`;
+      game.querySelector("[data-score]").textContent = `Score : ${score} / 100`;
       const heading = document.createElement("strong");
       heading.textContent = timedOut ? "Temps écoulé !" : wasPassed ? "Question passée." : correct ? "Bonne réponse !" : "Réponse incorrecte.";
       const details = document.createElement("p");
@@ -262,7 +262,7 @@
       game.classList.add("hidden");
       artistStart.classList.add("hidden");
       end.classList.remove("hidden");
-      end.querySelector("[data-final-score]").textContent = `Ton score : ${score} / ${runQuestions.length}`;
+      end.querySelector("[data-final-score]").textContent = `Ton score : ${score} / 100`;
     }
     function leaveToDirectory() {
     quizTimer.stop();

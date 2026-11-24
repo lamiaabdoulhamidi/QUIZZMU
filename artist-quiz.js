@@ -227,7 +227,7 @@
     quizTimer.reset(question.type === "blindtest");
     currentTrack = null;
     roundBadge.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
-    scoreBadge.textContent = `Score : ${score} / ${questions.length}`;
+    scoreBadge.textContent = `Score : ${score} / 100`;
     questionType.textContent = question.type === "blindtest" ? `Blind test · ${artist.name}` : `Culture musicale · ${artist.name}`;
     prompt.textContent = question.prompt || "Quel est le titre du morceau ?";
     audioArea.hidden = question.type !== "blindtest";
@@ -271,7 +271,7 @@
     quizTimer.stop();
     const question = getArtistQuestions()[currentIndex];
     const correct = normalize(selectedAnswer) === normalize(question.title);
-    if (correct) score += 1;
+    if (correct) score += 10;
     if (question.type === "blindtest") audio.pause();
     if (selectedButton) {
       selectedButton.setAttribute("aria-pressed", "true");
@@ -281,7 +281,7 @@
       button.disabled = true;
       if (normalize(button.textContent) === normalize(question.title)) button.classList.add("correct");
     });
-    scoreBadge.textContent = `Score : ${score} / ${getArtistQuestions().length}`;
+    scoreBadge.textContent = `Score : ${score} / 100`;
     const heading = document.createElement("strong");
     heading.textContent = timedOut ? "Temps écoulé !" : correct ? "Bonne réponse !" : "Réponse incorrecte.";
     const details = document.createElement("p");
@@ -302,7 +302,7 @@
     endScreen.classList.remove("hidden");
     endTitle.textContent = `Quiz ${artistCatalog[currentArtistId].name} terminé !`;
     endBadge.textContent = `Spécial ${artistCatalog[currentArtistId].name}`;
-    finalScore.textContent = `Ton score : ${score} / ${getArtistQuestions().length}`;
+    finalScore.textContent = `Ton score : ${score} / 100`;
   }
 
   playButton.addEventListener("click", async () => {
