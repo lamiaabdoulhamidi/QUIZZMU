@@ -31,7 +31,7 @@
     const centerY = height * (height < 600 ? 0.78 : 0.72) + (pointer.y - 0.5) * 18;
     const motion = reducedMotion.matches ? 0 : frame;
     const elapsed = window.qmWaveStart == null || reducedMotion.matches ? 5 : (performance.now() - window.qmWaveStart) / 1000;
-    const p = Math.max(0, Math.min(1, (elapsed - 1.85) / 1.65));
+    const p = Math.max(0, Math.min(1, (elapsed - 1.05) / 1.8));
     const emergence = p * p * (3 - 2 * p);
     context.globalAlpha = emergence;
     const layers = [
@@ -49,7 +49,7 @@
         const envelope = 0.26 + Math.pow(Math.max(0, Math.sin(normalizedX * Math.PI)), 0.75) * 0.74;
         const wave = Math.sin(x * layer.freq + motion * layer.speed + layer.phase + shift * 0.012) * layer.amp * envelope;
         const detail = Math.sin(x * layer.freq * 2.1 - motion * layer.speed * 1.7 + layer.phase) * layer.amp * 0.16;
-        const y = centerY + (wave + detail) * emergence;
+        const y = centerY + wave + detail;
         if (x === -2) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
