@@ -32,24 +32,26 @@
       /* Intro uniquement au premier affichage de l'accueil. */
       @media (prefers-reduced-motion: no-preference) {
         #welcomeScreen.qm-intro .welcome-content { animation: none; }
-        #welcomeScreen.qm-intro .welcome-title { animation: qm-logo 1.65s 1.65s cubic-bezier(.2,.8,.25,1) both; }
-        #welcomeScreen.qm-intro .welcome-kicker { animation: qm-reveal .65s 2.8s both; }
-        #welcomeScreen.qm-intro .welcome-description { animation: qm-reveal .65s 3.12s both; }
-        #welcomeScreen.qm-intro .welcome-button { animation: qm-reveal .65s 3.48s both; }
-        #welcomeScreen.qm-intro .welcome-hint { animation: qm-reveal .65s 3.82s both; }
-        #welcomeScreen.qm-intro .sound-bars { animation: qm-bars .6s 4.05s both; }
-        body.qm-opening #soundscape { animation: qm-waves 1.6s 2.65s both; }
+        #welcomeScreen.qm-intro .welcome-title { animation: qm-logo 1.15s 1.55s cubic-bezier(.2,.8,.25,1) both; }
+        #welcomeScreen.qm-intro .welcome-kicker { animation: qm-reveal .6s 2.6s both; }
+        #welcomeScreen.qm-intro .welcome-description { animation: qm-reveal .6s 2.8s both; }
+        #welcomeScreen.qm-intro .welcome-button { animation: qm-reveal .6s 3s both; }
+        #welcomeScreen.qm-intro .welcome-hint { animation: qm-reveal .6s 3.2s both; }
+        #welcomeScreen.qm-intro .sound-bars { animation: qm-bars .6s 3.4s both; }
+        body.qm-opening #soundscape { animation: qm-waves 1.3s 2.1s both; }
         #qmIntroFx { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-        #qmIntroFx .qm-q { position:absolute; left:50%; top:50%; font-size:clamp(7rem,24vw,18rem); font-weight:900; line-height:1; color:#fff; text-shadow:0 0 42px #ad54f8aa; animation:qm-q 1.95s both; }
-        #qmIntroFx .qm-ring { position:absolute; left:50%; top:50%; width:clamp(100px,28vw,340px); aspect-ratio:1; border:2px solid #b95bff; border-radius:50%; box-shadow:0 0 24px #a238ff; animation:qm-ring 1.35s var(--delay) ease-out both; }
-        #qmIntroFx .qm-spark { position:absolute; left:50%; top:50%; width:5px; height:5px; background:#d8a0ff; border-radius:50%; box-shadow:0 0 12px #c065ff; animation:qm-spark 1.55s var(--delay) ease-out both; }
-        @keyframes qm-q { 0% {opacity:0;transform:translate(-50%,-50%) scale(.05) rotate(-25deg)} 20% {opacity:1;transform:translate(-50%,-50%) scale(.48) rotate(12deg)} 40% {opacity:1;transform:translate(-50%,-50%) scale(.8) rotate(-8deg)} 65% {opacity:1;transform:translate(-50%,-50%) scale(1.18)} 80% {opacity:1;transform:translate(-50%,-50%) scale(1)} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.35)} }
-        @keyframes qm-ring { 0% {opacity:0;transform:translate(-50%,-50%) scale(.15)} 20% {opacity:.85} 100% {opacity:0;transform:translate(-50%,-50%) scale(2.35)} }
-        @keyframes qm-spark { 0% {opacity:0;transform:translate(-50%,-50%) scale(0)} 25% {opacity:1} 75% {opacity:.75} 100% {opacity:0;transform:translate(var(--x),var(--y)) scale(.2)} }
-        @keyframes qm-logo { 0% {opacity:0;transform:translateY(var(--qm-offset, 90px)) scale(.72)} 32% {opacity:1;transform:translateY(var(--qm-offset, 90px)) scale(1.035)} 52% {opacity:1;transform:translateY(var(--qm-offset, 90px)) scale(1)} 100% {opacity:1;transform:translateY(0) scale(1)} }
-        @keyframes qm-reveal { from {opacity:0;transform:translateY(18px) scale(.96)} to {opacity:1;transform:translateY(0) scale(1)} }
+        #qmIntroFx .qm-q { position:absolute; left:50%; top:50%; font-size:clamp(5rem,22vw,15rem); font-weight:900; line-height:1; color:#fff; text-shadow:0 0 25px #ad54ff55; animation:qm-q 1.85s both; z-index:2; }
+        #qmIntroFx .qm-ring { position:absolute; left:50%; top:50%; width:clamp(100px,25vw,300px); aspect-ratio:1; border:1px solid #a960e4; border-radius:50%; animation:qm-ring 1.2s var(--delay) both; }
+        #qmIntroFx .qm-beat { position:absolute; left:50%; top:50%; margin-left:var(--side); display:flex; align-items:center; gap:clamp(3px,.65vw,8px); height:clamp(18px,8%,42px); animation:qm-beat 1.35s .55s both; }
+        #qmIntroFx .qm-beat i { display:block; width:clamp(3px,.55vw,7px); border-radius:2px; background:#ae65eb; animation:qm-beat-bar .55s ease-in-out infinite alternate; }
+        @keyframes qm-q { 0% {opacity:0;transform:translate(-50%,-50%) scale(.2)} 30% {opacity:1;transform:translate(-50%,-50%) scale(.75)} 60% {opacity:1;transform:translate(-50%,-50%) scale(1.035)} 80% {opacity:1;transform:translate(-50%,-50%) scale(1)} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.1)} }
+        @keyframes qm-ring { 0% {opacity:0;transform:translate(-50%,-50%) scale(.6)} 30% {opacity:.6} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.9)} }
+        @keyframes qm-beat { 0%,100% {opacity:0;transform:translate(-50%,-50%) scale(.95)} 30%,65% {opacity:.75;transform:translate(-50%,-50%) scale(1)} }
+        @keyframes qm-beat-bar { from {transform:scaleY(.55)} to {transform:scaleY(1)} }
+        @keyframes qm-logo { 0% {opacity:0;transform:translateY(var(--qm-offset,80px)) scale(.85)} 35%,55% {opacity:1;transform:translateY(var(--qm-offset,80px)) scale(1)} 100% {opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes qm-reveal { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
         @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
-        @keyframes qm-waves { from {opacity:0;clip-path:inset(0 50% 0 50%)} to {opacity:1;clip-path:inset(0 0 0 0)} }
+        @keyframes qm-waves { from {opacity:0} to {opacity:1} }
       }
       @media (prefers-reduced-motion: reduce) { #qmIntroFx { display:none !important; } }
     </style>
@@ -81,18 +83,19 @@
         fx.id = 'qmIntroFx';
         fx.setAttribute('aria-hidden','true');
         fx.innerHTML = '<div class="qm-q">Q</div>';
-        for (let i=0;i<3;i++) {
+        [.25,.65].forEach(delay => {
           const ring=document.createElement('i');
-          ring.className='qm-ring'; ring.style.setProperty('--delay', (i*.32)+'s'); fx.appendChild(ring);
-        }
-        const radius=Math.min(innerWidth*.42,innerHeight*.37,290);
-        for(let i=0;i<30;i++){
-          const a=i*Math.PI*2/30, r=radius*(.55+(i%5)*.11);
-          const spark=document.createElement('i'); spark.className='qm-spark';
-          spark.style.setProperty('--x',Math.cos(a)*r+'px');
-          spark.style.setProperty('--y',Math.sin(a)*r+'px');
-          spark.style.setProperty('--delay',(i%5*.12)+'s'); fx.appendChild(spark);
-        }
+          ring.className='qm-ring'; ring.style.setProperty('--delay',delay+'s'); fx.appendChild(ring);
+        });
+        [-1,1].forEach(side => {
+          const beat=document.createElement('div'); beat.className='qm-beat';
+          beat.style.setProperty('--side',side*20+'%');
+          [35,65,100,65,35].forEach((height,i)=>{
+            const bar=document.createElement('i'); bar.style.height=height+'%';
+            bar.style.animationDelay=i*.12+'s'; beat.appendChild(bar);
+          });
+          fx.appendChild(beat);
+        });
         home.classList.add('qm-intro');
         document.body.classList.add('qm-opening');
         const h=home.getBoundingClientRect(), t=title.getBoundingClientRect();
@@ -106,7 +109,7 @@
         }
         start.addEventListener('focus',finish);
         start.addEventListener('click',finish);
-        timer=setTimeout(finish,4750);
+        timer=setTimeout(finish,4100);
       })();
     </script>
 
