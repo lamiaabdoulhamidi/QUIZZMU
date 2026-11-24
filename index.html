@@ -29,31 +29,26 @@
         display: none !important;
       }
 
-      /* Intro uniquement au premier affichage de l'accueil. */
-      @media (prefers-reduced-motion: no-preference) {
-        #welcomeScreen.qm-intro .welcome-content { animation: none; }
-        #welcomeScreen.qm-intro .welcome-title { animation: qm-logo 1.15s 1.55s cubic-bezier(.2,.8,.25,1) both; }
-        #welcomeScreen.qm-intro .welcome-kicker { animation: qm-reveal .6s 2.6s both; }
-        #welcomeScreen.qm-intro .welcome-description { animation: qm-reveal .6s 2.8s both; }
-        #welcomeScreen.qm-intro .welcome-button { animation: qm-reveal .6s 3s both; }
-        #welcomeScreen.qm-intro .welcome-hint { animation: qm-reveal .6s 3.2s both; }
-        #welcomeScreen.qm-intro .sound-bars { animation: qm-bars .6s 3.4s both; }
-        body.qm-opening #soundscape { animation: qm-waves 1.3s 2.1s both; }
-        #qmIntroFx { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-        #qmIntroFx .qm-q { position:absolute; left:50%; top:50%; font-size:clamp(5rem,22vw,15rem); font-weight:900; line-height:1; color:#fff; text-shadow:0 0 25px #ad54ff55; animation:qm-q 1.85s both; z-index:2; }
-        #qmIntroFx .qm-ring { position:absolute; left:50%; top:50%; width:clamp(100px,25vw,300px); aspect-ratio:1; border:1px solid #a960e4; border-radius:50%; animation:qm-ring 1.2s var(--delay) both; }
-        #qmIntroFx .qm-beat { position:absolute; left:50%; top:50%; margin-left:var(--side); display:flex; align-items:center; gap:clamp(3px,.65vw,8px); height:clamp(18px,8%,42px); animation:qm-beat 1.35s .55s both; }
-        #qmIntroFx .qm-beat i { display:block; width:clamp(3px,.55vw,7px); border-radius:2px; background:#ae65eb; animation:qm-beat-bar .55s ease-in-out infinite alternate; }
-        @keyframes qm-q { 0% {opacity:0;transform:translate(-50%,-50%) scale(.2)} 30% {opacity:1;transform:translate(-50%,-50%) scale(.75)} 60% {opacity:1;transform:translate(-50%,-50%) scale(1.035)} 80% {opacity:1;transform:translate(-50%,-50%) scale(1)} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.1)} }
-        @keyframes qm-ring { 0% {opacity:0;transform:translate(-50%,-50%) scale(.6)} 30% {opacity:.6} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.9)} }
-        @keyframes qm-beat { 0%,100% {opacity:0;transform:translate(-50%,-50%) scale(.95)} 30%,65% {opacity:.75;transform:translate(-50%,-50%) scale(1)} }
-        @keyframes qm-beat-bar { from {transform:scaleY(.55)} to {transform:scaleY(1)} }
-        @keyframes qm-logo { 0% {opacity:0;transform:translateY(var(--qm-offset,80px)) scale(.85)} 35%,55% {opacity:1;transform:translateY(var(--qm-offset,80px)) scale(1)} 100% {opacity:1;transform:translateY(0) scale(1)} }
-        @keyframes qm-reveal { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
-        @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
-        @keyframes qm-waves { from {opacity:0} to {opacity:1} }
-      }
-      @media (prefers-reduced-motion: reduce) { #qmIntroFx { display:none !important; } }
+      /* Intro: un seul logo, sans réinitialisation de l'animation du contenu. */
+      #welcomeScreen.qm-intro .welcome-content, #welcomeScreen.qm-intro-done .welcome-content { animation:none; }
+      #welcomeScreen.qm-intro .welcome-title { opacity:0; }
+      #welcomeScreen.qm-intro .welcome-kicker { animation:qm-reveal .6s 2.55s both; }
+      #welcomeScreen.qm-intro .welcome-description { animation:qm-reveal .6s 2.75s both; }
+      #welcomeScreen.qm-intro .welcome-button { animation:qm-reveal .6s 2.95s both; }
+      #welcomeScreen.qm-intro .welcome-hint { animation:qm-reveal .6s 3.15s both; }
+      #welcomeScreen.qm-intro .sound-bars { animation:qm-bars .6s 3.35s both; }
+      #qmIntroFx { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
+      #qmIntroFx .qm-logo { position:absolute; display:flex; align-items:baseline; white-space:nowrap; transform-origin:0 50%; color:#fff; }
+      #qmIntroFx .qm-rest { display:inline-block; overflow:hidden; white-space:nowrap; }
+      #qmIntroFx .qm-ring { position:absolute; left:50%; top:50%; width:clamp(100px,25vw,300px); aspect-ratio:1; border:1px solid #a960e4; border-radius:50%; animation:qm-ring 1.2s var(--delay) both; }
+      #qmIntroFx .qm-beat { position:absolute; left:50%; top:50%; margin-left:var(--side); display:flex; align-items:center; gap:clamp(3px,.65vw,8px); height:clamp(18px,8%,42px); animation:qm-beat 1.35s .55s both; }
+      #qmIntroFx .qm-beat i { display:block; width:clamp(3px,.55vw,7px); border-radius:2px; background:#ae65eb; animation:qm-beat-bar .55s ease-in-out infinite alternate; }
+      @keyframes qm-ring { 0% {opacity:0;transform:translate(-50%,-50%) scale(.6)} 30% {opacity:.6} 100% {opacity:0;transform:translate(-50%,-50%) scale(1.9)} }
+      @keyframes qm-beat { 0%,100% {opacity:0;transform:translate(-50%,-50%) scale(.95)} 30%,65% {opacity:.75;transform:translate(-50%,-50%) scale(1)} }
+      @keyframes qm-beat-bar { from {transform:scaleY(.55)} to {transform:scaleY(1)} }
+      @keyframes qm-reveal { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
+      @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
+      @media(prefers-reduced-motion:reduce) { #qmIntroFx {display:none!important} #welcomeScreen.qm-intro .welcome-title {opacity:1} #welcomeScreen.qm-intro .welcome-content > *, #welcomeScreen.qm-intro .sound-bars {animation:none!important} }
     </style>
   </head>
   <body>
@@ -75,41 +70,37 @@
 
     <script>
       (() => {
-        const home = document.getElementById('welcomeScreen');
-        const title = document.getElementById('welcomeTitle');
-        const start = document.getElementById('beginJourney');
-        if (!home || !title || !start || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
-        const fx = document.createElement('div');
-        fx.id = 'qmIntroFx';
-        fx.setAttribute('aria-hidden','true');
-        fx.innerHTML = '<div class="qm-q">Q</div>';
-        [.25,.65].forEach(delay => {
-          const ring=document.createElement('i');
-          ring.className='qm-ring'; ring.style.setProperty('--delay',delay+'s'); fx.appendChild(ring);
-        });
-        [-1,1].forEach(side => {
-          const beat=document.createElement('div'); beat.className='qm-beat';
-          beat.style.setProperty('--side',side*20+'%');
-          [35,65,100,65,35].forEach((height,i)=>{
-            const bar=document.createElement('i'); bar.style.height=height+'%';
-            bar.style.animationDelay=i*.12+'s'; beat.appendChild(bar);
-          });
-          fx.appendChild(beat);
-        });
-        home.classList.add('qm-intro');
-        document.body.classList.add('qm-opening');
-        const h=home.getBoundingClientRect(), t=title.getBoundingClientRect();
-        title.style.setProperty('--qm-offset',(h.top+h.height/2-t.top-t.height/2)+'px');
-        home.appendChild(fx);
-        let timer;
-        function finish(){
-          clearTimeout(timer); fx.remove(); home.classList.remove('qm-intro');
-          document.body.classList.remove('qm-opening'); title.style.removeProperty('--qm-offset');
-          start.removeEventListener('focus',finish); start.removeEventListener('click',finish);
+        const home=document.getElementById('welcomeScreen'), title=document.getElementById('welcomeTitle'), start=document.getElementById('beginJourney');
+        const motion=matchMedia('(prefers-reduced-motion: reduce)');
+        if(!home||!title||!start||motion.matches)return;
+        home.classList.add('qm-intro','qm-intro-done');
+        window.qmWaveStart=performance.now();
+        const fx=document.createElement('div');fx.id='qmIntroFx';fx.setAttribute('aria-hidden','true');
+        [.25,.65].forEach(delay=>{const ring=document.createElement('i');ring.className='qm-ring';ring.style.setProperty('--delay',delay+'s');fx.appendChild(ring)});
+        [-1,1].forEach(side=>{const beat=document.createElement('div');beat.className='qm-beat';beat.style.setProperty('--side',side*20+'%');[35,65,100,65,35].forEach((height,i)=>{const bar=document.createElement('i');bar.style.height=height+'%';bar.style.animationDelay=i*.12+'s';beat.appendChild(bar)});fx.appendChild(beat)});
+        const logo=document.createElement('div');logo.className='qm-logo';logo.innerHTML='<span class="qm-letter">Q</span><span class="qm-rest">UIZZ<span style="color:#bd69ff">MU</span></span>';fx.appendChild(logo);home.appendChild(fx);
+        const rest=logo.lastElementChild, letter=logo.firstElementChild;
+        let raf=0,timer=0,finished=false;
+        const ease=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)};
+        function finish(){if(finished)return;finished=true;cancelAnimationFrame(raf);clearTimeout(timer);fx.remove();home.classList.remove('qm-intro');start.removeEventListener('focus',finish);start.removeEventListener('click',finish);window.removeEventListener('resize',finish);motion.removeEventListener?.('change',finish)}
+        function frame(now){
+          if(finished)return;
+          const t=(now-window.qmWaveStart)/1000;
+          const style=getComputedStyle(title), rect=title.getBoundingClientRect();
+          logo.style.fontFamily=style.fontFamily;logo.style.fontSize=style.fontSize;logo.style.fontWeight=style.fontWeight;logo.style.lineHeight=style.lineHeight;logo.style.letterSpacing=style.letterSpacing;logo.style.textShadow=style.textShadow;
+          const reveal=ease((t-1.05)/.85), rise=ease((t-1.9)/.75);
+          rest.style.width='auto';const full=rest.scrollWidth, q=letter.getBoundingClientRect().width/(Number(logo.dataset.scale)||1);
+          const scale=t<1.05?.2+.8*ease(t/1.05):1;
+          rest.style.width=full*reveal+'px';rest.style.opacity=String(ease((t-1.05)/.55));
+          const width=q+full*reveal;
+          const x=(innerWidth/2-width*scale/2)*(1-rise)+(rect.left+(rect.width-width)/2)*rise;
+          const y=(innerHeight/2-rect.height/2)*(1-rise)+rect.top*rise;
+          logo.style.left=x+'px';logo.style.top=y+'px';logo.style.transform='scale('+scale+')';logo.dataset.scale=scale;logo.style.opacity=String(ease(t/.28));
+          if(t>=2.65){logo.remove();title.style.opacity='1';return}
+          raf=requestAnimationFrame(frame);
         }
-        start.addEventListener('focus',finish);
-        start.addEventListener('click',finish);
-        timer=setTimeout(finish,4100);
+        start.addEventListener('focus',finish);start.addEventListener('click',finish);window.addEventListener('resize',finish);motion.addEventListener?.('change',finish);
+        raf=requestAnimationFrame(frame);timer=setTimeout(finish,4050);
       })();
     </script>
 
@@ -310,6 +301,6 @@
     <script src="genre-free-tracks.js"></script>
     <script src="genre-answer-options.js?v=20261124flexibleanswers"></script>
     <script src="genre-setup.js?v=20261123"></script>
-    <script src="ambient.js"></script>
+    <script src="ambient.js?v=20261124smooth"></script>
   </body>
 </html>
