@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#40202d" />
+    <meta name="theme-color" content="#08060d" />
     <title>QuizzMU — Écoute. Devine. Joue.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,67 +50,7 @@
       @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
       @media(prefers-reduced-motion:reduce) { #qmIntroFx {display:none!important} #welcomeScreen.qm-intro .welcome-title {opacity:1} #welcomeScreen.qm-intro .welcome-content > *, #welcomeScreen.qm-intro .sound-bars {animation:none!important} }
     </style>
-  
-<style id="soul-studio">
-body{background:#40202d!important;color:#fff0e2!important}
-#soundscape,.ambient-glow{display:none}
-#welcomeScreen{overflow:hidden}
-#welcomeScreen:before{content:"";position:absolute;left:-16vw;top:-22vw;width:43vw;height:43vw;border-radius:50%;background:#79505f;opacity:.45;pointer-events:none}
-#welcomeScreen .welcome-content{position:relative;z-index:1}
-#welcomeScreen .welcome-title,#modeSelection h2,.brand-lockup h1{font-family:Georgia,serif;font-style:italic;letter-spacing:-.055em;text-shadow:none;color:#fff0e2}
-#welcomeScreen .welcome-title{font-size:clamp(3.7rem,14vw,10rem)}
-#welcomeScreen .welcome-title span,.brand-lockup h1 span,#modeSelection h2 span{color:#f1b2a2}
-#welcomeScreen .welcome-kicker,#modeSelection .welcome-kicker{color:#f1b2a2}
-#welcomeScreen .welcome-description,#welcomeScreen .welcome-hint{color:#e2c4bd}
-#welcomeScreen .welcome-hint span{background:#79525f}
-#welcomeScreen .live-dot,#welcomeScreen .sound-bars i{background:#f1b2a2;box-shadow:none}
-#qmIntroFx .qm-logo{color:#fff0e2;font-style:italic}
-#qmIntroFx .qm-ring{border-color:#f1b2a2}
-#qmIntroFx .qm-beat i{background:#f1b2a2}
-body .primary-btn{background:#f1b2a2!important;color:#40202d!important;box-shadow:none!important;border:0!important;border-radius:999px}
-#modeSelection{display:block;max-width:1120px;margin:auto;padding:20px 0 45px}
-#modeSelection .mode-selection-inner{width:100%;max-width:none;text-align:left;animation:none}
-.soul-nav{display:flex;justify-content:space-between;align-items:center;padding:0 0 22px;border-bottom:1px solid #79525f;gap:16px}
-.soul-brand{font:bold italic 28px Georgia,serif;color:#fff0e2;white-space:nowrap}
-.soul-brand span{color:#f1b2a2}
-.soul-navlinks{display:flex;gap:18px;align-items:center}
-.soul-link,.soul-row{background:none;border:0;color:inherit;cursor:pointer;font:inherit}
-.soul-link{font-size:.85rem;padding:8px 0}
-.soul-link:hover,.soul-row:hover{color:#f1b2a2}
-.soul-heading{display:flex;justify-content:space-between;align-items:center;margin:38px 0 22px}
-.soul-label{font-size:.72rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase}
-.soul-heading .soul-label{color:#f1b2a2}
-#modeSelection #modeTitle{font-size:clamp(2.8rem,6vw,5.2rem);margin:10px 0 0;line-height:1}
-.soul-wave{display:flex;align-items:center;gap:4px;height:36px}
-.soul-wave i{width:3px;background:#f1b2a2;border-radius:2px;animation:qm-beat-bar .7s ease-in-out infinite alternate}
-.soul-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:32px}
-.soul-feature{background:#f1b2a2;color:#40202d;position:relative;overflow:hidden;border-radius:12px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:center}
-.soul-feature h3{font:bold italic clamp(3rem,6vw,5.4rem)/1 Georgia,serif;margin:14px 0;color:#40202d;position:relative;z-index:1}
-.soul-feature p{max-width:65%;position:relative;z-index:1;color:#40202d;margin:0 0 22px}
-.soul-feature button{align-self:flex-start;position:relative;z-index:1;background:#40202d;color:#fff0e2;border:0;border-radius:30px;padding:12px 20px;font-weight:700;cursor:pointer}
-.soul-disc{position:absolute;width:46%;aspect-ratio:1;right:-11%;bottom:-25%;border-radius:50%;background:repeating-radial-gradient(circle,#252225 0 3px,#373235 4px 5px);display:grid;place-items:center}
-.soul-disc:after{content:'Q';display:grid;place-items:center;width:30%;aspect-ratio:1;border-radius:50%;background:#f1b2a2;color:#40202d;font:bold italic 2rem Georgia}
-.soul-genres{padding:10px 0}
-.soul-row{width:100%;display:flex;gap:18px;align-items:center;text-align:left;border-bottom:1px solid #79525f;padding:15px 0}
-.soul-row small{color:#d8aaa9}
-.soul-row strong{flex:1}
-.soul-subtitle{font-size:1.3rem;margin:32px 0 15px;color:#fff0e2}
-.soul-artists{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.soul-artist{display:flex;align-items:center;gap:12px;background:#512d3b;color:#fff0e2;border:1px solid #79525f;border-radius:9px;text-align:left;padding:16px;cursor:pointer;min-width:0}
-.soul-avatar{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:50%;background:#f1b2a2;color:#40202d;font:bold italic 24px Georgia}
-.soul-artist small{display:block;color:#e1bcb5;margin-top:5px}
-.soul-more{margin-top:22px}
-#modeSelection:not(.hidden) .soul-heading,#modeSelection:not(.hidden) .soul-feature,#modeSelection:not(.hidden) .soul-genres,#modeSelection:not(.hidden) .soul-artists{animation:qm-reveal .55s both}
-#modeSelection:not(.hidden) .soul-feature{animation-delay:.1s}
-#modeSelection:not(.hidden) .soul-genres{animation-delay:.2s}
-#modeSelection:not(.hidden) .soul-artists{animation-delay:.3s}
-#appShell .panel,#appShell .artist-card{background:#512d3b!important;border-color:#79525f!important;box-shadow:none!important}
-#appShell .ghost-btn{color:#fff0e2;border-color:#79525f;background:#512d3b}
-#appShell .genre-btn,#appShell .artist-choices button{border-color:#79525f}
-@media(max-width:650px){.soul-grid{grid-template-columns:1fr;gap:20px}.soul-artists{grid-template-columns:1fr}.soul-nav{flex-wrap:wrap}.soul-navlinks{gap:12px}.soul-feature{min-height:230px;padding:24px}.soul-heading{margin-top:26px}.soul-wave{max-width:24%;overflow:hidden}.soul-feature p{max-width:75%}}
-@media(prefers-reduced-motion:reduce){#modeSelection *,.soul-wave i{animation:none!important}}
-</style>
-</head>
+  </head>
   <body>
     <canvas id="soundscape" aria-hidden="true"></canvas>
     <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
@@ -138,7 +78,7 @@ body .primary-btn{background:#f1b2a2!important;color:#40202d!important;box-shado
         const fx=document.createElement('div');fx.id='qmIntroFx';fx.setAttribute('aria-hidden','true');
         [.25,.65].forEach(delay=>{const ring=document.createElement('i');ring.className='qm-ring';ring.style.setProperty('--delay',delay+'s');fx.appendChild(ring)});
         [-1,1].forEach(side=>{const beat=document.createElement('div');beat.className='qm-beat';beat.style.setProperty('--side',side*20+'%');[35,65,100,65,35].forEach((height,i)=>{const bar=document.createElement('i');bar.style.height=height+'%';bar.style.animationDelay=i*.12+'s';beat.appendChild(bar)});fx.appendChild(beat)});
-        const logo=document.createElement('div');logo.className='qm-logo';logo.innerHTML='<span class="qm-letter">Q</span><span class="qm-rest">UIZZ<span style="color:#f1b2a2">MU</span></span>';fx.appendChild(logo);home.appendChild(fx);
+        const logo=document.createElement('div');logo.className='qm-logo';logo.innerHTML='<span class="qm-letter">Q</span><span class="qm-rest">UIZZ<span style="color:#bd69ff">MU</span></span>';fx.appendChild(logo);home.appendChild(fx);
         const rest=logo.lastElementChild, letter=logo.firstElementChild;
         let raf=0,timer=0,finished=false;
         const ease=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)};
@@ -166,24 +106,25 @@ body .primary-btn{background:#f1b2a2!important;color:#40202d!important;box-shado
 
     <section id="modeSelection" class="mode-selection hidden" aria-labelledby="modeTitle">
       <div class="mode-selection-inner">
-        <nav class="soul-nav" aria-label="Navigation">
-          <div class="soul-brand">QUIZZ<span>MU</span></div>
-          <div class="soul-navlinks"><button class="soul-link" type="button" id="soulDiscover">Découvrir</button><button class="soul-link" type="button" id="soulGenres">Genres</button><button class="soul-link" type="button" id="soulArtists">Artistes</button><button id="backToWelcome" class="soul-link" type="button">← Accueil</button></div>
-        </nav>
-        <div class="soul-heading"><div><div class="soul-label">● ON AIR — QUIZZMU</div><h2 id="modeTitle">À toi le micro.</h2></div><div class="soul-wave" aria-hidden="true"><i style="height:8px;animation-delay:0s"></i><i style="height:24px;animation-delay:0.04s"></i><i style="height:34px;animation-delay:0.08s"></i><i style="height:34px;animation-delay:0.12s"></i><i style="height:25px;animation-delay:0.16s"></i><i style="height:9px;animation-delay:0.2s"></i><i style="height:23px;animation-delay:0.24s"></i><i style="height:33px;animation-delay:0.28s"></i><i style="height:34px;animation-delay:0.32s"></i><i style="height:25px;animation-delay:0.36s"></i><i style="height:10px;animation-delay:0.4s"></i><i style="height:22px;animation-delay:0.44s"></i><i style="height:33px;animation-delay:0.48s"></i><i style="height:34px;animation-delay:0.52s"></i><i style="height:26px;animation-delay:0.56s"></i><i style="height:11px;animation-delay:0.6s"></i><i style="height:21px;animation-delay:0.64s"></i><i style="height:32px;animation-delay:0.68s"></i><i style="height:35px;animation-delay:0.72s"></i><i style="height:27px;animation-delay:0.76s"></i><i style="height:12px;animation-delay:0.8s"></i><i style="height:20px;animation-delay:0.84s"></i><i style="height:32px;animation-delay:0.88s"></i><i style="height:35px;animation-delay:0.92s"></i><i style="height:28px;animation-delay:0.96s"></i><i style="height:14px;animation-delay:1s"></i><i style="height:19px;animation-delay:1.04s"></i><i style="height:31px;animation-delay:1.08s"></i></div></div>
-        <div class="soul-grid">
-          <article class="soul-feature"><div class="soul-label">Focus artiste / 01</div><h3>Rihanna.</h3><p>De ses premiers hits à ses plus grands classiques.</p><button type="button" data-soul-artist="Rihanna">Jouer maintenant →</button><div class="soul-disc" aria-hidden="true"></div></article>
-          <div class="soul-genres"><div class="soul-label">Blind test par genre</div><button type="button" class="soul-row" data-soul-genre="rap"><small>01</small><strong>Rap</strong><span>↗</span></button><button type="button" class="soul-row" data-soul-genre="rnb"><small>02</small><strong>R&amp;B</strong><span>↗</span></button><button type="button" class="soul-row" data-soul-genre="afro"><small>03</small><strong>Afro</strong><span>↗</span></button><button type="button" class="soul-row" data-soul-genre="variete"><small>04</small><strong>Variété française</strong><span>↗</span></button></div>
+        <p class="welcome-kicker"><span class="live-dot"></span> CHOISIS TON EXPÉRIENCE</p>
+        <h2 id="modeTitle">À toi de <span>jouer.</span></h2>
+        <p class="mode-intro">Blind test par genre ou quizz sur tes artistes préférés, fais ton choix !</p>
+        <div class="mode-cards">
+          <button class="mode-card questions-mode" type="button" data-open-mode="questions">
+            <span class="mode-icon" aria-hidden="true">♫</span>
+            <span class="mode-card-copy"><strong>Blind Test par genre</strong><span>Choisis ton genre musical et devine les morceaux avant la fin du chrono.</span></span>
+            <span class="mode-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="mode-card artist-mode" type="button" data-open-mode="artist">
+            <span class="mode-icon" aria-hidden="true">✦</span>
+            <span class="mode-card-copy"><strong>Spécial Artiste</strong><span>Plonge dans l’univers d’un de tes artistes préférés.</span></span>
+            <span class="mode-arrow" aria-hidden="true">↗</span>
+          </button>
         </div>
-        <h3 class="soul-subtitle">Les incontournables</h3>
-        <div class="soul-artists"><button class="soul-artist" type="button" data-soul-artist="Beyoncé"><span class="soul-avatar">B</span><span><strong>Beyoncé</strong><small>Spécial artiste</small></span></button><button class="soul-artist" type="button" data-soul-artist="Michael Jackson"><span class="soul-avatar">M</span><span><strong>Michael Jackson</strong><small>Spécial artiste</small></span></button><button class="soul-artist" type="button" data-soul-artist="Drake"><span class="soul-avatar">D</span><span><strong>Drake</strong><small>Spécial artiste</small></span></button></div>
-        <div class="soul-more"><button type="button" class="soul-link" id="soulAllArtists">Tous les artistes →</button></div>
-        <div hidden>
-          <button class="mode-card questions-mode" type="button" data-open-mode="questions"><span class="mode-card-copy"><strong>Blind Test par genre</strong><span>Choisis ton genre musical.</span></span></button>
-          <button class="mode-card artist-mode" type="button" data-open-mode="artist"><span class="mode-card-copy"><strong>Spécial Artiste</strong><span>Choisis ton artiste.</span></span></button>
-        </div>
+        <button id="backToWelcome" class="text-back" type="button">← Retour à l’accueil</button>
       </div>
     </section>
+
     <div class="app-shell hidden" id="appShell">
       <header class="topbar">
         <div class="brand-lockup"><p class="eyebrow">TON TERRAIN DE JEU MUSICAL</p><h1>Quizz<span>MU</span></h1></div>
@@ -361,24 +302,5 @@ body .primary-btn{background:#f1b2a2!important;color:#40202d!important;box-shado
     <script src="genre-answer-options.js?v=20261124flexibleanswers"></script>
     <script src="genre-setup.js?v=20261123"></script>
     <script src="ambient.js?v=20261124wavefade"></script>
-  <script>
-(() => {
- const open = mode => document.querySelector('[data-open-mode="'+mode+'"]').click();
- document.getElementById('soulDiscover').addEventListener('click',()=>document.getElementById('modeTitle').scrollIntoView({block:'center',behavior:'smooth'}));
- document.getElementById('soulGenres').addEventListener('click',()=>open('questions'));
- ['soulArtists','soulAllArtists'].forEach(id=>document.getElementById(id).addEventListener('click',()=>open('artist')));
- document.querySelectorAll('[data-soul-genre]').forEach(btn=>btn.addEventListener('click',()=>{
-   open('questions');
-   setTimeout(()=>document.querySelector('#startScreen [data-genre="'+btn.dataset.soulGenre+'"]')?.click(),0);
- }));
- document.querySelectorAll('[data-soul-artist]').forEach(btn=>btn.addEventListener('click',()=>{
-   open('artist');
-   setTimeout(()=>{
-     const card=[...document.querySelectorAll('#artistStartScreen .artist-card')].find(c=>c.querySelector('h3')?.textContent.trim().toLowerCase()===btn.dataset.soulArtist.toLowerCase());
-     card?.querySelector('button')?.click();
-   },0);
- }));
-})();
-</script>
-</body>
+  </body>
 </html>
