@@ -50,59 +50,43 @@
       @keyframes qm-bars { from {opacity:0} to {opacity:.6} }
       @media(prefers-reduced-motion:reduce) { #qmIntroFx {display:none!important} #welcomeScreen.qm-intro .welcome-title {opacity:1} #welcomeScreen.qm-intro .welcome-content > *, #welcomeScreen.qm-intro .sound-bars {animation:none!important} }
     </style>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
   </head>
   <body>
     <canvas id="soundscape" aria-hidden="true"></canvas>
     <div class="ambient-glow ambient-glow-one" aria-hidden="true"></div>
     <div class="ambient-glow ambient-glow-two" aria-hidden="true"></div>
 
+    <style>
+    #welcomeScreen:not(.hidden){display:flex;position:relative;z-index:3;min-height:100svh;width:100%;padding:clamp(18px,4vw,60px);box-sizing:border-box;background:#2110c9;align-items:center;justify-content:center;overflow:hidden;color:#2110c9}
+    #welcomeScreen.hidden{display:none!important}
+    #welcomeScreen .concert-poster{position:relative;width:min(1120px,100%);min-height:min(72vh,650px);box-sizing:border-box;background:#f5f0df;padding:clamp(24px,4vw,64px);text-align:left;animation:poster-in .65s ease-out both}
+    #welcomeScreen .concert-poster:before,#welcomeScreen .concert-poster:after{content:"";position:absolute;top:0;width:85px;height:24px;background:#ff459a99;transform:rotate(-30deg);left:-16px}
+    #welcomeScreen .concert-poster:after{left:auto;right:-16px;transform:rotate(30deg)}
+    #welcomeScreen .poster-top{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid;padding-bottom:12px;font:700 11px monospace;letter-spacing:1px}
+    #welcomeScreen #welcomeTitle{position:relative;isolation:isolate;display:block;margin:18px 0 0;color:#2110c9;font-family:'Barlow Condensed','Impact',sans-serif;font-weight:900;font-size:clamp(55px,13vw,180px);line-height:.9;letter-spacing:-.035em;text-shadow:none;animation:poster-in .65s .15s both}
+    #welcomeScreen #welcomeTitle:before{content:"";position:absolute;z-index:-1;background:#fa278b;width:25%;aspect-ratio:1;border-radius:50%;left:30%;top:0}
+    #welcomeScreen .poster-sub{font:800 clamp(18px,3vw,40px)/1.1 'Barlow Condensed',Impact,sans-serif;margin:12px 0 16px;border-bottom:1px solid;padding-bottom:16px}
+    #welcomeScreen .poster-sub b{color:#fa278b}
+    #welcomeScreen .poster-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+    #welcomeScreen .poster-details{font:13px/1.7 monospace;margin:0;color:#2110c9}
+    #welcomeScreen #beginJourney{display:inline-flex;align-items:center;gap:16px;background:#fa278b;color:#17101c;border:0;border-radius:2px;box-shadow:0 4px 0 #2110c9;padding:14px 20px;font:800 clamp(18px,2.4vw,28px)/1 'Barlow Condensed',Impact,sans-serif;transform:rotate(-3deg);cursor:pointer;text-transform:uppercase;animation:ticket-in .55s .35s both}
+    #welcomeScreen #beginJourney:hover{transform:rotate(0deg) translateY(-2px)}
+    #welcomeScreen .ticket-number{border-right:1px dashed #17101c;padding-right:12px;font:700 12px monospace}
+    @keyframes poster-in{from{opacity:0;translate:0 15px}to{opacity:1;translate:0 0}}
+    @keyframes ticket-in{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+    @media(max-width:600px){#welcomeScreen .concert-poster{min-height:0}#welcomeScreen .poster-top{font-size:9px}#welcomeScreen .poster-bottom{align-items:flex-start;flex-direction:column}#welcomeScreen #welcomeTitle{font-size:clamp(48px,14vw,90px)}}
+    @media(prefers-reduced-motion:reduce){#welcomeScreen *{animation:none!important}}
+    </style>
     <main id="welcomeScreen" class="welcome-screen" aria-labelledby="welcomeTitle">
-      <div class="welcome-content">
-        <p class="welcome-kicker"><span class="live-dot"></span> LE QUIZ MUSICAL QUI TE MET AU DÉFI</p>
-        <h1 id="welcomeTitle" class="welcome-title">QUIZZ<span>MU</span></h1>
-        <p class="welcome-description">Blind tests, questions de culture musicale et défis : mets tes connaissances à l’épreuve !</p>
-        <button id="beginJourney" class="primary-btn welcome-button" type="button">Commencer à jouer <span aria-hidden="true">↗</span></button>
-        <div class="welcome-hint" aria-hidden="true"><span></span> ENTRE DANS LE RYTHME <span></span></div>
+      <div class="concert-poster">
+        <div class="poster-top"><span>LE QUIZ MUSICAL</span><span>UNE SEULE DATE : MAINTENANT</span></div>
+        <h1 id="welcomeTitle">QUIZZMU</h1>
+        <p class="poster-sub">BLIND TEST <b>★</b> CULTURE MUSICALE <b>★</b> DÉFIS</p>
+        <div class="poster-bottom"><p class="poster-details">LIEU &nbsp; ton navigateur<br>TENUE &nbsp; des écouteurs, c’est mieux<br>AU PROGRAMME &nbsp; tes artistes préférés</p>
+        <button id="beginJourney" type="button"><span class="ticket-number" aria-hidden="true">N°<br>0001</span><span>Commencer à jouer →</span></button></div>
       </div>
-      <div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </main>
-
-
-    <script>
-      (() => {
-        const home=document.getElementById('welcomeScreen'), title=document.getElementById('welcomeTitle'), start=document.getElementById('beginJourney');
-        const motion=matchMedia('(prefers-reduced-motion: reduce)');
-        if(!home||!title||!start||motion.matches)return;
-        home.classList.add('qm-intro','qm-intro-done');
-        window.qmWaveStart=performance.now();
-        const fx=document.createElement('div');fx.id='qmIntroFx';fx.setAttribute('aria-hidden','true');
-        [.25,.65].forEach(delay=>{const ring=document.createElement('i');ring.className='qm-ring';ring.style.setProperty('--delay',delay+'s');fx.appendChild(ring)});
-        [-1,1].forEach(side=>{const beat=document.createElement('div');beat.className='qm-beat';beat.style.setProperty('--side',side*20+'%');[35,65,100,65,35].forEach((height,i)=>{const bar=document.createElement('i');bar.style.height=height+'%';bar.style.animationDelay=i*.12+'s';beat.appendChild(bar)});fx.appendChild(beat)});
-        const logo=document.createElement('div');logo.className='qm-logo';logo.innerHTML='<span class="qm-letter">Q</span><span class="qm-rest">UIZZ<span style="color:#bd69ff">MU</span></span>';fx.appendChild(logo);home.appendChild(fx);
-        const rest=logo.lastElementChild, letter=logo.firstElementChild;
-        let raf=0,timer=0,finished=false;
-        const ease=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)};
-        function finish(){if(finished)return;finished=true;cancelAnimationFrame(raf);clearTimeout(timer);fx.remove();home.classList.remove('qm-intro');start.removeEventListener('focus',finish);start.removeEventListener('click',finish);window.removeEventListener('resize',finish);motion.removeEventListener?.('change',finish)}
-        function frame(now){
-          if(finished)return;
-          const t=(now-window.qmWaveStart)/1000;
-          const style=getComputedStyle(title), rect=title.getBoundingClientRect();
-          logo.style.fontFamily=style.fontFamily;logo.style.fontSize=style.fontSize;logo.style.fontWeight=style.fontWeight;logo.style.lineHeight=style.lineHeight;logo.style.letterSpacing=style.letterSpacing;logo.style.textShadow=style.textShadow;
-          const reveal=ease((t-1.05)/.85), rise=ease((t-1.9)/.75);
-          rest.style.width='auto';const full=rest.scrollWidth, q=letter.getBoundingClientRect().width/(Number(logo.dataset.scale)||1);
-          const scale=t<1.05?.2+.8*ease(t/1.05):1;
-          rest.style.width=full*reveal+'px';rest.style.opacity=String(ease((t-1.05)/.55));
-          const width=q+full*reveal;
-          const x=(innerWidth/2-width*scale/2)*(1-rise)+(rect.left+(rect.width-width)/2)*rise;
-          const y=(innerHeight/2-rect.height/2)*(1-rise)+rect.top*rise;
-          logo.style.left=x+'px';logo.style.top=y+'px';logo.style.transform='scale('+scale+')';logo.dataset.scale=scale;logo.style.opacity=String(ease(t/.28));
-          if(t>=2.65){logo.remove();title.style.opacity='1';return}
-          raf=requestAnimationFrame(frame);
-        }
-        start.addEventListener('focus',finish);start.addEventListener('click',finish);window.addEventListener('resize',finish);motion.addEventListener?.('change',finish);
-        raf=requestAnimationFrame(frame);timer=setTimeout(finish,4050);
-      })();
-    </script>
 
     <section id="modeSelection" class="mode-selection hidden" aria-labelledby="modeTitle">
       <div class="mode-selection-inner">
